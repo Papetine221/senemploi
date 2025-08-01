@@ -1,0 +1,123 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-candidature-heading"
+        data-cy="CandidatureCreateUpdateHeading"
+        jhiTranslate="senemploiV4App.candidature.home.createOrEditLabel"
+      >
+        Créer ou éditer un Candidature
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="senemploiV4App.candidature.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lettreMotivation" jhiTranslate="senemploiV4App.candidature.lettreMotivation"
+            >Lettre Motivation</label
+          >
+          <textarea
+            class="form-control"
+            name="lettreMotivation"
+            id="field_lettreMotivation"
+            data-cy="lettreMotivation"
+            formControlName="lettreMotivation"
+          ></textarea>
+        </div>
+
+        @let datePostulationRef = editForm.get('datePostulation')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_datePostulation" jhiTranslate="senemploiV4App.candidature.datePostulation"
+            >Date Postulation</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_datePostulation"
+              data-cy="datePostulation"
+              type="datetime-local"
+              class="form-control"
+              name="datePostulation"
+              formControlName="datePostulation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (datePostulationRef.invalid && (datePostulationRef.dirty || datePostulationRef.touched)) {
+            <div>
+              @if (editForm.get('datePostulation')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('datePostulation')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >Ce champ doit être une date et une heure.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_statut" jhiTranslate="senemploiV4App.candidature.statut">Statut</label>
+          <input type="text" class="form-control" name="statut" id="field_statut" data-cy="statut" formControlName="statut" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_candidat" jhiTranslate="senemploiV4App.candidature.candidat">Candidat</label>
+          <select
+            class="form-control"
+            id="field_candidat"
+            data-cy="candidat"
+            name="candidat"
+            formControlName="candidat"
+            [compareWith]="compareCandidat"
+          >
+            <option [ngValue]="null"></option>
+            @for (candidatOption of candidatsSharedCollection; track $index) {
+              <option [ngValue]="candidatOption">{{ candidatOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_offre" jhiTranslate="senemploiV4App.candidature.offre">Offre</label>
+          <select
+            class="form-control"
+            id="field_offre"
+            data-cy="offre"
+            name="offre"
+            formControlName="offre"
+            [compareWith]="compareOffreEmploi"
+          >
+            <option [ngValue]="null"></option>
+            @for (offreEmploiOption of offreEmploisSharedCollection; track $index) {
+              <option [ngValue]="offreEmploiOption">{{ offreEmploiOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

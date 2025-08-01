@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (recruteur(); as recruteurRef) {
+      <div>
+        <h2 data-cy="recruteurDetailsHeading"><span jhiTranslate="senemploiV4App.recruteur.detail.title">Recruteur</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ recruteurRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.recruteur.nomEntreprise">Nom Entreprise</span></dt>
+          <dd>
+            <span>{{ recruteurRef.nomEntreprise }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.recruteur.secteur">Secteur</span></dt>
+          <dd>
+            <span>{{ recruteurRef.secteur }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.recruteur.user">User</span></dt>
+          <dd>
+            <span>{{ recruteurRef.user?.id }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/recruteur', recruteurRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

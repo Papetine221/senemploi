@@ -1,0 +1,43 @@
+// Entités métiers
+entity Candidat {
+  telephone String
+  adresse String
+  cv Blob
+}
+
+entity Recruteur {
+  nomEntreprise String required
+  secteur String
+}
+
+entity OffreEmploi {
+  titre String required
+  description TextBlob required
+  salaire Double min(0)
+  datePublication Instant required
+  dateExpiration Instant required
+}
+
+entity Candidature {
+  lettreMotivation TextBlob
+  datePostulation Instant required
+  statut String
+}
+
+// Relations
+relationship OneToOne {
+  Candidat{user} to User with builtInEntity
+  Recruteur{user} to User with builtInEntity
+}
+
+relationship ManyToOne {
+  OffreEmploi{recruteur} to Recruteur
+  Candidature{candidat} to Candidat
+  Candidature{offre} to OffreEmploi
+}
+
+// Options techniques (syntaxe corrigée)
+dto * with mapstruct
+service * with serviceImpl
+paginate OffreEmploi, Candidat, Recruteur with infinite-scroll
+filter *

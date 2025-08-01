@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (candidat(); as candidatRef) {
+      <div>
+        <h2 data-cy="candidatDetailsHeading"><span jhiTranslate="senemploiV4App.candidat.detail.title">Candidat</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ candidatRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.candidat.telephone">Telephone</span></dt>
+          <dd>
+            <span>{{ candidatRef.telephone }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.candidat.adresse">Adresse</span></dt>
+          <dd>
+            <span>{{ candidatRef.adresse }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.candidat.cv">Cv</span></dt>
+          <dd>
+            <span>{{ candidatRef.cv }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.candidat.user">User</span></dt>
+          <dd>
+            <span>{{ candidatRef.user?.id }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/candidat', candidatRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

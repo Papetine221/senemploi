@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20250801145741"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "lettreMotivation",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "datePostulation",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Candidature",
+  "relationships": [
+    {
+      "otherEntityName": "candidat",
+      "relationshipName": "candidat",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "offreEmploi",
+      "relationshipName": "offre",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

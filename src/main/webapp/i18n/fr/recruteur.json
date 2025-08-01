@@ -1,0 +1,26 @@
+{
+  "senemploiV4App": {
+    "recruteur": {
+      "home": {
+        "title": "Recruteurs",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Recruteur",
+        "createOrEditLabel": "Créer ou éditer un Recruteur",
+        "notFound": "Aucun Recruteur trouvé"
+      },
+      "created": "Un nouveau Recruteur a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Recruteur avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Recruteur avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Recruteur {{ id }} ?"
+      },
+      "detail": {
+        "title": "Recruteur"
+      },
+      "id": "ID",
+      "nomEntreprise": "Nom Entreprise",
+      "secteur": "Secteur",
+      "user": "User"
+    }
+  }
+}
