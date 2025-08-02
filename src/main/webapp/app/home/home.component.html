@@ -1,83 +1,89 @@
-<div class="row">
-  <div class="col-md-3">
-    <span class="hipster img-fluid rounded"></span>
-  </div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <title>Plateforme d'Emploi au Sénégal</title>
+</head>
+<body>
+  <div class="container text-center">
+    <h1 class="slogan">Votre partenaire emploi au quotidien</h1>
 
-  <div class="col-md-9">
-    <h1 class="display-4"><span jhiTranslate="home.title">Bienvenue, Java Hipster !</span> (Senemploi V 4)</h1>
-
-    <p class="lead" jhiTranslate="home.subtitle">Ceci est votre page d&apos;accueil</p>
-
-    <div>
-      @if (account() !== null) {
-        <div class="alert alert-success">
-          @if (account(); as accountRef) {
-            <span id="home-logged-message" jhiTranslate="home.logged.message" [translateValues]="{ username: accountRef.login }"
-              >Vous êtes connecté en tant que &quot;{{ accountRef.login }}&quot;.</span
-            >
-          }
-        </div>
-      } @else {
-        <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.authenticated.prefix">Si vous voulez vous </span>
-          <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">connecter</a
-          ><span jhiTranslate="global.messages.info.authenticated.suffix"
-            >, vous pouvez utiliser les comptes par défaut : <br />
-            - Administrateur (nom d&apos;utilisateur=&quot;admin&quot; et mot de passe =&quot;admin&quot;) <br />
-            - Utilisateur (nom d&apos;utilisateur=&quot;user&quot; et mot de passe =&quot;user&quot;).</span
-          >
-        </div>
-
-        <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.register.noaccount">Vous n&apos;avez pas encore de compte ?</span>&nbsp;
-          <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Créer un compte</a>
-        </div>
-      }
+    <div class="my-4">
+      <a routerLink="/login" class="btn btn-recruteur">Je suis recruteur</a>
+      <a routerLink="/login" class="btn btn-job-seeker">Je cherche un job</a>
     </div>
 
-    <p jhiTranslate="home.question">Si vous avez des questions à propos de JHipster :</p>
-
-    <ul>
-      <li>
-        <a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.homepage"
-          >Page d&apos;accueil de JHipster</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://stackoverflow.com/tags/jhipster/info"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.stackoverflow"
-          >JHipster sur Stack Overflow</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/jhipster/generator-jhipster/issues?state=open"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.bugtracker"
-          >JHipster bug tracker</a
-        >
-      </li>
-      <li>
-        <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.chat"
-          >JHipster public chat room</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.follow"
-          >Suivez &#64;jhipster sur Twitter</a
-        >
-      </li>
-    </ul>
-
-    <p>
-      <span jhiTranslate="home.like">Si vous aimez JHipster, donnez nous une étoile sur</span>
-      <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.github"
-        >GitHub </a
-      >!
+    <p class="small-text">
+      Pas encore inscrit ? 👉
+      <a routerLink="/account/register" class="link-create-account">Créer un compte</a>
     </p>
+
+    <div class="search-section">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <input type="text" class="form-control" placeholder="Rechercher un emploi..." />
+        </div>
+        <div class="col-md-3">
+          <select class="form-select">
+            <option selected>Par secteur</option>
+            <option>Informatique</option>
+            <option>Santé</option>
+            <option>Education</option>
+            <option>Commerce</option>
+            <option>Finance</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select">
+            <option selected>Par région</option>
+            <option>Dakar</option>
+            <option>Thiès</option>
+            <option>Saint-Louis</option>
+            <option>Kaolack</option>
+            <option>Ziguinchor</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-success w-100">Rechercher</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row offres">
+      <div class="col-md-6">
+        <h2>✅ Offres récentes</h2>
+        <ul>
+          <li>Analyste Junior</li>
+          <li>Assistant RH</li>
+          <li>Développeur Web</li>
+          <li>Chef de Projet Digital</li>
+          <li>Comptable Senior</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h2>⭐️ À la une</h2>
+        <ul>
+          <li>Responsable Terrain – Thiès</li>
+          <li>Digital Officer – Dakar</li>
+          <li>Chargé Marketing – Saint-Louis</li>
+          <li>Directeur Commercial – Kaolack</li>
+          <li>Ingénieur Système – Dakar</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      © 2025 Plateforme Emploi Sénégal. Construisons ensemble un avenir professionnel solide et accessible pour tous !
+    </div>
   </div>
-</div>
+</body>
+</html>
