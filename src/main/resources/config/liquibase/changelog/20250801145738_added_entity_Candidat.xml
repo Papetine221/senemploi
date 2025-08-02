@@ -27,7 +27,7 @@
                 <constraints nullable="true" />
             </column>
             <column name="user_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_candidat__user_id" />
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_candidat__user_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -54,6 +54,7 @@
             <column name="adresse" type="string"/>
             <column name="cv" type="blob"/>
             <column name="cv_content_type" type="string"/>
+            <column name="user_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

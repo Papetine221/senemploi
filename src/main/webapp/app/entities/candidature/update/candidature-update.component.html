@@ -78,12 +78,21 @@
             formControlName="candidat"
             [compareWith]="compareCandidat"
           >
-            <option [ngValue]="null"></option>
+            @if (!editForm.get('candidat')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
             @for (candidatOption of candidatsSharedCollection; track $index) {
               <option [ngValue]="candidatOption">{{ candidatOption.id }}</option>
             }
           </select>
         </div>
+        @if (editForm.get(['candidat'])!.invalid && (editForm.get(['candidat'])!.dirty || editForm.get(['candidat'])!.touched)) {
+          <div>
+            @if (editForm.get(['candidat'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
 
         <div class="mb-3">
           <label class="form-label" for="field_offre" jhiTranslate="senemploiV4App.candidature.offre">Offre</label>
@@ -95,12 +104,21 @@
             formControlName="offre"
             [compareWith]="compareOffreEmploi"
           >
-            <option [ngValue]="null"></option>
+            @if (!editForm.get('offre')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
             @for (offreEmploiOption of offreEmploisSharedCollection; track $index) {
               <option [ngValue]="offreEmploiOption">{{ offreEmploiOption.id }}</option>
             }
           </select>
         </div>
+        @if (editForm.get(['offre'])!.invalid && (editForm.get(['offre'])!.dirty || editForm.get(['offre'])!.touched)) {
+          <div>
+            @if (editForm.get(['offre'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
       </div>
 
       <div>

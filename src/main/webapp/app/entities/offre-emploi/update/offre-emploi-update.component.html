@@ -144,12 +144,99 @@
             formControlName="recruteur"
             [compareWith]="compareRecruteur"
           >
-            <option [ngValue]="null"></option>
+            @if (!editForm.get('recruteur')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
             @for (recruteurOption of recruteursSharedCollection; track $index) {
               <option [ngValue]="recruteurOption">{{ recruteurOption.id }}</option>
             }
           </select>
         </div>
+        @if (editForm.get(['recruteur'])!.invalid && (editForm.get(['recruteur'])!.dirty || editForm.get(['recruteur'])!.touched)) {
+          <div>
+            @if (editForm.get(['recruteur'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_typeContrat" jhiTranslate="senemploiV4App.offreEmploi.typeContrat">Type Contrat</label>
+          <select
+            class="form-control"
+            id="field_typeContrat"
+            data-cy="typeContrat"
+            name="typeContrat"
+            formControlName="typeContrat"
+            [compareWith]="compareTypeContrat"
+          >
+            @if (!editForm.get('typeContrat')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (typeContratOption of typeContratsSharedCollection; track $index) {
+              <option [ngValue]="typeContratOption">{{ typeContratOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['typeContrat'])!.invalid && (editForm.get(['typeContrat'])!.dirty || editForm.get(['typeContrat'])!.touched)) {
+          <div>
+            @if (editForm.get(['typeContrat'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_localisation" jhiTranslate="senemploiV4App.offreEmploi.localisation">Localisation</label>
+          <select
+            class="form-control"
+            id="field_localisation"
+            data-cy="localisation"
+            name="localisation"
+            formControlName="localisation"
+            [compareWith]="compareLocalisation"
+          >
+            @if (!editForm.get('localisation')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (localisationOption of localisationsSharedCollection; track $index) {
+              <option [ngValue]="localisationOption">{{ localisationOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (
+          editForm.get(['localisation'])!.invalid && (editForm.get(['localisation'])!.dirty || editForm.get(['localisation'])!.touched)
+        ) {
+          <div>
+            @if (editForm.get(['localisation'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label for="field_competences" jhiTranslate="senemploiV4App.offreEmploi.competences">Competences</label>
+          <select
+            class="form-control"
+            id="field_competences"
+            data-cy="competences"
+            multiple
+            name="competences"
+            formControlName="competences"
+            [compareWith]="compareCompetence"
+          >
+            @for (competenceOption of competencesSharedCollection; track $index) {
+              <option [ngValue]="competenceOption">{{ competenceOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['competences'])!.invalid && (editForm.get(['competences'])!.dirty || editForm.get(['competences'])!.touched)) {
+          <div>
+            @if (editForm.get(['competences'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
       </div>
 
       <div>

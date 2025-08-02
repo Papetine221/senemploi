@@ -135,6 +135,7 @@ export class OffreEmploiComponent implements OnInit {
     this.isLoading = true;
     const queryObject: any = {
       size: this.itemsPerPage,
+      eagerload: true,
     };
     if (this.hasMorePage()) {
       Object.assign(queryObject, this.links().next);

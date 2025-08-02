@@ -34,6 +34,12 @@ public class OffreEmploiCriteria implements Serializable, Criteria {
 
     private LongFilter recruteurId;
 
+    private LongFilter typeContratId;
+
+    private LongFilter localisationId;
+
+    private LongFilter competencesId;
+
     private Boolean distinct;
 
     public OffreEmploiCriteria() {}
@@ -45,6 +51,9 @@ public class OffreEmploiCriteria implements Serializable, Criteria {
         this.datePublication = other.optionalDatePublication().map(InstantFilter::copy).orElse(null);
         this.dateExpiration = other.optionalDateExpiration().map(InstantFilter::copy).orElse(null);
         this.recruteurId = other.optionalRecruteurId().map(LongFilter::copy).orElse(null);
+        this.typeContratId = other.optionalTypeContratId().map(LongFilter::copy).orElse(null);
+        this.localisationId = other.optionalLocalisationId().map(LongFilter::copy).orElse(null);
+        this.competencesId = other.optionalCompetencesId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
     }
 
@@ -167,6 +176,63 @@ public class OffreEmploiCriteria implements Serializable, Criteria {
         this.recruteurId = recruteurId;
     }
 
+    public LongFilter getTypeContratId() {
+        return typeContratId;
+    }
+
+    public Optional<LongFilter> optionalTypeContratId() {
+        return Optional.ofNullable(typeContratId);
+    }
+
+    public LongFilter typeContratId() {
+        if (typeContratId == null) {
+            setTypeContratId(new LongFilter());
+        }
+        return typeContratId;
+    }
+
+    public void setTypeContratId(LongFilter typeContratId) {
+        this.typeContratId = typeContratId;
+    }
+
+    public LongFilter getLocalisationId() {
+        return localisationId;
+    }
+
+    public Optional<LongFilter> optionalLocalisationId() {
+        return Optional.ofNullable(localisationId);
+    }
+
+    public LongFilter localisationId() {
+        if (localisationId == null) {
+            setLocalisationId(new LongFilter());
+        }
+        return localisationId;
+    }
+
+    public void setLocalisationId(LongFilter localisationId) {
+        this.localisationId = localisationId;
+    }
+
+    public LongFilter getCompetencesId() {
+        return competencesId;
+    }
+
+    public Optional<LongFilter> optionalCompetencesId() {
+        return Optional.ofNullable(competencesId);
+    }
+
+    public LongFilter competencesId() {
+        if (competencesId == null) {
+            setCompetencesId(new LongFilter());
+        }
+        return competencesId;
+    }
+
+    public void setCompetencesId(LongFilter competencesId) {
+        this.competencesId = competencesId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -202,13 +268,27 @@ public class OffreEmploiCriteria implements Serializable, Criteria {
             Objects.equals(datePublication, that.datePublication) &&
             Objects.equals(dateExpiration, that.dateExpiration) &&
             Objects.equals(recruteurId, that.recruteurId) &&
+            Objects.equals(typeContratId, that.typeContratId) &&
+            Objects.equals(localisationId, that.localisationId) &&
+            Objects.equals(competencesId, that.competencesId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, titre, salaire, datePublication, dateExpiration, recruteurId, distinct);
+        return Objects.hash(
+            id,
+            titre,
+            salaire,
+            datePublication,
+            dateExpiration,
+            recruteurId,
+            typeContratId,
+            localisationId,
+            competencesId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -221,6 +301,9 @@ public class OffreEmploiCriteria implements Serializable, Criteria {
             optionalDatePublication().map(f -> "datePublication=" + f + ", ").orElse("") +
             optionalDateExpiration().map(f -> "dateExpiration=" + f + ", ").orElse("") +
             optionalRecruteurId().map(f -> "recruteurId=" + f + ", ").orElse("") +
+            optionalTypeContratId().map(f -> "typeContratId=" + f + ", ").orElse("") +
+            optionalLocalisationId().map(f -> "localisationId=" + f + ", ").orElse("") +
+            optionalCompetencesId().map(f -> "competencesId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
         "}";
     }

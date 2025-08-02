@@ -43,6 +43,31 @@
               </div>
             }
           </dd>
+          <dt><span jhiTranslate="senemploiV4App.offreEmploi.typeContrat">Type Contrat</span></dt>
+          <dd>
+            @if (offreEmploi()!.typeContrat) {
+              <div>
+                <a [routerLink]="['/type-contrat', offreEmploi()!.typeContrat?.id, 'view']">{{ offreEmploiRef.typeContrat?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.offreEmploi.localisation">Localisation</span></dt>
+          <dd>
+            @if (offreEmploi()!.localisation) {
+              <div>
+                <a [routerLink]="['/localisation', offreEmploi()!.localisation?.id, 'view']">{{ offreEmploiRef.localisation?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.offreEmploi.competences">Competences</span></dt>
+          <dd>
+            @for (competences of offreEmploiRef.competences; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/competence', competences.id, 'view']">{{ competences?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

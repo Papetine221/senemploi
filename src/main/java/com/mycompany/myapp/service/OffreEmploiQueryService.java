@@ -47,7 +47,9 @@ public class OffreEmploiQueryService extends QueryService<OffreEmploi> {
     public Page<OffreEmploiDTO> findByCriteria(OffreEmploiCriteria criteria, Pageable page) {
         LOG.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<OffreEmploi> specification = createSpecification(criteria);
-        return offreEmploiRepository.findAll(specification, page).map(offreEmploiMapper::toDto);
+        return offreEmploiRepository
+            .fetchBagRelationships(offreEmploiRepository.findAll(specification, page))
+            .map(offreEmploiMapper::toDto);
     }
 
     /**
@@ -78,7 +80,16 @@ public class OffreEmploiQueryService extends QueryService<OffreEmploi> {
                 buildRangeSpecification(criteria.getSalaire(), OffreEmploi_.salaire),
                 buildRangeSpecification(criteria.getDatePublication(), OffreEmploi_.datePublication),
                 buildRangeSpecification(criteria.getDateExpiration(), OffreEmploi_.dateExpiration),
-                buildSpecification(criteria.getRecruteurId(), root -> root.join(OffreEmploi_.recruteur, JoinType.LEFT).get(Recruteur_.id))
+                buildSpecification(criteria.getRecruteurId(), root -> root.join(OffreEmploi_.recruteur, JoinType.LEFT).get(Recruteur_.id)),
+                buildSpecification(criteria.getTypeContratId(), root ->
+                    root.join(OffreEmploi_.typeContrat, JoinType.LEFT).get(TypeContrat_.id)
+                ),
+                buildSpecification(criteria.getLocalisationId(), root ->
+                    root.join(OffreEmploi_.localisation, JoinType.LEFT).get(Localisation_.id)
+                ),
+                buildSpecification(criteria.getCompetencesId(), root ->
+                    root.join(OffreEmploi_.competences, JoinType.LEFT).get(Competence_.id)
+                )
             );
         }
         return specification;

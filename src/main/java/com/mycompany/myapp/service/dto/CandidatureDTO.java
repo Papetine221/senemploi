@@ -22,8 +22,10 @@ public class CandidatureDTO implements Serializable {
 
     private String statut;
 
+    @NotNull
     private CandidatDTO candidat;
 
+    @NotNull
     private OffreEmploiDTO offre;
 
     public Long getId() {

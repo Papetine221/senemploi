@@ -24,6 +24,7 @@
       "relationshipName": "user",
       "relationshipSide": "left",
       "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required",
       "relationshipWithBuiltInEntity": true
     }
   ],

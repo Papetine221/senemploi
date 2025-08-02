@@ -26,6 +26,21 @@ const routes: Routes = [
     data: { pageTitle: 'senemploiV4App.candidature.home.title' },
     loadChildren: () => import('./candidature/candidature.routes'),
   },
+  {
+    path: 'type-contrat',
+    data: { pageTitle: 'senemploiV4App.typeContrat.home.title' },
+    loadChildren: () => import('./type-contrat/type-contrat.routes'),
+  },
+  {
+    path: 'localisation',
+    data: { pageTitle: 'senemploiV4App.localisation.home.title' },
+    loadChildren: () => import('./localisation/localisation.routes'),
+  },
+  {
+    path: 'competence',
+    data: { pageTitle: 'senemploiV4App.competence.home.title' },
+    loadChildren: () => import('./competence/competence.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 

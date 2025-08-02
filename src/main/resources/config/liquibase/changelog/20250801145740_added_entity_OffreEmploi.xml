@@ -30,12 +30,32 @@
                 <constraints nullable="false" />
             </column>
             <column name="recruteur_id" type="bigint">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
+            </column>
+            <column name="type_contrat_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="localisation_id" type="bigint">
+                <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="offre_emploi" columnName="date_publication" columnDataType="${datetimeType}"/>
         <dropDefaultValue tableName="offre_emploi" columnName="date_expiration" columnDataType="${datetimeType}"/>
+    </changeSet>
+
+    <changeSet id="20250801145740-1-relations" author="jhipster">
+
+        <createTable tableName="rel_offre_emploi__competences">
+            <column name="competences_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="offre_emploi_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="offre_emploi_id, competences_id" tableName="rel_offre_emploi__competences"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -60,6 +80,9 @@
             <column name="salaire" type="numeric"/>
             <column name="date_publication" type="date"/>
             <column name="date_expiration" type="date"/>
+            <column name="recruteur_id" type="numeric"/>
+            <column name="type_contrat_id" type="numeric"/>
+            <column name="localisation_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

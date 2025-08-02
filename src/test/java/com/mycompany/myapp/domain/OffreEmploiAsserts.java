@@ -63,6 +63,9 @@ public class OffreEmploiAsserts {
     public static void assertOffreEmploiUpdatableRelationshipsEquals(OffreEmploi expected, OffreEmploi actual) {
         assertThat(actual)
             .as("Verify OffreEmploi relationships")
-            .satisfies(a -> assertThat(a.getRecruteur()).as("check recruteur").isEqualTo(expected.getRecruteur()));
+            .satisfies(a -> assertThat(a.getRecruteur()).as("check recruteur").isEqualTo(expected.getRecruteur()))
+            .satisfies(a -> assertThat(a.getTypeContrat()).as("check typeContrat").isEqualTo(expected.getTypeContrat()))
+            .satisfies(a -> assertThat(a.getLocalisation()).as("check localisation").isEqualTo(expected.getLocalisation()))
+            .satisfies(a -> assertThat(a.getCompetences()).as("check competences").isEqualTo(expected.getCompetences()));
     }
 }

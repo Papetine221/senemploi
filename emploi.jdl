@@ -21,22 +21,44 @@ entity OffreEmploi {
 entity Candidature {
   lettreMotivation TextBlob
   datePostulation Instant required
-  statut String
+  statut String  // EN_ATTENTE/ACCEPTEE/REFUSEE
+}
+
+//ajouter ; facilite la recherche
+entity TypeContrat {
+  nom String required
+}
+
+entity Localisation {
+  region String required
+  departement String
+  ville String required
+}
+
+entity Competence {
+  nom String required
 }
 
 // Relations
 relationship OneToOne {
-  Candidat{user} to User with builtInEntity
-  Recruteur{user} to User with builtInEntity
+  Candidat{user required} to User with builtInEntity
+  Recruteur{user required} to User with builtInEntity
 }
 
 relationship ManyToOne {
-  OffreEmploi{recruteur} to Recruteur
-  Candidature{candidat} to Candidat
-  Candidature{offre} to OffreEmploi
+  OffreEmploi{recruteur required } to Recruteur
+  OffreEmploi { typeContrat required } to TypeContrat
+  OffreEmploi { localisation required } to Localisation
+  Candidature{candidat required} to Candidat
+  Candidature{offre required} to OffreEmploi
 }
 
-// Options techniques (syntaxe corrigée)
+relationship ManyToMany {
+  OffreEmploi { competences required } to Competence
+}
+
+
+// Options 
 dto * with mapstruct
 service * with serviceImpl
 paginate OffreEmploi, Candidat, Recruteur with infinite-scroll

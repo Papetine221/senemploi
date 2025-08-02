@@ -26,6 +26,9 @@ describe('OffreEmploi Form Service', () => {
             datePublication: expect.any(Object),
             dateExpiration: expect.any(Object),
             recruteur: expect.any(Object),
+            typeContrat: expect.any(Object),
+            localisation: expect.any(Object),
+            competences: expect.any(Object),
           }),
         );
       });
@@ -42,6 +45,9 @@ describe('OffreEmploi Form Service', () => {
             datePublication: expect.any(Object),
             dateExpiration: expect.any(Object),
             recruteur: expect.any(Object),
+            typeContrat: expect.any(Object),
+            localisation: expect.any(Object),
+            competences: expect.any(Object),
           }),
         );
       });

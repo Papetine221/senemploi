@@ -23,7 +23,10 @@
       "salaire": "Salaire",
       "datePublication": "Date Publication",
       "dateExpiration": "Date Expiration",
-      "recruteur": "Recruteur"
+      "recruteur": "Recruteur",
+      "typeContrat": "Type Contrat",
+      "localisation": "Localisation",
+      "competences": "Competences"
     }
   }
 }

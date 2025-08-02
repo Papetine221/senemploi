@@ -17,6 +17,7 @@ public class RecruteurDTO implements Serializable {
 
     private String secteur;
 
+    @NotNull
     private UserDTO user;
 
     public Long getId() {

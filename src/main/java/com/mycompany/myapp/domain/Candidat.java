@@ -1,6 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -34,7 +35,8 @@ public class Candidat implements Serializable {
     @Column(name = "cv_content_type")
     private String cvContentType;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @NotNull
     @JoinColumn(unique = true)
     private User user;
 

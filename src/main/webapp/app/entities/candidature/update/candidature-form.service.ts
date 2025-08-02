@@ -60,8 +60,12 @@ export class CandidatureFormService {
         validators: [Validators.required],
       }),
       statut: new FormControl(candidatureRawValue.statut),
-      candidat: new FormControl(candidatureRawValue.candidat),
-      offre: new FormControl(candidatureRawValue.offre),
+      candidat: new FormControl(candidatureRawValue.candidat, {
+        validators: [Validators.required],
+      }),
+      offre: new FormControl(candidatureRawValue.offre, {
+        validators: [Validators.required],
+      }),
     });
   }
 

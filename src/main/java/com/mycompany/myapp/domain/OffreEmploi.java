@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -44,9 +46,29 @@ public class OffreEmploi implements Serializable {
     @Column(name = "date_expiration", nullable = false)
     private Instant dateExpiration;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "user" }, allowSetters = true)
     private Recruteur recruteur;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    private TypeContrat typeContrat;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    private Localisation localisation;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @NotNull
+    @JoinTable(
+        name = "rel_offre_emploi__competences",
+        joinColumns = @JoinColumn(name = "offre_emploi_id"),
+        inverseJoinColumns = @JoinColumn(name = "competences_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "offreEmplois" }, allowSetters = true)
+    private Set<Competence> competences = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -138,6 +160,55 @@ public class OffreEmploi implements Serializable {
 
     public OffreEmploi recruteur(Recruteur recruteur) {
         this.setRecruteur(recruteur);
+        return this;
+    }
+
+    public TypeContrat getTypeContrat() {
+        return this.typeContrat;
+    }
+
+    public void setTypeContrat(TypeContrat typeContrat) {
+        this.typeContrat = typeContrat;
+    }
+
+    public OffreEmploi typeContrat(TypeContrat typeContrat) {
+        this.setTypeContrat(typeContrat);
+        return this;
+    }
+
+    public Localisation getLocalisation() {
+        return this.localisation;
+    }
+
+    public void setLocalisation(Localisation localisation) {
+        this.localisation = localisation;
+    }
+
+    public OffreEmploi localisation(Localisation localisation) {
+        this.setLocalisation(localisation);
+        return this;
+    }
+
+    public Set<Competence> getCompetences() {
+        return this.competences;
+    }
+
+    public void setCompetences(Set<Competence> competences) {
+        this.competences = competences;
+    }
+
+    public OffreEmploi competences(Set<Competence> competences) {
+        this.setCompetences(competences);
+        return this;
+    }
+
+    public OffreEmploi addCompetences(Competence competence) {
+        this.competences.add(competence);
+        return this;
+    }
+
+    public OffreEmploi removeCompetences(Competence competence) {
+        this.competences.remove(competence);
         return this;
     }
 

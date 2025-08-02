@@ -12,6 +12,12 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IRecruteur } from 'app/entities/recruteur/recruteur.model';
 import { RecruteurService } from 'app/entities/recruteur/service/recruteur.service';
+import { ITypeContrat } from 'app/entities/type-contrat/type-contrat.model';
+import { TypeContratService } from 'app/entities/type-contrat/service/type-contrat.service';
+import { ILocalisation } from 'app/entities/localisation/localisation.model';
+import { LocalisationService } from 'app/entities/localisation/service/localisation.service';
+import { ICompetence } from 'app/entities/competence/competence.model';
+import { CompetenceService } from 'app/entities/competence/service/competence.service';
 import { OffreEmploiService } from '../service/offre-emploi.service';
 import { IOffreEmploi } from '../offre-emploi.model';
 import { OffreEmploiFormGroup, OffreEmploiFormService } from './offre-emploi-form.service';
@@ -26,18 +32,31 @@ export class OffreEmploiUpdateComponent implements OnInit {
   offreEmploi: IOffreEmploi | null = null;
 
   recruteursSharedCollection: IRecruteur[] = [];
+  typeContratsSharedCollection: ITypeContrat[] = [];
+  localisationsSharedCollection: ILocalisation[] = [];
+  competencesSharedCollection: ICompetence[] = [];
 
   protected dataUtils = inject(DataUtils);
   protected eventManager = inject(EventManager);
   protected offreEmploiService = inject(OffreEmploiService);
   protected offreEmploiFormService = inject(OffreEmploiFormService);
   protected recruteurService = inject(RecruteurService);
+  protected typeContratService = inject(TypeContratService);
+  protected localisationService = inject(LocalisationService);
+  protected competenceService = inject(CompetenceService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: OffreEmploiFormGroup = this.offreEmploiFormService.createOffreEmploiFormGroup();
 
   compareRecruteur = (o1: IRecruteur | null, o2: IRecruteur | null): boolean => this.recruteurService.compareRecruteur(o1, o2);
+
+  compareTypeContrat = (o1: ITypeContrat | null, o2: ITypeContrat | null): boolean => this.typeContratService.compareTypeContrat(o1, o2);
+
+  compareLocalisation = (o1: ILocalisation | null, o2: ILocalisation | null): boolean =>
+    this.localisationService.compareLocalisation(o1, o2);
+
+  compareCompetence = (o1: ICompetence | null, o2: ICompetence | null): boolean => this.competenceService.compareCompetence(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ offreEmploi }) => {
@@ -106,6 +125,18 @@ export class OffreEmploiUpdateComponent implements OnInit {
       this.recruteursSharedCollection,
       offreEmploi.recruteur,
     );
+    this.typeContratsSharedCollection = this.typeContratService.addTypeContratToCollectionIfMissing<ITypeContrat>(
+      this.typeContratsSharedCollection,
+      offreEmploi.typeContrat,
+    );
+    this.localisationsSharedCollection = this.localisationService.addLocalisationToCollectionIfMissing<ILocalisation>(
+      this.localisationsSharedCollection,
+      offreEmploi.localisation,
+    );
+    this.competencesSharedCollection = this.competenceService.addCompetenceToCollectionIfMissing<ICompetence>(
+      this.competencesSharedCollection,
+      ...(offreEmploi.competences ?? []),
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -118,5 +149,35 @@ export class OffreEmploiUpdateComponent implements OnInit {
         ),
       )
       .subscribe((recruteurs: IRecruteur[]) => (this.recruteursSharedCollection = recruteurs));
+
+    this.typeContratService
+      .query()
+      .pipe(map((res: HttpResponse<ITypeContrat[]>) => res.body ?? []))
+      .pipe(
+        map((typeContrats: ITypeContrat[]) =>
+          this.typeContratService.addTypeContratToCollectionIfMissing<ITypeContrat>(typeContrats, this.offreEmploi?.typeContrat),
+        ),
+      )
+      .subscribe((typeContrats: ITypeContrat[]) => (this.typeContratsSharedCollection = typeContrats));
+
+    this.localisationService
+      .query()
+      .pipe(map((res: HttpResponse<ILocalisation[]>) => res.body ?? []))
+      .pipe(
+        map((localisations: ILocalisation[]) =>
+          this.localisationService.addLocalisationToCollectionIfMissing<ILocalisation>(localisations, this.offreEmploi?.localisation),
+        ),
+      )
+      .subscribe((localisations: ILocalisation[]) => (this.localisationsSharedCollection = localisations));
+
+    this.competenceService
+      .query()
+      .pipe(map((res: HttpResponse<ICompetence[]>) => res.body ?? []))
+      .pipe(
+        map((competences: ICompetence[]) =>
+          this.competenceService.addCompetenceToCollectionIfMissing<ICompetence>(competences, ...(this.offreEmploi?.competences ?? [])),
+        ),
+      )
+      .subscribe((competences: ICompetence[]) => (this.competencesSharedCollection = competences));
   }
 }

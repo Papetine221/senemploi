@@ -6,6 +6,8 @@ import com.mycompany.myapp.service.CandidatService;
 import com.mycompany.myapp.service.criteria.CandidatCriteria;
 import com.mycompany.myapp.service.dto.CandidatDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -62,7 +64,7 @@ public class CandidatResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<CandidatDTO> createCandidat(@RequestBody CandidatDTO candidatDTO) throws URISyntaxException {
+    public ResponseEntity<CandidatDTO> createCandidat(@Valid @RequestBody CandidatDTO candidatDTO) throws URISyntaxException {
         LOG.debug("REST request to save Candidat : {}", candidatDTO);
         if (candidatDTO.getId() != null) {
             throw new BadRequestAlertException("A new candidat cannot already have an ID", ENTITY_NAME, "idexists");
@@ -86,7 +88,7 @@ public class CandidatResource {
     @PutMapping("/{id}")
     public ResponseEntity<CandidatDTO> updateCandidat(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody CandidatDTO candidatDTO
+        @Valid @RequestBody CandidatDTO candidatDTO
     ) throws URISyntaxException {
         LOG.debug("REST request to update Candidat : {}, {}", id, candidatDTO);
         if (candidatDTO.getId() == null) {
@@ -120,7 +122,7 @@ public class CandidatResource {
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<CandidatDTO> partialUpdateCandidat(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody CandidatDTO candidatDTO
+        @NotNull @RequestBody CandidatDTO candidatDTO
     ) throws URISyntaxException {
         LOG.debug("REST request to partial update Candidat partially : {}, {}", id, candidatDTO);
         if (candidatDTO.getId() == null) {

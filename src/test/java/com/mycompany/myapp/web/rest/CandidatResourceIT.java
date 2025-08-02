@@ -82,8 +82,18 @@ class CandidatResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Candidat createEntity() {
-        return new Candidat().telephone(DEFAULT_TELEPHONE).adresse(DEFAULT_ADRESSE).cv(DEFAULT_CV).cvContentType(DEFAULT_CV_CONTENT_TYPE);
+    public static Candidat createEntity(EntityManager em) {
+        Candidat candidat = new Candidat()
+            .telephone(DEFAULT_TELEPHONE)
+            .adresse(DEFAULT_ADRESSE)
+            .cv(DEFAULT_CV)
+            .cvContentType(DEFAULT_CV_CONTENT_TYPE);
+        // Add required entity
+        User user = UserResourceIT.createEntity();
+        em.persist(user);
+        em.flush();
+        candidat.setUser(user);
+        return candidat;
     }
 
     /**
@@ -92,13 +102,23 @@ class CandidatResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Candidat createUpdatedEntity() {
-        return new Candidat().telephone(UPDATED_TELEPHONE).adresse(UPDATED_ADRESSE).cv(UPDATED_CV).cvContentType(UPDATED_CV_CONTENT_TYPE);
+    public static Candidat createUpdatedEntity(EntityManager em) {
+        Candidat updatedCandidat = new Candidat()
+            .telephone(UPDATED_TELEPHONE)
+            .adresse(UPDATED_ADRESSE)
+            .cv(UPDATED_CV)
+            .cvContentType(UPDATED_CV_CONTENT_TYPE);
+        // Add required entity
+        User user = UserResourceIT.createEntity();
+        em.persist(user);
+        em.flush();
+        updatedCandidat.setUser(user);
+        return updatedCandidat;
     }
 
     @BeforeEach
     void initTest() {
-        candidat = createEntity();
+        candidat = createEntity(em);
     }
 
     @AfterEach
@@ -305,16 +325,8 @@ class CandidatResourceIT {
     @Test
     @Transactional
     void getAllCandidatsByUserIsEqualToSomething() throws Exception {
-        User user;
-        if (TestUtil.findAll(em, User.class).isEmpty()) {
-            candidatRepository.saveAndFlush(candidat);
-            user = UserResourceIT.createEntity();
-        } else {
-            user = TestUtil.findAll(em, User.class).get(0);
-        }
-        em.persist(user);
-        em.flush();
-        candidat.setUser(user);
+        // Get already existing entity
+        User user = candidat.getUser();
         candidatRepository.saveAndFlush(candidat);
         Long userId = user.getId();
         // Get all the candidatList where user equals to userId
@@ -479,7 +491,7 @@ class CandidatResourceIT {
         Candidat partialUpdatedCandidat = new Candidat();
         partialUpdatedCandidat.setId(candidat.getId());
 
-        partialUpdatedCandidat.telephone(UPDATED_TELEPHONE).adresse(UPDATED_ADRESSE);
+        partialUpdatedCandidat.cv(UPDATED_CV).cvContentType(UPDATED_CV_CONTENT_TYPE);
 
         restCandidatMockMvc
             .perform(

@@ -1,0 +1,43 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (competence(); as competenceRef) {
+      <div>
+        <h2 data-cy="competenceDetailsHeading"><span jhiTranslate="senemploiV4App.competence.detail.title">Competence</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ competenceRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.competence.nom">Nom</span></dt>
+          <dd>
+            <span>{{ competenceRef.nom }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.competence.offreEmploi">Offre Emploi</span></dt>
+          <dd>
+            @for (offreEmploi of competenceRef.offreEmplois; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/offre-emploi', offreEmploi.id, 'view']">{{ offreEmploi?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/competence', competenceRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

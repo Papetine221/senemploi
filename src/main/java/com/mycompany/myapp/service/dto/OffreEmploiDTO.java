@@ -4,7 +4,9 @@ import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.OffreEmploi} entity.
@@ -29,7 +31,17 @@ public class OffreEmploiDTO implements Serializable {
     @NotNull
     private Instant dateExpiration;
 
+    @NotNull
     private RecruteurDTO recruteur;
+
+    @NotNull
+    private TypeContratDTO typeContrat;
+
+    @NotNull
+    private LocalisationDTO localisation;
+
+    @NotNull
+    private Set<CompetenceDTO> competences = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -87,6 +99,30 @@ public class OffreEmploiDTO implements Serializable {
         this.recruteur = recruteur;
     }
 
+    public TypeContratDTO getTypeContrat() {
+        return typeContrat;
+    }
+
+    public void setTypeContrat(TypeContratDTO typeContrat) {
+        this.typeContrat = typeContrat;
+    }
+
+    public LocalisationDTO getLocalisation() {
+        return localisation;
+    }
+
+    public void setLocalisation(LocalisationDTO localisation) {
+        this.localisation = localisation;
+    }
+
+    public Set<CompetenceDTO> getCompetences() {
+        return competences;
+    }
+
+    public void setCompetences(Set<CompetenceDTO> competences) {
+        this.competences = competences;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -119,6 +155,9 @@ public class OffreEmploiDTO implements Serializable {
             ", datePublication='" + getDatePublication() + "'" +
             ", dateExpiration='" + getDateExpiration() + "'" +
             ", recruteur=" + getRecruteur() +
+            ", typeContrat=" + getTypeContrat() +
+            ", localisation=" + getLocalisation() +
+            ", competences=" + getCompetences() +
             "}";
     }
 }

@@ -50,12 +50,21 @@
         <div class="mb-3">
           <label class="form-label" for="field_user" jhiTranslate="senemploiV4App.candidat.user">User</label>
           <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareUser">
-            <option [ngValue]="null"></option>
+            @if (!editForm.get('user')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
             @for (userOption of usersSharedCollection; track $index) {
               <option [ngValue]="userOption">{{ userOption.id }}</option>
             }
           </select>
         </div>
+        @if (editForm.get(['user'])!.invalid && (editForm.get(['user'])!.dirty || editForm.get(['user'])!.touched)) {
+          <div>
+            @if (editForm.get(['user'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
       </div>
 
       <div>

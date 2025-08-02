@@ -29,7 +29,8 @@ public class Recruteur implements Serializable {
     @Column(name = "secteur")
     private String secteur;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @NotNull
     @JoinColumn(unique = true)
     private User user;
 

@@ -28,7 +28,7 @@ type OffreEmploiFormRawValue = FormValueOf<IOffreEmploi>;
 
 type NewOffreEmploiFormRawValue = FormValueOf<NewOffreEmploi>;
 
-type OffreEmploiFormDefaults = Pick<NewOffreEmploi, 'id' | 'datePublication' | 'dateExpiration'>;
+type OffreEmploiFormDefaults = Pick<NewOffreEmploi, 'id' | 'datePublication' | 'dateExpiration' | 'competences'>;
 
 type OffreEmploiFormGroupContent = {
   id: FormControl<OffreEmploiFormRawValue['id'] | NewOffreEmploi['id']>;
@@ -38,6 +38,9 @@ type OffreEmploiFormGroupContent = {
   datePublication: FormControl<OffreEmploiFormRawValue['datePublication']>;
   dateExpiration: FormControl<OffreEmploiFormRawValue['dateExpiration']>;
   recruteur: FormControl<OffreEmploiFormRawValue['recruteur']>;
+  typeContrat: FormControl<OffreEmploiFormRawValue['typeContrat']>;
+  localisation: FormControl<OffreEmploiFormRawValue['localisation']>;
+  competences: FormControl<OffreEmploiFormRawValue['competences']>;
 };
 
 export type OffreEmploiFormGroup = FormGroup<OffreEmploiFormGroupContent>;
@@ -72,7 +75,16 @@ export class OffreEmploiFormService {
       dateExpiration: new FormControl(offreEmploiRawValue.dateExpiration, {
         validators: [Validators.required],
       }),
-      recruteur: new FormControl(offreEmploiRawValue.recruteur),
+      recruteur: new FormControl(offreEmploiRawValue.recruteur, {
+        validators: [Validators.required],
+      }),
+      typeContrat: new FormControl(offreEmploiRawValue.typeContrat, {
+        validators: [Validators.required],
+      }),
+      localisation: new FormControl(offreEmploiRawValue.localisation, {
+        validators: [Validators.required],
+      }),
+      competences: new FormControl(offreEmploiRawValue.competences ?? []),
     });
   }
 
@@ -97,6 +109,7 @@ export class OffreEmploiFormService {
       id: null,
       datePublication: currentTime,
       dateExpiration: currentTime,
+      competences: [],
     };
   }
 
@@ -117,6 +130,7 @@ export class OffreEmploiFormService {
       ...offreEmploi,
       datePublication: offreEmploi.datePublication ? offreEmploi.datePublication.format(DATE_TIME_FORMAT) : undefined,
       dateExpiration: offreEmploi.dateExpiration ? offreEmploi.dateExpiration.format(DATE_TIME_FORMAT) : undefined,
+      competences: offreEmploi.competences ?? [],
     };
   }
 }

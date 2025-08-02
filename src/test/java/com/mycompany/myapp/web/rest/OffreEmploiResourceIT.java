@@ -4,26 +4,37 @@ import static com.mycompany.myapp.domain.OffreEmploiAsserts.*;
 import static com.mycompany.myapp.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.domain.Competence;
+import com.mycompany.myapp.domain.Localisation;
 import com.mycompany.myapp.domain.OffreEmploi;
 import com.mycompany.myapp.domain.Recruteur;
+import com.mycompany.myapp.domain.TypeContrat;
 import com.mycompany.myapp.repository.OffreEmploiRepository;
+import com.mycompany.myapp.service.OffreEmploiService;
 import com.mycompany.myapp.service.dto.OffreEmploiDTO;
 import com.mycompany.myapp.service.mapper.OffreEmploiMapper;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link OffreEmploiResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class OffreEmploiResourceIT {
@@ -65,8 +77,14 @@ class OffreEmploiResourceIT {
     @Autowired
     private OffreEmploiRepository offreEmploiRepository;
 
+    @Mock
+    private OffreEmploiRepository offreEmploiRepositoryMock;
+
     @Autowired
     private OffreEmploiMapper offreEmploiMapper;
+
+    @Mock
+    private OffreEmploiService offreEmploiServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -84,13 +102,54 @@ class OffreEmploiResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static OffreEmploi createEntity() {
-        return new OffreEmploi()
+    public static OffreEmploi createEntity(EntityManager em) {
+        OffreEmploi offreEmploi = new OffreEmploi()
             .titre(DEFAULT_TITRE)
             .description(DEFAULT_DESCRIPTION)
             .salaire(DEFAULT_SALAIRE)
             .datePublication(DEFAULT_DATE_PUBLICATION)
             .dateExpiration(DEFAULT_DATE_EXPIRATION);
+        // Add required entity
+        Recruteur recruteur;
+        if (TestUtil.findAll(em, Recruteur.class).isEmpty()) {
+            recruteur = RecruteurResourceIT.createEntity(em);
+            em.persist(recruteur);
+            em.flush();
+        } else {
+            recruteur = TestUtil.findAll(em, Recruteur.class).get(0);
+        }
+        offreEmploi.setRecruteur(recruteur);
+        // Add required entity
+        TypeContrat typeContrat;
+        if (TestUtil.findAll(em, TypeContrat.class).isEmpty()) {
+            typeContrat = TypeContratResourceIT.createEntity();
+            em.persist(typeContrat);
+            em.flush();
+        } else {
+            typeContrat = TestUtil.findAll(em, TypeContrat.class).get(0);
+        }
+        offreEmploi.setTypeContrat(typeContrat);
+        // Add required entity
+        Localisation localisation;
+        if (TestUtil.findAll(em, Localisation.class).isEmpty()) {
+            localisation = LocalisationResourceIT.createEntity();
+            em.persist(localisation);
+            em.flush();
+        } else {
+            localisation = TestUtil.findAll(em, Localisation.class).get(0);
+        }
+        offreEmploi.setLocalisation(localisation);
+        // Add required entity
+        Competence competence;
+        if (TestUtil.findAll(em, Competence.class).isEmpty()) {
+            competence = CompetenceResourceIT.createEntity();
+            em.persist(competence);
+            em.flush();
+        } else {
+            competence = TestUtil.findAll(em, Competence.class).get(0);
+        }
+        offreEmploi.getCompetences().add(competence);
+        return offreEmploi;
     }
 
     /**
@@ -99,18 +158,59 @@ class OffreEmploiResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static OffreEmploi createUpdatedEntity() {
-        return new OffreEmploi()
+    public static OffreEmploi createUpdatedEntity(EntityManager em) {
+        OffreEmploi updatedOffreEmploi = new OffreEmploi()
             .titre(UPDATED_TITRE)
             .description(UPDATED_DESCRIPTION)
             .salaire(UPDATED_SALAIRE)
             .datePublication(UPDATED_DATE_PUBLICATION)
             .dateExpiration(UPDATED_DATE_EXPIRATION);
+        // Add required entity
+        Recruteur recruteur;
+        if (TestUtil.findAll(em, Recruteur.class).isEmpty()) {
+            recruteur = RecruteurResourceIT.createUpdatedEntity(em);
+            em.persist(recruteur);
+            em.flush();
+        } else {
+            recruteur = TestUtil.findAll(em, Recruteur.class).get(0);
+        }
+        updatedOffreEmploi.setRecruteur(recruteur);
+        // Add required entity
+        TypeContrat typeContrat;
+        if (TestUtil.findAll(em, TypeContrat.class).isEmpty()) {
+            typeContrat = TypeContratResourceIT.createUpdatedEntity();
+            em.persist(typeContrat);
+            em.flush();
+        } else {
+            typeContrat = TestUtil.findAll(em, TypeContrat.class).get(0);
+        }
+        updatedOffreEmploi.setTypeContrat(typeContrat);
+        // Add required entity
+        Localisation localisation;
+        if (TestUtil.findAll(em, Localisation.class).isEmpty()) {
+            localisation = LocalisationResourceIT.createUpdatedEntity();
+            em.persist(localisation);
+            em.flush();
+        } else {
+            localisation = TestUtil.findAll(em, Localisation.class).get(0);
+        }
+        updatedOffreEmploi.setLocalisation(localisation);
+        // Add required entity
+        Competence competence;
+        if (TestUtil.findAll(em, Competence.class).isEmpty()) {
+            competence = CompetenceResourceIT.createUpdatedEntity();
+            em.persist(competence);
+            em.flush();
+        } else {
+            competence = TestUtil.findAll(em, Competence.class).get(0);
+        }
+        updatedOffreEmploi.getCompetences().add(competence);
+        return updatedOffreEmploi;
     }
 
     @BeforeEach
     void initTest() {
-        offreEmploi = createEntity();
+        offreEmploi = createEntity(em);
     }
 
     @AfterEach
@@ -231,6 +331,23 @@ class OffreEmploiResourceIT {
             .andExpect(jsonPath("$.[*].salaire").value(hasItem(DEFAULT_SALAIRE)))
             .andExpect(jsonPath("$.[*].datePublication").value(hasItem(DEFAULT_DATE_PUBLICATION.toString())))
             .andExpect(jsonPath("$.[*].dateExpiration").value(hasItem(DEFAULT_DATE_EXPIRATION.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllOffreEmploisWithEagerRelationshipsIsEnabled() throws Exception {
+        when(offreEmploiServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restOffreEmploiMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(offreEmploiServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllOffreEmploisWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(offreEmploiServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restOffreEmploiMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+        verify(offreEmploiRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
     @Test
@@ -462,7 +579,7 @@ class OffreEmploiResourceIT {
         Recruteur recruteur;
         if (TestUtil.findAll(em, Recruteur.class).isEmpty()) {
             offreEmploiRepository.saveAndFlush(offreEmploi);
-            recruteur = RecruteurResourceIT.createEntity();
+            recruteur = RecruteurResourceIT.createEntity(em);
         } else {
             recruteur = TestUtil.findAll(em, Recruteur.class).get(0);
         }
@@ -476,6 +593,72 @@ class OffreEmploiResourceIT {
 
         // Get all the offreEmploiList where recruteur equals to (recruteurId + 1)
         defaultOffreEmploiShouldNotBeFound("recruteurId.equals=" + (recruteurId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllOffreEmploisByTypeContratIsEqualToSomething() throws Exception {
+        TypeContrat typeContrat;
+        if (TestUtil.findAll(em, TypeContrat.class).isEmpty()) {
+            offreEmploiRepository.saveAndFlush(offreEmploi);
+            typeContrat = TypeContratResourceIT.createEntity();
+        } else {
+            typeContrat = TestUtil.findAll(em, TypeContrat.class).get(0);
+        }
+        em.persist(typeContrat);
+        em.flush();
+        offreEmploi.setTypeContrat(typeContrat);
+        offreEmploiRepository.saveAndFlush(offreEmploi);
+        Long typeContratId = typeContrat.getId();
+        // Get all the offreEmploiList where typeContrat equals to typeContratId
+        defaultOffreEmploiShouldBeFound("typeContratId.equals=" + typeContratId);
+
+        // Get all the offreEmploiList where typeContrat equals to (typeContratId + 1)
+        defaultOffreEmploiShouldNotBeFound("typeContratId.equals=" + (typeContratId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllOffreEmploisByLocalisationIsEqualToSomething() throws Exception {
+        Localisation localisation;
+        if (TestUtil.findAll(em, Localisation.class).isEmpty()) {
+            offreEmploiRepository.saveAndFlush(offreEmploi);
+            localisation = LocalisationResourceIT.createEntity();
+        } else {
+            localisation = TestUtil.findAll(em, Localisation.class).get(0);
+        }
+        em.persist(localisation);
+        em.flush();
+        offreEmploi.setLocalisation(localisation);
+        offreEmploiRepository.saveAndFlush(offreEmploi);
+        Long localisationId = localisation.getId();
+        // Get all the offreEmploiList where localisation equals to localisationId
+        defaultOffreEmploiShouldBeFound("localisationId.equals=" + localisationId);
+
+        // Get all the offreEmploiList where localisation equals to (localisationId + 1)
+        defaultOffreEmploiShouldNotBeFound("localisationId.equals=" + (localisationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllOffreEmploisByCompetencesIsEqualToSomething() throws Exception {
+        Competence competences;
+        if (TestUtil.findAll(em, Competence.class).isEmpty()) {
+            offreEmploiRepository.saveAndFlush(offreEmploi);
+            competences = CompetenceResourceIT.createEntity();
+        } else {
+            competences = TestUtil.findAll(em, Competence.class).get(0);
+        }
+        em.persist(competences);
+        em.flush();
+        offreEmploi.addCompetences(competences);
+        offreEmploiRepository.saveAndFlush(offreEmploi);
+        Long competencesId = competences.getId();
+        // Get all the offreEmploiList where competences equals to competencesId
+        defaultOffreEmploiShouldBeFound("competencesId.equals=" + competencesId);
+
+        // Get all the offreEmploiList where competences equals to (competencesId + 1)
+        defaultOffreEmploiShouldNotBeFound("competencesId.equals=" + (competencesId + 1));
     }
 
     private void defaultOffreEmploiFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
@@ -639,12 +822,7 @@ class OffreEmploiResourceIT {
         OffreEmploi partialUpdatedOffreEmploi = new OffreEmploi();
         partialUpdatedOffreEmploi.setId(offreEmploi.getId());
 
-        partialUpdatedOffreEmploi
-            .titre(UPDATED_TITRE)
-            .description(UPDATED_DESCRIPTION)
-            .salaire(UPDATED_SALAIRE)
-            .datePublication(UPDATED_DATE_PUBLICATION)
-            .dateExpiration(UPDATED_DATE_EXPIRATION);
+        partialUpdatedOffreEmploi.description(UPDATED_DESCRIPTION).salaire(UPDATED_SALAIRE).dateExpiration(UPDATED_DATE_EXPIRATION);
 
         restOffreEmploiMockMvc
             .perform(

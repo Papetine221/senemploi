@@ -46,7 +46,9 @@ export class CandidatFormService {
       adresse: new FormControl(candidatRawValue.adresse),
       cv: new FormControl(candidatRawValue.cv),
       cvContentType: new FormControl(candidatRawValue.cvContentType),
-      user: new FormControl(candidatRawValue.user),
+      user: new FormControl(candidatRawValue.user, {
+        validators: [Validators.required],
+      }),
     });
   }
 

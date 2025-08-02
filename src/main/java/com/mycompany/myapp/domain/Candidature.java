@@ -35,12 +35,14 @@ public class Candidature implements Serializable {
     @Column(name = "statut")
     private String statut;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "user" }, allowSetters = true)
     private Candidat candidat;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "recruteur" }, allowSetters = true)
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "recruteur", "typeContrat", "localisation", "competences" }, allowSetters = true)
     private OffreEmploi offre;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

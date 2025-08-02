@@ -81,6 +81,9 @@ class OffreEmploiCriteriaTest {
         offreEmploiCriteria.datePublication();
         offreEmploiCriteria.dateExpiration();
         offreEmploiCriteria.recruteurId();
+        offreEmploiCriteria.typeContratId();
+        offreEmploiCriteria.localisationId();
+        offreEmploiCriteria.competencesId();
         offreEmploiCriteria.distinct();
     }
 
@@ -93,6 +96,9 @@ class OffreEmploiCriteriaTest {
                 condition.apply(criteria.getDatePublication()) &&
                 condition.apply(criteria.getDateExpiration()) &&
                 condition.apply(criteria.getRecruteurId()) &&
+                condition.apply(criteria.getTypeContratId()) &&
+                condition.apply(criteria.getLocalisationId()) &&
+                condition.apply(criteria.getCompetencesId()) &&
                 condition.apply(criteria.getDistinct()),
             "every filter matches"
         );
@@ -107,6 +113,9 @@ class OffreEmploiCriteriaTest {
                 condition.apply(criteria.getDatePublication(), copy.getDatePublication()) &&
                 condition.apply(criteria.getDateExpiration(), copy.getDateExpiration()) &&
                 condition.apply(criteria.getRecruteurId(), copy.getRecruteurId()) &&
+                condition.apply(criteria.getTypeContratId(), copy.getTypeContratId()) &&
+                condition.apply(criteria.getLocalisationId(), copy.getLocalisationId()) &&
+                condition.apply(criteria.getCompetencesId(), copy.getCompetencesId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),
             "every filter matches"
         );

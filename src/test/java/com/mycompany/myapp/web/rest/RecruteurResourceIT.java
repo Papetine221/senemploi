@@ -76,8 +76,14 @@ class RecruteurResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Recruteur createEntity() {
-        return new Recruteur().nomEntreprise(DEFAULT_NOM_ENTREPRISE).secteur(DEFAULT_SECTEUR);
+    public static Recruteur createEntity(EntityManager em) {
+        Recruteur recruteur = new Recruteur().nomEntreprise(DEFAULT_NOM_ENTREPRISE).secteur(DEFAULT_SECTEUR);
+        // Add required entity
+        User user = UserResourceIT.createEntity();
+        em.persist(user);
+        em.flush();
+        recruteur.setUser(user);
+        return recruteur;
     }
 
     /**
@@ -86,13 +92,19 @@ class RecruteurResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Recruteur createUpdatedEntity() {
-        return new Recruteur().nomEntreprise(UPDATED_NOM_ENTREPRISE).secteur(UPDATED_SECTEUR);
+    public static Recruteur createUpdatedEntity(EntityManager em) {
+        Recruteur updatedRecruteur = new Recruteur().nomEntreprise(UPDATED_NOM_ENTREPRISE).secteur(UPDATED_SECTEUR);
+        // Add required entity
+        User user = UserResourceIT.createEntity();
+        em.persist(user);
+        em.flush();
+        updatedRecruteur.setUser(user);
+        return updatedRecruteur;
     }
 
     @BeforeEach
     void initTest() {
-        recruteur = createEntity();
+        recruteur = createEntity(em);
     }
 
     @AfterEach
@@ -318,16 +330,8 @@ class RecruteurResourceIT {
     @Test
     @Transactional
     void getAllRecruteursByUserIsEqualToSomething() throws Exception {
-        User user;
-        if (TestUtil.findAll(em, User.class).isEmpty()) {
-            recruteurRepository.saveAndFlush(recruteur);
-            user = UserResourceIT.createEntity();
-        } else {
-            user = TestUtil.findAll(em, User.class).get(0);
-        }
-        em.persist(user);
-        em.flush();
-        recruteur.setUser(user);
+        // Get already existing entity
+        User user = recruteur.getUser();
         recruteurRepository.saveAndFlush(recruteur);
         Long userId = user.getId();
         // Get all the recruteurList where user equals to userId
@@ -489,8 +493,6 @@ class RecruteurResourceIT {
         // Update the recruteur using partial update
         Recruteur partialUpdatedRecruteur = new Recruteur();
         partialUpdatedRecruteur.setId(recruteur.getId());
-
-        partialUpdatedRecruteur.nomEntreprise(UPDATED_NOM_ENTREPRISE);
 
         restRecruteurMockMvc
             .perform(

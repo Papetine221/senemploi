@@ -1,0 +1,28 @@
+{
+  "annotations": {
+    "changelogDate": "20250802153615"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "region",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "departement",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ville",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Localisation",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

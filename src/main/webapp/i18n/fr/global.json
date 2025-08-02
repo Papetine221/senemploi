@@ -11,7 +11,10 @@
         "candidat": "Candidat",
         "recruteur": "Recruteur",
         "offreEmploi": "Offre Emploi",
-        "candidature": "Candidature"
+        "candidature": "Candidature",
+        "typeContrat": "Type Contrat",
+        "localisation": "Localisation",
+        "competence": "Competence"
       },
       "account": {
         "main": "Compte",

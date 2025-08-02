@@ -40,7 +40,29 @@
       "otherEntityName": "recruteur",
       "relationshipName": "recruteur",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "typeContrat",
+      "relationshipName": "typeContrat",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "localisation",
+      "relationshipName": "localisation",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "competence",
+      "relationshipName": "competences",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": "required"
     }
   ],
   "searchEngine": "no",

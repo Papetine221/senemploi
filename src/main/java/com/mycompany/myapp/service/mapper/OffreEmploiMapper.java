@@ -1,9 +1,17 @@
 package com.mycompany.myapp.service.mapper;
 
+import com.mycompany.myapp.domain.Competence;
+import com.mycompany.myapp.domain.Localisation;
 import com.mycompany.myapp.domain.OffreEmploi;
 import com.mycompany.myapp.domain.Recruteur;
+import com.mycompany.myapp.domain.TypeContrat;
+import com.mycompany.myapp.service.dto.CompetenceDTO;
+import com.mycompany.myapp.service.dto.LocalisationDTO;
 import com.mycompany.myapp.service.dto.OffreEmploiDTO;
 import com.mycompany.myapp.service.dto.RecruteurDTO;
+import com.mycompany.myapp.service.dto.TypeContratDTO;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.mapstruct.*;
 
 /**
@@ -12,10 +20,36 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface OffreEmploiMapper extends EntityMapper<OffreEmploiDTO, OffreEmploi> {
     @Mapping(target = "recruteur", source = "recruteur", qualifiedByName = "recruteurId")
+    @Mapping(target = "typeContrat", source = "typeContrat", qualifiedByName = "typeContratId")
+    @Mapping(target = "localisation", source = "localisation", qualifiedByName = "localisationId")
+    @Mapping(target = "competences", source = "competences", qualifiedByName = "competenceIdSet")
     OffreEmploiDTO toDto(OffreEmploi s);
+
+    @Mapping(target = "removeCompetences", ignore = true)
+    OffreEmploi toEntity(OffreEmploiDTO offreEmploiDTO);
 
     @Named("recruteurId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     RecruteurDTO toDtoRecruteurId(Recruteur recruteur);
+
+    @Named("typeContratId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    TypeContratDTO toDtoTypeContratId(TypeContrat typeContrat);
+
+    @Named("localisationId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    LocalisationDTO toDtoLocalisationId(Localisation localisation);
+
+    @Named("competenceId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    CompetenceDTO toDtoCompetenceId(Competence competence);
+
+    @Named("competenceIdSet")
+    default Set<CompetenceDTO> toDtoCompetenceIdSet(Set<Competence> competence) {
+        return competence.stream().map(this::toDtoCompetenceId).collect(Collectors.toSet());
+    }
 }

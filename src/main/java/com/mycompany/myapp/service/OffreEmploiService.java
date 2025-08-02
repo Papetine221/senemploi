@@ -2,6 +2,8 @@ package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.OffreEmploiDTO;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Service Interface for managing {@link com.mycompany.myapp.domain.OffreEmploi}.
@@ -30,6 +32,14 @@ public interface OffreEmploiService {
      * @return the persisted entity.
      */
     Optional<OffreEmploiDTO> partialUpdate(OffreEmploiDTO offreEmploiDTO);
+
+    /**
+     * Get all the offreEmplois with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<OffreEmploiDTO> findAllWithEagerRelationships(Pageable pageable);
 
     /**
      * Get the "id" offreEmploi.

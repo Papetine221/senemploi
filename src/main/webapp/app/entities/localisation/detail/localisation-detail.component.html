@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (localisation(); as localisationRef) {
+      <div>
+        <h2 data-cy="localisationDetailsHeading"><span jhiTranslate="senemploiV4App.localisation.detail.title">Localisation</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ localisationRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.localisation.region">Region</span></dt>
+          <dd>
+            <span>{{ localisationRef.region }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.localisation.departement">Departement</span></dt>
+          <dd>
+            <span>{{ localisationRef.departement }}</span>
+          </dd>
+          <dt><span jhiTranslate="senemploiV4App.localisation.ville">Ville</span></dt>
+          <dd>
+            <span>{{ localisationRef.ville }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/localisation', localisationRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -44,7 +44,9 @@ export class RecruteurFormService {
         validators: [Validators.required],
       }),
       secteur: new FormControl(recruteurRawValue.secteur),
-      user: new FormControl(recruteurRawValue.user),
+      user: new FormControl(recruteurRawValue.user, {
+        validators: [Validators.required],
+      }),
     });
   }
 

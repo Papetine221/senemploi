@@ -16,5 +16,33 @@
                                  referencedColumnNames="id"
                                  referencedTableName="recruteur"
                                  />
+
+        <addForeignKeyConstraint baseColumnNames="type_contrat_id"
+                                 baseTableName="offre_emploi"
+                                 constraintName="fk_offre_emploi__type_contrat_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="type_contrat"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="localisation_id"
+                                 baseTableName="offre_emploi"
+                                 constraintName="fk_offre_emploi__localisation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="localisation"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="offre_emploi_id"
+                                 baseTableName="rel_offre_emploi__competences"
+                                 constraintName="fk_rel_offre_emploi__competences__offre_emploi_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="offre_emploi"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="competences_id"
+                                 baseTableName="rel_offre_emploi__competences"
+                                 constraintName="fk_rel_offre_emploi__competences__competences_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="competence"
+                                 />
     </changeSet>
 </databaseChangeLog>

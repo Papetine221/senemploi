@@ -81,6 +81,18 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="typeContrat.id">
+              <div class="d-flex">
+                <span jhiTranslate="senemploiV4App.offreEmploi.typeContrat">Type Contrat</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="localisation.id">
+              <div class="d-flex">
+                <span jhiTranslate="senemploiV4App.offreEmploi.localisation">Localisation</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -99,6 +111,20 @@
                 @if (offreEmploi.recruteur) {
                   <div>
                     <a [routerLink]="['/recruteur', offreEmploi.recruteur.id, 'view']">{{ offreEmploi.recruteur.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (offreEmploi.typeContrat) {
+                  <div>
+                    <a [routerLink]="['/type-contrat', offreEmploi.typeContrat.id, 'view']">{{ offreEmploi.typeContrat.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (offreEmploi.localisation) {
+                  <div>
+                    <a [routerLink]="['/localisation', offreEmploi.localisation.id, 'view']">{{ offreEmploi.localisation.id }}</a>
                   </div>
                 }
               </td>

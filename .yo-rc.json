@@ -13,7 +13,7 @@
     "devDatabaseType": "mysql",
     "enableHibernateCache": true,
     "enableTranslation": true,
-    "entities": [],
+    "entities": ["Candidat", "Recruteur", "OffreEmploi", "Candidature", "TypeContrat", "Localisation", "Competence"],
     "feignClient": null,
     "jhipsterVersion": "8.11.0",
     "jwtSecretKey": "YjVjN2I1ZjNmNGFkY2IyYTMxZmNhMTY0OTllOTcwMGE4MTI1M2EyMjU4MDdhZGM1NDQ1NGUzZTNkMzNjMWVhYmRhNjU2NDBlMWIwMzlhZDQ2OTRjOTQ5NTYzMDg0Y2RjNWE2MzJjMzI3YWY0MTI1MGQ3ZmQ2NmViMDkxNjZlZjE=",

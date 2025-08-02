@@ -78,11 +78,32 @@ class CandidatureResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Candidature createEntity() {
-        return new Candidature()
+    public static Candidature createEntity(EntityManager em) {
+        Candidature candidature = new Candidature()
             .lettreMotivation(DEFAULT_LETTRE_MOTIVATION)
             .datePostulation(DEFAULT_DATE_POSTULATION)
             .statut(DEFAULT_STATUT);
+        // Add required entity
+        Candidat candidat;
+        if (TestUtil.findAll(em, Candidat.class).isEmpty()) {
+            candidat = CandidatResourceIT.createEntity(em);
+            em.persist(candidat);
+            em.flush();
+        } else {
+            candidat = TestUtil.findAll(em, Candidat.class).get(0);
+        }
+        candidature.setCandidat(candidat);
+        // Add required entity
+        OffreEmploi offreEmploi;
+        if (TestUtil.findAll(em, OffreEmploi.class).isEmpty()) {
+            offreEmploi = OffreEmploiResourceIT.createEntity(em);
+            em.persist(offreEmploi);
+            em.flush();
+        } else {
+            offreEmploi = TestUtil.findAll(em, OffreEmploi.class).get(0);
+        }
+        candidature.setOffre(offreEmploi);
+        return candidature;
     }
 
     /**
@@ -91,16 +112,37 @@ class CandidatureResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Candidature createUpdatedEntity() {
-        return new Candidature()
+    public static Candidature createUpdatedEntity(EntityManager em) {
+        Candidature updatedCandidature = new Candidature()
             .lettreMotivation(UPDATED_LETTRE_MOTIVATION)
             .datePostulation(UPDATED_DATE_POSTULATION)
             .statut(UPDATED_STATUT);
+        // Add required entity
+        Candidat candidat;
+        if (TestUtil.findAll(em, Candidat.class).isEmpty()) {
+            candidat = CandidatResourceIT.createUpdatedEntity(em);
+            em.persist(candidat);
+            em.flush();
+        } else {
+            candidat = TestUtil.findAll(em, Candidat.class).get(0);
+        }
+        updatedCandidature.setCandidat(candidat);
+        // Add required entity
+        OffreEmploi offreEmploi;
+        if (TestUtil.findAll(em, OffreEmploi.class).isEmpty()) {
+            offreEmploi = OffreEmploiResourceIT.createUpdatedEntity(em);
+            em.persist(offreEmploi);
+            em.flush();
+        } else {
+            offreEmploi = TestUtil.findAll(em, OffreEmploi.class).get(0);
+        }
+        updatedCandidature.setOffre(offreEmploi);
+        return updatedCandidature;
     }
 
     @BeforeEach
     void initTest() {
-        candidature = createEntity();
+        candidature = createEntity(em);
     }
 
     @AfterEach
@@ -311,7 +353,7 @@ class CandidatureResourceIT {
         Candidat candidat;
         if (TestUtil.findAll(em, Candidat.class).isEmpty()) {
             candidatureRepository.saveAndFlush(candidature);
-            candidat = CandidatResourceIT.createEntity();
+            candidat = CandidatResourceIT.createEntity(em);
         } else {
             candidat = TestUtil.findAll(em, Candidat.class).get(0);
         }
@@ -333,7 +375,7 @@ class CandidatureResourceIT {
         OffreEmploi offre;
         if (TestUtil.findAll(em, OffreEmploi.class).isEmpty()) {
             candidatureRepository.saveAndFlush(candidature);
-            offre = OffreEmploiResourceIT.createEntity();
+            offre = OffreEmploiResourceIT.createEntity(em);
         } else {
             offre = TestUtil.findAll(em, OffreEmploi.class).get(0);
         }
@@ -502,8 +544,6 @@ class CandidatureResourceIT {
         // Update the candidature using partial update
         Candidature partialUpdatedCandidature = new Candidature();
         partialUpdatedCandidature.setId(candidature.getId());
-
-        partialUpdatedCandidature.lettreMotivation(UPDATED_LETTRE_MOTIVATION);
 
         restCandidatureMockMvc
             .perform(

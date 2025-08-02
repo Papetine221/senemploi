@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service.dto;
 
 import jakarta.persistence.Lob;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -21,6 +22,7 @@ public class CandidatDTO implements Serializable {
 
     private String cvContentType;
 
+    @NotNull
     private UserDTO user;
 
     public Long getId() {
