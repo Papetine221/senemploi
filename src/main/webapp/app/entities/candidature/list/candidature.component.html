@@ -84,7 +84,9 @@
               </td>
               <td>{{ candidature.lettreMotivation }}</td>
               <td>{{ candidature.datePostulation | formatMediumDatetime }}</td>
-              <td>{{ candidature.statut }}</td>
+              <td [jhiTranslate]="'senemploiV4App.StatutCandidature.' + (candidature.statut ?? 'null')">
+                {{ { null: '', EN_ATTENTE: 'EN_ATTENTE', ACCEPTEE: 'ACCEPTEE', REFUSEE: 'REFUSEE' }[candidature.statut ?? 'null'] }}
+              </td>
               <td>
                 @if (candidature.candidat) {
                   <div>

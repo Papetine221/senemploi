@@ -14,6 +14,7 @@ import { ICandidat } from 'app/entities/candidat/candidat.model';
 import { CandidatService } from 'app/entities/candidat/service/candidat.service';
 import { IOffreEmploi } from 'app/entities/offre-emploi/offre-emploi.model';
 import { OffreEmploiService } from 'app/entities/offre-emploi/service/offre-emploi.service';
+import { StatutCandidature } from 'app/entities/enumerations/statut-candidature.model';
 import { CandidatureService } from '../service/candidature.service';
 import { ICandidature } from '../candidature.model';
 import { CandidatureFormGroup, CandidatureFormService } from './candidature-form.service';
@@ -26,6 +27,7 @@ import { CandidatureFormGroup, CandidatureFormService } from './candidature-form
 export class CandidatureUpdateComponent implements OnInit {
   isSaving = false;
   candidature: ICandidature | null = null;
+  statutCandidatureValues = Object.keys(StatutCandidature);
 
   candidatsSharedCollection: ICandidat[] = [];
   offreEmploisSharedCollection: IOffreEmploi[] = [];

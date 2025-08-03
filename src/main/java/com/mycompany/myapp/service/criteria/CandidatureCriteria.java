@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.criteria;
 
+import com.mycompany.myapp.domain.enumeration.StatutCandidature;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,13 +21,30 @@ import tech.jhipster.service.filter.*;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class CandidatureCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering StatutCandidature
+     */
+    public static class StatutCandidatureFilter extends Filter<StatutCandidature> {
+
+        public StatutCandidatureFilter() {}
+
+        public StatutCandidatureFilter(StatutCandidatureFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public StatutCandidatureFilter copy() {
+            return new StatutCandidatureFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
     private InstantFilter datePostulation;
 
-    private StringFilter statut;
+    private StatutCandidatureFilter statut;
 
     private LongFilter candidatId;
 
@@ -39,7 +57,7 @@ public class CandidatureCriteria implements Serializable, Criteria {
     public CandidatureCriteria(CandidatureCriteria other) {
         this.id = other.optionalId().map(LongFilter::copy).orElse(null);
         this.datePostulation = other.optionalDatePostulation().map(InstantFilter::copy).orElse(null);
-        this.statut = other.optionalStatut().map(StringFilter::copy).orElse(null);
+        this.statut = other.optionalStatut().map(StatutCandidatureFilter::copy).orElse(null);
         this.candidatId = other.optionalCandidatId().map(LongFilter::copy).orElse(null);
         this.offreId = other.optionalOffreId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
@@ -88,22 +106,22 @@ public class CandidatureCriteria implements Serializable, Criteria {
         this.datePostulation = datePostulation;
     }
 
-    public StringFilter getStatut() {
+    public StatutCandidatureFilter getStatut() {
         return statut;
     }
 
-    public Optional<StringFilter> optionalStatut() {
+    public Optional<StatutCandidatureFilter> optionalStatut() {
         return Optional.ofNullable(statut);
     }
 
-    public StringFilter statut() {
+    public StatutCandidatureFilter statut() {
         if (statut == null) {
-            setStatut(new StringFilter());
+            setStatut(new StatutCandidatureFilter());
         }
         return statut;
     }
 
-    public void setStatut(StringFilter statut) {
+    public void setStatut(StatutCandidatureFilter statut) {
         this.statut = statut;
     }
 

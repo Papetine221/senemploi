@@ -73,7 +73,7 @@ public class CandidatureQueryService extends QueryService<Candidature> {
                 Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : null,
                 buildRangeSpecification(criteria.getId(), Candidature_.id),
                 buildRangeSpecification(criteria.getDatePostulation(), Candidature_.datePostulation),
-                buildStringSpecification(criteria.getStatut(), Candidature_.statut),
+                buildSpecification(criteria.getStatut(), Candidature_.statut),
                 buildSpecification(criteria.getCandidatId(), root -> root.join(Candidature_.candidat, JoinType.LEFT).get(Candidat_.id)),
                 buildSpecification(criteria.getOffreId(), root -> root.join(Candidature_.offre, JoinType.LEFT).get(OffreEmploi_.id))
             );

@@ -16,7 +16,9 @@
     },
     {
       "fieldName": "statut",
-      "fieldType": "String"
+      "fieldType": "StatutCandidature",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EN_ATTENTE,ACCEPTEE,REFUSEE"
     }
   ],
   "jpaMetamodelFiltering": true,

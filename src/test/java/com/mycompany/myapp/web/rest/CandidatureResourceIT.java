@@ -12,6 +12,7 @@ import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Candidat;
 import com.mycompany.myapp.domain.Candidature;
 import com.mycompany.myapp.domain.OffreEmploi;
+import com.mycompany.myapp.domain.enumeration.StatutCandidature;
 import com.mycompany.myapp.repository.CandidatureRepository;
 import com.mycompany.myapp.service.dto.CandidatureDTO;
 import com.mycompany.myapp.service.mapper.CandidatureMapper;
@@ -44,8 +45,8 @@ class CandidatureResourceIT {
     private static final Instant DEFAULT_DATE_POSTULATION = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_DATE_POSTULATION = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final String DEFAULT_STATUT = "AAAAAAAAAA";
-    private static final String UPDATED_STATUT = "BBBBBBBBBB";
+    private static final StatutCandidature DEFAULT_STATUT = StatutCandidature.EN_ATTENTE;
+    private static final StatutCandidature UPDATED_STATUT = StatutCandidature.ACCEPTEE;
 
     private static final String ENTITY_API_URL = "/api/candidatures";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -214,6 +215,23 @@ class CandidatureResourceIT {
 
     @Test
     @Transactional
+    void checkStatutIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        candidature.setStatut(null);
+
+        // Create the Candidature, which fails.
+        CandidatureDTO candidatureDTO = candidatureMapper.toDto(candidature);
+
+        restCandidatureMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(candidatureDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllCandidatures() throws Exception {
         // Initialize the database
         insertedCandidature = candidatureRepository.saveAndFlush(candidature);
@@ -226,7 +244,7 @@ class CandidatureResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(candidature.getId().intValue())))
             .andExpect(jsonPath("$.[*].lettreMotivation").value(hasItem(DEFAULT_LETTRE_MOTIVATION)))
             .andExpect(jsonPath("$.[*].datePostulation").value(hasItem(DEFAULT_DATE_POSTULATION.toString())))
-            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT)));
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())));
     }
 
     @Test
@@ -243,7 +261,7 @@ class CandidatureResourceIT {
             .andExpect(jsonPath("$.id").value(candidature.getId().intValue()))
             .andExpect(jsonPath("$.lettreMotivation").value(DEFAULT_LETTRE_MOTIVATION))
             .andExpect(jsonPath("$.datePostulation").value(DEFAULT_DATE_POSTULATION.toString()))
-            .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT));
+            .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT.toString()));
     }
 
     @Test
@@ -329,26 +347,6 @@ class CandidatureResourceIT {
 
     @Test
     @Transactional
-    void getAllCandidaturesByStatutContainsSomething() throws Exception {
-        // Initialize the database
-        insertedCandidature = candidatureRepository.saveAndFlush(candidature);
-
-        // Get all the candidatureList where statut contains
-        defaultCandidatureFiltering("statut.contains=" + DEFAULT_STATUT, "statut.contains=" + UPDATED_STATUT);
-    }
-
-    @Test
-    @Transactional
-    void getAllCandidaturesByStatutNotContainsSomething() throws Exception {
-        // Initialize the database
-        insertedCandidature = candidatureRepository.saveAndFlush(candidature);
-
-        // Get all the candidatureList where statut does not contain
-        defaultCandidatureFiltering("statut.doesNotContain=" + UPDATED_STATUT, "statut.doesNotContain=" + DEFAULT_STATUT);
-    }
-
-    @Test
-    @Transactional
     void getAllCandidaturesByCandidatIsEqualToSomething() throws Exception {
         Candidat candidat;
         if (TestUtil.findAll(em, Candidat.class).isEmpty()) {
@@ -407,7 +405,7 @@ class CandidatureResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(candidature.getId().intValue())))
             .andExpect(jsonPath("$.[*].lettreMotivation").value(hasItem(DEFAULT_LETTRE_MOTIVATION)))
             .andExpect(jsonPath("$.[*].datePostulation").value(hasItem(DEFAULT_DATE_POSTULATION.toString())))
-            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT)));
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())));
 
         // Check, that the count call also returns 1
         restCandidatureMockMvc

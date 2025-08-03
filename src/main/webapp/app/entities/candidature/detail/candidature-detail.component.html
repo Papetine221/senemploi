@@ -25,7 +25,9 @@
           </dd>
           <dt><span jhiTranslate="senemploiV4App.candidature.statut">Statut</span></dt>
           <dd>
-            <span>{{ candidatureRef.statut }}</span>
+            <span [jhiTranslate]="'senemploiV4App.StatutCandidature.' + (candidatureRef.statut ?? 'null')">{{
+              { null: '', EN_ATTENTE: 'EN_ATTENTE', ACCEPTEE: 'ACCEPTEE', REFUSEE: 'REFUSEE' }[candidatureRef.statut ?? 'null']
+            }}</span>
           </dd>
           <dt><span jhiTranslate="senemploiV4App.candidature.candidat">Candidat</span></dt>
           <dd>

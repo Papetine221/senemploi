@@ -5,23 +5,26 @@ import { ICandidature, NewCandidature } from './candidature.model';
 export const sampleWithRequiredData: ICandidature = {
   id: 28558,
   datePostulation: dayjs('2025-08-01T00:48'),
+  statut: 'EN_ATTENTE',
 };
 
 export const sampleWithPartialData: ICandidature = {
-  id: 13073,
+  id: 27809,
   lettreMotivation: '../fake-data/blob/hipster.txt',
-  datePostulation: dayjs('2025-07-31T21:10'),
+  datePostulation: dayjs('2025-08-01T00:32'),
+  statut: 'EN_ATTENTE',
 };
 
 export const sampleWithFullData: ICandidature = {
   id: 23153,
   lettreMotivation: '../fake-data/blob/hipster.txt',
   datePostulation: dayjs('2025-08-01T14:40'),
-  statut: 'ferme après aussi',
+  statut: 'REFUSEE',
 };
 
 export const sampleWithNewData: NewCandidature = {
   datePostulation: dayjs('2025-07-31T18:45'),
+  statut: 'REFUSEE',
   id: null,
 };
 

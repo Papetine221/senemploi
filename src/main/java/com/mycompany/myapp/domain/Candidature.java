@@ -1,6 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mycompany.myapp.domain.enumeration.StatutCandidature;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -32,8 +33,10 @@ public class Candidature implements Serializable {
     @Column(name = "date_postulation", nullable = false)
     private Instant datePostulation;
 
-    @Column(name = "statut")
-    private String statut;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "statut", nullable = false)
+    private StatutCandidature statut;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -86,16 +89,16 @@ public class Candidature implements Serializable {
         this.datePostulation = datePostulation;
     }
 
-    public String getStatut() {
+    public StatutCandidature getStatut() {
         return this.statut;
     }
 
-    public Candidature statut(String statut) {
+    public Candidature statut(StatutCandidature statut) {
         this.setStatut(statut);
         return this;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(StatutCandidature statut) {
         this.statut = statut;
     }
 

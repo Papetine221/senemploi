@@ -63,9 +63,22 @@
           }
         </div>
 
+        @let statutRef = editForm.get('statut')!;
         <div class="mb-3">
           <label class="form-label" for="field_statut" jhiTranslate="senemploiV4App.candidature.statut">Statut</label>
-          <input type="text" class="form-control" name="statut" id="field_statut" data-cy="statut" formControlName="statut" />
+          <select class="form-control" name="statut" formControlName="statut" id="field_statut" data-cy="statut">
+            <option [ngValue]="null">{{ 'senemploiV4App.StatutCandidature.null' | translate }}</option>
+            @for (statutCandidature of statutCandidatureValues; track $index) {
+              <option [value]="statutCandidature">{{ 'senemploiV4App.StatutCandidature.' + statutCandidature | translate }}</option>
+            }
+          </select>
+          @if (statutRef.invalid && (statutRef.dirty || statutRef.touched)) {
+            <div>
+              @if (editForm.get('statut')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
         </div>
 
         <div class="mb-3">

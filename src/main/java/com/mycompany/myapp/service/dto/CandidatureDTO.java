@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.enumeration.StatutCandidature;
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -20,7 +21,8 @@ public class CandidatureDTO implements Serializable {
     @NotNull
     private Instant datePostulation;
 
-    private String statut;
+    @NotNull
+    private StatutCandidature statut;
 
     @NotNull
     private CandidatDTO candidat;
@@ -52,11 +54,11 @@ public class CandidatureDTO implements Serializable {
         this.datePostulation = datePostulation;
     }
 
-    public String getStatut() {
+    public StatutCandidature getStatut() {
         return statut;
     }
 
-    public void setStatut(String statut) {
+    public void setStatut(StatutCandidature statut) {
         this.statut = statut;
     }
 

@@ -59,7 +59,9 @@ export class CandidatureFormService {
       datePostulation: new FormControl(candidatureRawValue.datePostulation, {
         validators: [Validators.required],
       }),
-      statut: new FormControl(candidatureRawValue.statut),
+      statut: new FormControl(candidatureRawValue.statut, {
+        validators: [Validators.required],
+      }),
       candidat: new FormControl(candidatureRawValue.candidat, {
         validators: [Validators.required],
       }),

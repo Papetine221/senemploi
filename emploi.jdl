@@ -18,10 +18,16 @@ entity OffreEmploi {
   dateExpiration Instant required
 }
 
+enum StatutCandidature {
+  EN_ATTENTE,
+  ACCEPTEE,
+  REFUSEE
+}
+
 entity Candidature {
   lettreMotivation TextBlob
   datePostulation Instant required
-  statut String  // EN_ATTENTE/ACCEPTEE/REFUSEE
+  statut StatutCandidature required
 }
 
 //ajouter ; facilite la recherche
