@@ -6,15 +6,12 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Competence.
  */
 @Entity
 @Table(name = "competence")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Competence implements Serializable {
 
@@ -30,7 +27,6 @@ public class Competence implements Serializable {
     private String nom;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "competences")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "recruteur", "typeContrat", "localisation", "competences" }, allowSetters = true)
     private Set<OffreEmploi> offreEmplois = new HashSet<>();
 

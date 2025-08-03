@@ -7,15 +7,12 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A OffreEmploi.
  */
 @Entity
 @Table(name = "offre_emploi")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class OffreEmploi implements Serializable {
 
@@ -66,7 +63,6 @@ public class OffreEmploi implements Serializable {
         joinColumns = @JoinColumn(name = "offre_emploi_id"),
         inverseJoinColumns = @JoinColumn(name = "competences_id")
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "offreEmplois" }, allowSetters = true)
     private Set<Competence> competences = new HashSet<>();
 
