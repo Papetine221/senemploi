@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobSearch SN - Plateforme de recherche d'emploi pour les jeunes Sénégalais</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #008753; /* Vert Sénégal */
+            --secondary-color: #FDBC00; /* Jaune Sénégal */
+            --accent-color: #E31B23; /* Rouge Sénégal */
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f0969b36-cce8-444a-9b74-bfdf74dc7934.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+        }
+        
+        .job-card {
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .badge-primary {
+            background-color: var(--primary-color);
+        }
+        
+        .search-box {
+            border-radius: 50px;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: #333;
+        }
+        
+        footer {
+            background-color: #f8f9fa;
+        }
+        
+        .category-badge {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .category-badge:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-briefcase"></i> JobSearch SN
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Tableau de bord</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Offres d'emploi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Candidats</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Entreprises</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Statistiques</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="#" class="btn btn-outline-primary me-2">Connexion</a>
+                    <a href="#" class="btn btn-primary">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">Recrutez les meilleurs talents Sénégalais</h1>
+            <p class="lead mb-5">Plateforme professionnelle pour trouver et gérer vos candidats idéaux</p>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <form class="row g-3">
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-search"></i>
+                                        </span>
+                                        <input type="text" class="form-control border-start-0 search-box" placeholder="Mots-clés, compétences, postes">
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        </span>
+                                        <input type="text" class="form-control border-start-0 search-box" placeholder="Dakar, Thiès, Sénégal">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100 search-box">
+                                        <i class="fas fa-search me-1"></i> Rechercher
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Catégories populaires</h2>
+                <p class="text-muted">Explorez les opportunités par secteur d'activité</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <div class="category-badge p-3 bg-white rounded-3 shadow-sm">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ecee74c4-aa88-45e6-a8ea-b3b6a6f6fa8a.png" alt="Icône secteur IT" class="img-fluid mb-3" style="height: 50px;">
+                        <h6 class="mb-0">Technologie</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <div class="category-badge p-3 bg-white rounded-3 shadow-sm">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/00c902ef-eae7-4abd-acb1-285cbac8b441.png" alt="Icône secteur Finance" class="img-fluid mb-3" style="height: 50px;">
+                        <h6 class="mb-0">Finance</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <div class="category-badge p-3 bg-white rounded-3 shadow-sm">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c277c959-4495-4a0f-9dbb-1aeb71a69757.png" alt="Icône secteur Santé" class="img-fluid mb-3" style="height: 50px;">
+                        <h6 class="mb-0">Santé</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <div class="category-badge p-3 bg-white rounded-3 shadow-sm">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ca9aad41-4208-445a-a6ab-f594fcfafe67.png" alt="Icône secteur Éducation" class="img-fluid mb-3" style="height: 50px;">
+                        <h6 class="mb-0">Éducation</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <div class="category-badge p-3 bg-white rounded-3 shadow-sm">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f44a85f7-a2b9-43cd-92cd-5cc217d024c9.png" alt="Icône secteur Commerce" class="img-fluid mb-3" style="height: 50px;">
+                        <h6 class="mb-0">Commerce</h6>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <div class="category-badge p-3 bg-white rounded-3 shadow-sm">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c02c21b5-20f6-4c7f-a971-4b0014ffb098.png" alt="Icône secteur Tourisme" class="img-fluid mb-3" style="height: 50px;">
+                        <h6 class="mb-0">Tourisme</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Candidates Dashboard -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h2 class="fw-bold">Candidatures récentes</h2>
+                    <p class="text-muted mb-0">Gérez vos candidats et offres d'emploi</p>
+                </div>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-primary">Nouvelle offre <i class="fas fa-plus ms-1"></i></a>
+                    <a href="#" class="btn btn-outline-primary">Voir tout <i class="fas fa-arrow-right ms-1"></i></a>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Candidate Card 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card job-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start mb-3">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7893ffaa-6da5-47c6-b69f-ebc164340d26.png" alt="Photo Aminata Diop" class="rounded-circle me-3" width="60">
+                                <div>
+                                    <h5 class="card-title mb-1">Aminata Diop</h5>
+                                    <p class="card-text text-muted mb-1">Candidate pour Développeur Fullstack</p>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="fas fa-clock me-1"></i> Postulé il y a 2 jours
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <span class="badge bg-light text-dark me-1">Angular</span>
+                                <span class="badge bg-light text-dark me-1">Java</span>
+                                <span class="badge bg-light text-dark">5 ans XP</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-dark fw-bold">Préférence: Dakar</span>
+                                <span class="badge bg-success">Nouveauté</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <a href="#" class="btn btn-outline-primary me-2">Voir CV</a>
+                            <a href="#" class="btn btn-primary">Contacter</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Job Card 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card job-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start mb-3">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3717a637-d7f4-4642-ad50-71060098636f.png" alt="Logo banque" class="rounded me-3" width="60">
+                                <div>
+                                    <h5 class="card-title mb-1">Analyste Financier</h5>
+                                    <p class="card-text text-muted mb-1">Banque Internationale</p>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="fas fa-map-marker-alt me-1"></i> Dakar, Sénégal
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <span class="badge bg-light text-dark me-1">Finance</span>
+                                <span class="badge bg-light text-dark me-1">Excel</span>
+                                <span class="badge bg-light text-dark">Analyse</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">4,200,000 XOF</span>
+                                <span class="text-muted small">Publié il y a 5 jours</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <a href="#" class="btn btn-outline-primary w-100">Postuler</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Job Card 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card job-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start mb-3">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/769eb065-878a-4b8b-9929-f1036411aa5a.png" alt="Logo centre de santé" class="rounded me-3" width="60">
+                                <div>
+                                    <h5 class="card-title mb-1">Infirmier(ère)</h5>
+                                    <p class="card-text text-muted mb-1">Centre Médical</p>
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <i class="fas fa-map-marker-alt me-1"></i> Thiès, Sénégal
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <span class="badge bg-light text-dark me-1">Santé</span>
+                                <span class="badge bg-light text-dark me-1">Soins</span>
+                                <span class="badge bg-light text-dark">Urgence</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">2,800,000 XOF</span>
+                                <span class="text-muted small">Publié il y a 1 semaine</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <a href="#" class="btn btn-outline-primary w-100">Postuler</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Pourquoi choisir JobSearch SN ?</h2>
+                <p class="text-muted">Notre plateforme offre des fonctionnalités uniques adaptées au marché Sénégalais</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 bg-transparent">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-filter"></i>
+                            </div>
+                            <h5>Recherche avancée</h5>
+                            <p class="text-muted">Filtrez les candidats par compétences, expérience et localisation pour trouver les profils idéaux.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 bg-transparent">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h5>Tableau de bord RH</h5>
+                            <p class="text-muted">Suivez vos statistiques de recrutement et suivi des candidatures en temps réel.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 bg-transparent">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-bullhorn"></i>
+                            </div>
+                            <h5>Publication d'offres</h5>
+                            <p class="text-muted">Créez et gérez vos annonces d'emploi avec des templates professionnels.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Témoignages</h2>
+                <p class="text-muted">Ce que disent nos utilisateurs</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c7a1de7d-9fae-4189-a67f-cd76a44e7e2d.png" alt="Portrait de Amadou Diop" class="rounded-circle mb-3" width="80">
+                            <p class="mb-4">"JobSearch SN m'a permis de trouver un emploi dans ma spécialité juste après l'obtention de mon diplôme."</p>
+                            <h6 class="mb-1">Amadou Diop</h6>
+                            <p class="text-muted small">Développeur chez TechAfrique</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/881aa26e-f401-4fa9-86b7-a615ed1dad6b.png" alt="Portrait de Marieme Ndiaye" class="rounded-circle mb-3" width="80">
+                            <p class="mb-4">"La plateforme est très intuitive et les offres correspondent bien au marché local. Je recommande !"</p>
+                            <h6 class="mb-1">Marième Ndiaye</h6>
+                            <p class="text-muted small">Comptable chez Finances SA</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ba417ecb-8540-41f8-a5db-f6f7e15ab3eb.png" alt="Portrait de Saliou Fall" class="rounded-circle mb-3" width="80">
+                            <p class="mb-4">"Grâce au mentorat, j'ai pu améliorer mon CV et décrocher plusieurs entretiens."</p>
+                            <h6 class="mb-1">Saliou Fall</h6>
+                            <p class="text-muted small">Ingénieur chez Energie SN</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Employer CTA -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3 class="fw-bold mb-3">Vous êtes une entreprise ?</h3>
+                    <p class="mb-0">Rejoignez notre réseau de recruteurs et trouvez les meilleurs talents Sénégalais pour votre organisation.</p>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <a href="#" class="btn btn-secondary btn-lg">Publier une offre</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                    <h5 class="fw-bold mb-3">JobSearch SN</h5>
+                    <p>La plateforme de référence pour l'emploi des jeunes talents Sénégalais.</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-dark me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-dark me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-dark me-2"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-dark"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h6 class="fw-bold mb-3">Pour candidats</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Trouver un emploi</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Formations</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Conseils carrière</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark">Mentorat</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h6 class="fw-bold mb-3">Pour employeurs</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Publier une offre</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Rechercher CV</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Services RH</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark">Tarifs</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h6 class="fw-bold mb-3">Ressources</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Blog</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">FAQ</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Guides</a></li>
+                        <li><a href="#" class="text-decoration-none text-dark">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h6 class="fw-bold mb-3">Newsletter</h6>
+                    <p>Abonnez-vous pour recevoir les dernières offres et conseils.</p>
+                    <form class="mb-3">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Votre email" aria-label="Votre email">
+                            <button class="btn btn-primary" type="button">S'inscrire</button>
+                        </div>
+                    </form>
+                    <p class="small">En vous inscrivant, vous acceptez nos conditions d'utilisation.</p>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="small mb-0">© 2023 JobSearch SN. Tous droits réservés.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <ul class="list-inline small mb-0">
+                        <li class="list-inline-item"><a href="#" class="text-decoration-none text-dark">Mentions légales</a></li>
+                        <li class="list-inline-item ms-3"><a href="#" class="text-decoration-none text-dark">Confidentialité</a></li>
+                        <li class="list-inline-item ms-3"><a href="#" class="text-decoration-none text-dark">CGU</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

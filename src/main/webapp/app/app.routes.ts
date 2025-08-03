@@ -37,6 +37,13 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import(`./entities/entity.routes`),
   },
+  {
+    path: 'recruteur-dashboard',
+    loadComponent: () => import('./recruteur-dashboard/recruteur-dashboard.component')
+      .then(m => m.RecruteurDashboardComponent),
+    title: 'Tableau de bord recruteur',
+  },
+  
   ...errorRoute,
 ];
 
