@@ -25,6 +25,10 @@ public class ManagedUserVM extends AdminUserDTO {
 
     private String type;
 
+    private String nomEntreprise;
+
+    private String secteur;
+
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
     }
@@ -76,6 +80,22 @@ public class ManagedUserVM extends AdminUserDTO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getNomEntreprise() {
+        return nomEntreprise;
+    }
+
+    public void setNomEntreprise(String nomEntreprise) {
+        this.nomEntreprise = nomEntreprise;
+    }
+
+    public String getSecteur() {
+        return secteur;
+    }
+
+    public void setSecteur(String secteur) {
+        this.secteur = secteur;
     }
 
     // prettier-ignore

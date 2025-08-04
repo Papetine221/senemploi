@@ -51,6 +51,8 @@ export default class RegisterComponent implements AfterViewInit {
     telephone: new FormControl('', { nonNullable: true }),
     adresse: new FormControl('', { nonNullable: true }),
     cv: new FormControl('', { nonNullable: true }),
+    nomEntreprise: new FormControl('', { nonNullable: true }),
+    secteur: new FormControl('', { nonNullable: true }),
   });
 
   private readonly translateService = inject(TranslateService);
@@ -85,7 +87,7 @@ export default class RegisterComponent implements AfterViewInit {
     if (password !== confirmPassword) {
       this.doNotMatch.set(true);
     } else {
-      const { login, email, telephone, adresse } = this.registerForm.getRawValue();
+      const { login, email, telephone, adresse, nomEntreprise, secteur } = this.registerForm.getRawValue();
       
       // Traiter le fichier CV si présent
       if (this.cvFile) {
@@ -102,11 +104,13 @@ export default class RegisterComponent implements AfterViewInit {
               email,
               password,
               langKey: this.translateService.currentLang,
+              type: this.userType,
               telephone,
               adresse,
               cv: base64Content,
               cvContentType: this.cvContentType,
-              type: this.userType
+              nomEntreprise,
+              secteur,
             })
             .subscribe({
               next: () => this.success.set(true),
@@ -121,16 +125,15 @@ export default class RegisterComponent implements AfterViewInit {
             email,
             password,
             langKey: this.translateService.currentLang,
+            type: this.userType,
             telephone,
-            adresse,
             cv: null,
             cvContentType: null,
-            type: this.userType
+            adresse,
+            nomEntreprise,
+            secteur,
           })
-          .subscribe({
-            next: () => this.success.set(true),
-            error: response => this.processError(response)
-          });
+          .subscribe({ next: () => this.success.set(true), error: response => this.processError(response) });
       }
     }
   }

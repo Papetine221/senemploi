@@ -9,5 +9,8 @@ export class Registration {
     public cv: string | null,
     public cvContentType: string | null,
     public type: string | null,
+    public nomEntreprise: string | null,
+    public secteur: string | null,
+  
   ) {}
 }

@@ -143,6 +143,8 @@ public class UserService {
         Set<Authority> authorities = new HashSet<>();
         if (userDTO instanceof ManagedUserVM && "candidat".equals(((ManagedUserVM) userDTO).getType())) {
             authorityRepository.findById(AuthoritiesConstants.CANDIDAT).ifPresent(authorities::add);
+        } else if (userDTO instanceof ManagedUserVM && "recruteur".equals(((ManagedUserVM) userDTO).getType())) {
+            authorityRepository.findById(AuthoritiesConstants.RECRUTEUR).ifPresent(authorities::add);
         } else {
             authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         }
@@ -162,9 +164,9 @@ public class UserService {
                 candidat.user(newUser);
                 candidatRepository.save(candidat);
             } else if ("recruteur".equals(managedUserVM.getType())) {
-                // Handle recruteur creation
                 Recruteur recruteur = new Recruteur();
-                // Set recruteur specific fields here if any
+                recruteur.setNomEntreprise(managedUserVM.getNomEntreprise());
+                recruteur.setSecteur(managedUserVM.getSecteur());
                 recruteur.user(newUser);
                 recruteurRepository.save(recruteur);
             }

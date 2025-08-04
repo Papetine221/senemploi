@@ -216,6 +216,18 @@
             </div>
           </div>
 
+          <div *ngIf="userType === 'recruteur'">
+            <div class="mb-3">
+              <label class="form-label" for="nomEntreprise">Nom de l'entreprise</label>
+              <input type="text" class="form-control" id="nomEntreprise" name="nomEntreprise" formControlName="nomEntreprise" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="secteur">Secteur d'activité</label>
+              <input type="text" class="form-control" id="secteur" name="secteur" formControlName="secteur" />
+            </div>
+          </div>
+
           <button data-cy="submit" type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">
             Enregistrement
           </button>
