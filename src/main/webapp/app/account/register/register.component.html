@@ -199,13 +199,24 @@
             }
           </div>
 
-          <button
-            type="submit"
-            [disabled]="registerForm.invalid"
-            class="btn btn-primary"
-            data-cy="submit"
-            jhiTranslate="register.form.button"
-          >
+          <div *ngIf="userType === 'candidat'">
+            <div class="mb-3">
+              <label class="form-label" for="telephone">Téléphone</label>
+              <input type="text" class="form-control" id="telephone" name="telephone" formControlName="telephone" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="adresse">Adresse</label>
+              <input type="text" class="form-control" id="adresse" name="adresse" formControlName="adresse" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="cv">CV</label>
+              <input type="file" class="form-control" id="cv" name="cv" formControlName="cv" />
+            </div>
+          </div>
+
+          <button data-cy="submit" type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">
             Enregistrement
           </button>
         </form>

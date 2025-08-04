@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -22,6 +22,7 @@ export default class RegisterComponent implements AfterViewInit {
   errorEmailExists = signal(false);
   errorUserExists = signal(false);
   success = signal(false);
+  userType: string | null = null;
 
   registerForm = new FormGroup({
     login: new FormControl('', {
@@ -45,10 +46,20 @@ export default class RegisterComponent implements AfterViewInit {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
     }),
+    telephone: new FormControl('', { nonNullable: true }),
+    adresse: new FormControl('', { nonNullable: true }),
+    cv: new FormControl('', { nonNullable: true }),
   });
 
   private readonly translateService = inject(TranslateService);
   private readonly registerService = inject(RegisterService);
+  private readonly route = inject(ActivatedRoute);
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe(params => {
+      this.userType = params.get('type');
+    });
+  }
 
   ngAfterViewInit(): void {
     this.login().nativeElement.focus();
@@ -64,9 +75,9 @@ export default class RegisterComponent implements AfterViewInit {
     if (password !== confirmPassword) {
       this.doNotMatch.set(true);
     } else {
-      const { login, email } = this.registerForm.getRawValue();
+      const { login, email, telephone, adresse, cv } = this.registerForm.getRawValue();
       this.registerService
-        .save({ login, email, password, langKey: this.translateService.currentLang })
+        .save({ login, email, password, langKey: this.translateService.currentLang, telephone, adresse, cv, type: this.userType })
         .subscribe({ next: () => this.success.set(true), error: response => this.processError(response) });
     }
   }

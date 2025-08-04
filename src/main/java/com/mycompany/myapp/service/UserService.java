@@ -2,13 +2,19 @@ package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.config.Constants;
 import com.mycompany.myapp.domain.Authority;
+import com.mycompany.myapp.domain.Candidat;
+import com.mycompany.myapp.domain.Recruteur;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.AuthorityRepository;
+import com.mycompany.myapp.repository.CandidatRepository;
+import com.mycompany.myapp.repository.RecruteurRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
+import com.mycompany.myapp.web.rest.vm.ManagedUserVM;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -39,18 +45,26 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
+    private final CandidatRepository candidatRepository;
+
+    private final RecruteurRepository recruteurRepository;
+
     private final CacheManager cacheManager;
 
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        CandidatRepository candidatRepository,
+        RecruteurRepository recruteurRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.candidatRepository = candidatRepository;
+        this.recruteurRepository = recruteurRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -130,6 +144,28 @@ public class UserService {
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
+
+        if (userDTO instanceof ManagedUserVM) {
+            ManagedUserVM managedUserVM = (ManagedUserVM) userDTO;
+            if ("candidat".equals(managedUserVM.getType())) {
+                Candidat candidat = new Candidat();
+                candidat.setTelephone(managedUserVM.getTelephone());
+                candidat.setAdresse(managedUserVM.getAdresse());
+                if (managedUserVM.getCv() != null) {
+                    candidat.setCv(Base64.getDecoder().decode(managedUserVM.getCv()));
+                }
+                candidat.setCvContentType(managedUserVM.getCvContentType());
+                candidat.user(newUser);
+                candidatRepository.save(candidat);
+            } else if ("recruteur".equals(managedUserVM.getType())) {
+                // Handle recruteur creation
+                Recruteur recruteur = new Recruteur();
+                // Set recruteur specific fields here if any
+                recruteur.user(newUser);
+                recruteurRepository.save(recruteur);
+            }
+        }
+
         this.clearUserCaches(newUser);
         LOG.debug("Created Information for User: {}", newUser);
         return newUser;
