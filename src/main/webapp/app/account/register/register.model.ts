@@ -6,7 +6,8 @@ export class Registration {
     public langKey: string,
     public telephone: string,
     public adresse: string,
-    public cv: string,
+    public cv: string | null,
+    public cvContentType: string | null,
     public type: string | null,
   ) {}
 }

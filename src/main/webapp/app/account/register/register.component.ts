@@ -23,6 +23,8 @@ export default class RegisterComponent implements AfterViewInit {
   errorUserExists = signal(false);
   success = signal(false);
   userType: string | null = null;
+  cvFile: File | null = null;
+  cvContentType: string | null = null;
 
   registerForm = new FormGroup({
     login: new FormControl('', {
@@ -65,6 +67,14 @@ export default class RegisterComponent implements AfterViewInit {
     this.login().nativeElement.focus();
   }
 
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      this.cvFile = input.files[0];
+      this.cvContentType = this.cvFile.type;
+    }
+  }
+
   register(): void {
     this.doNotMatch.set(false);
     this.error.set(false);
@@ -75,10 +85,53 @@ export default class RegisterComponent implements AfterViewInit {
     if (password !== confirmPassword) {
       this.doNotMatch.set(true);
     } else {
-      const { login, email, telephone, adresse, cv } = this.registerForm.getRawValue();
-      this.registerService
-        .save({ login, email, password, langKey: this.translateService.currentLang, telephone, adresse, cv, type: this.userType })
-        .subscribe({ next: () => this.success.set(true), error: response => this.processError(response) });
+      const { login, email, telephone, adresse } = this.registerForm.getRawValue();
+      
+      // Traiter le fichier CV si présent
+      if (this.cvFile) {
+        const reader = new FileReader();
+        reader.readAsDataURL(this.cvFile);
+        reader.onload = () => {
+          // Extraire la partie base64 en supprimant le préfixe (ex: data:application/pdf;base64,)
+          const base64String = reader.result as string;
+          const base64Content = base64String.split(',')[1];
+          
+          this.registerService
+            .save({
+              login,
+              email,
+              password,
+              langKey: this.translateService.currentLang,
+              telephone,
+              adresse,
+              cv: base64Content,
+              cvContentType: this.cvContentType,
+              type: this.userType
+            })
+            .subscribe({
+              next: () => this.success.set(true),
+              error: response => this.processError(response)
+            });
+        };
+      } else {
+        // Pas de fichier CV
+        this.registerService
+          .save({
+            login,
+            email,
+            password,
+            langKey: this.translateService.currentLang,
+            telephone,
+            adresse,
+            cv: null,
+            cvContentType: null,
+            type: this.userType
+          })
+          .subscribe({
+            next: () => this.success.set(true),
+            error: response => this.processError(response)
+          });
+      }
     }
   }
 
