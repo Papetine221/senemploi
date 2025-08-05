@@ -23,6 +23,9 @@ export class RecruteurDashboardComponent implements OnInit {
   localisations: ILocalisation[] = [];
   offresPubliees: IOffreEmploi[] = [];
 
+  offreEnEdition: IOffreEmploi | null = null;
+
+
   private fb = inject(FormBuilder);
   private offreService = inject(OffreEmploiService);
   private typeContratService = inject(TypeContratService);
@@ -39,6 +42,22 @@ export class RecruteurDashboardComponent implements OnInit {
       localisationId: [null, Validators.required],
     });
   }
+
+  modifierOffre(offre: IOffreEmploi): void {
+    this.offreEnEdition = offre;
+    this.showForm = true;
+  
+    this.offreForm.patchValue({
+      titre: offre.titre,
+      description: offre.description,
+      salaire: offre.salaire,
+      datePublication: offre.datePublication,
+      dateExpiration: offre.dateExpiration,
+      typeContratId: offre.typeContrat?.id ?? null,
+      localisationId: offre.localisation?.id ?? null,
+    });
+  }
+  
 
   ngOnInit(): void {
     this.typeContratService.query().subscribe({
@@ -68,29 +87,63 @@ export class RecruteurDashboardComponent implements OnInit {
   onSubmit(): void {
     if (this.offreForm.valid) {
       const formValues = this.offreForm.value;
-      const offreData: NewOffreEmploi = {
-        id: null,
-        titre: formValues.titre,
-        description: formValues.description,
-        salaire: formValues.salaire,
-        datePublication: formValues.datePublication,
-        dateExpiration: formValues.dateExpiration,
-        typeContrat: { id: formValues.typeContratId },
-        localisation: { id: formValues.localisationId },
-        recruteur: { id: 1 },
-      };
-
-      this.offreService.create(offreData).subscribe({
-        next: () => {
-          alert('✅ Offre enregistrée avec succès.');
-          this.offreForm.reset();
-          this.showForm = false;
-          this.loadOffres();
-        },
-        error: () => {
-          alert('❌ Erreur lors de la soumission.');
-        },
-      });
+  
+      if (this.offreEnEdition) {
+        // ✅ Cas MODIFICATION (update)
+        const offreData: IOffreEmploi = {
+          id: this.offreEnEdition.id!,
+          titre: formValues.titre,
+          description: formValues.description,
+          salaire: formValues.salaire,
+          datePublication: formValues.datePublication,
+          dateExpiration: formValues.dateExpiration,
+          typeContrat: { id: formValues.typeContratId },
+          localisation: { id: formValues.localisationId },
+          recruteur: { id: 1 },
+        };
+  
+        this.offreService.update(offreData).subscribe({
+          next: () => {
+            alert('✏️ Offre modifiée avec succès.');
+            this.offreForm.reset();
+            this.showForm = false;
+            this.offreEnEdition = null;
+            this.loadOffres();
+          },
+          error: () => {
+            alert('❌ Erreur lors de la modification.');
+          },
+        });
+  
+      } else {
+        // ✅ Cas CRÉATION (create)
+        const offreData: NewOffreEmploi = {
+          id: null,
+          titre: formValues.titre,
+          description: formValues.description,
+          salaire: formValues.salaire,
+          datePublication: formValues.datePublication,
+          dateExpiration: formValues.dateExpiration,
+          typeContrat: { id: formValues.typeContratId },
+          localisation: { id: formValues.localisationId },
+          recruteur: { id: 1 },
+        };
+  
+        this.offreService.create(offreData).subscribe({
+          next: () => {
+            alert('✅ Offre enregistrée avec succès.');
+            this.offreForm.reset();
+            this.showForm = false;
+            this.loadOffres();
+          },
+          error: () => {
+            alert('❌ Erreur lors de l’enregistrement.');
+          },
+        });
+      }
     }
   }
+  
+    
+  
 }
