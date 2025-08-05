@@ -324,30 +324,30 @@
 
     <div class="row mt-4" *ngIf="offresPubliees.length > 0">
         <div class="col-md-6 col-lg-4 mb-4" *ngFor="let offre of offresPubliees">
-          <div class="card shadow-sm h-100">
-           
-      
+          <div class="card h-100 shadow-sm">
             <div class="card-body">
-              <h5 class="card-title"><strong>{{ offre.titre }}</strong></h5>
-              <p class="card-text text-muted">{{ offre.description }}</p>
+              <h5 class="card-title">{{ offre.titre }}</h5>
+              <p class="card-text">{{ offre.description }}</p>
       
               <ul class="list-unstyled mb-3">
                 <li><strong>Salaire :</strong> {{ offre.salaire }} F CFA</li>
-                <li><strong>Contrat :</strong> ID={{ offre.typeContrat?.id }}</li>
-                <li><strong>Localisation :</strong> ID={{ offre.localisation?.id }}</li>
-                <li>
-                  <strong>Publié le :</strong>
-                  {{ offre.datePublication?.toDate?.() | date: 'longDate' }}
+                <li><strong>Contrat :</strong> {{ offre.typeContrat?.nom }}</li>
+                <li><strong>Localisation :</strong>
+                  {{ offre.localisation?.ville }},
+                  {{ offre.localisation?.departement }},
+                  {{ offre.localisation?.region }}
                 </li>
-                <li>
-                  <strong>Expire le :</strong>
-                  {{ offre.dateExpiration?.toDate?.() | date: 'longDate' }}
-                </li>
+                
+                <li><strong>Publié le :</strong> {{ offre.datePublication?.toDate?.() | date: 'longDate' }}</li>
+                <li><strong>Expire le :</strong> {{ offre.dateExpiration?.toDate?.() | date: 'longDate' }}</li>
               </ul>
+      
+              <button class="btn btn-outline-primary btn-sm w-100 mt-auto">Voir plus</button>
             </div>
           </div>
         </div>
       </div>
+      
       
       
       

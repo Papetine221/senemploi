@@ -6,8 +6,7 @@ import { TypeContratService } from 'app/entities/type-contrat/service/type-contr
 import { LocalisationService } from 'app/entities/localisation/service/localisation.service';
 import { ITypeContrat } from 'app/entities/type-contrat/type-contrat.model';
 import { ILocalisation } from 'app/entities/localisation/localisation.model';
-import { IOffreEmploi } from 'app/entities/offre-emploi/offre-emploi.model';
-import { NewOffreEmploi } from 'app/entities/offre-emploi/offre-emploi.model';
+import { IOffreEmploi, NewOffreEmploi } from 'app/entities/offre-emploi/offre-emploi.model';
 
 @Component({
   selector: 'jhi-recruteur-dashboard',
@@ -22,8 +21,7 @@ export class RecruteurDashboardComponent implements OnInit {
 
   typeContrats: ITypeContrat[] = [];
   localisations: ILocalisation[] = [];
-
-  offresPubliees: IOffreEmploi[] = []; // <- clé corrigée ici
+  offresPubliees: IOffreEmploi[] = [];
 
   private fb = inject(FormBuilder);
   private offreService = inject(OffreEmploiService);
@@ -56,7 +54,10 @@ export class RecruteurDashboardComponent implements OnInit {
 
   loadOffres(): void {
     this.offreService.query().subscribe({
-      next: res => (this.offresPubliees = res.body ?? []),
+      next: res => {
+        this.offresPubliees = res.body ?? [];
+        console.log('Offres reçues :', this.offresPubliees); // ✅ Pour voir typeContrat.nom et localisation.ville
+      },
     });
   }
 
@@ -78,8 +79,6 @@ export class RecruteurDashboardComponent implements OnInit {
         localisation: { id: formValues.localisationId },
         recruteur: { id: 1 },
       };
-      
-      
 
       this.offreService.create(offreData).subscribe({
         next: () => {

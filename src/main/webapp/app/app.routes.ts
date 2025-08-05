@@ -17,6 +17,7 @@ const routes: Routes = [
     loadComponent: () => import('./login/login.component'),
     title: 'login.title',
   },
+  
   {
     path: 'account',
     loadChildren: () => import('./account/account.route'),
@@ -33,7 +34,7 @@ const routes: Routes = [
     loadChildren: () => import('./entities/entity.routes'),
   },
 
-  // ✅ Ajoute ceci SANS restriction (accès libre)
+  // ✅ Route libre d'accès (sans authentification)
   {
     path: 'recruteur-dashboard',
     loadComponent: () =>
