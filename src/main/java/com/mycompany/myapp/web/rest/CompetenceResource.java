@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.CompetenceRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.CompetenceQueryService;
 import com.mycompany.myapp.service.CompetenceService;
 import com.mycompany.myapp.service.criteria.CompetenceCriteria;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -59,6 +61,7 @@ public class CompetenceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CompetenceDTO> createCompetence(@Valid @RequestBody CompetenceDTO competenceDTO) throws URISyntaxException {
         LOG.debug("REST request to save Competence : {}", competenceDTO);
         if (competenceDTO.getId() != null) {
@@ -81,6 +84,7 @@ public class CompetenceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CompetenceDTO> updateCompetence(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody CompetenceDTO competenceDTO
@@ -115,6 +119,7 @@ public class CompetenceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CompetenceDTO> partialUpdateCompetence(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CompetenceDTO competenceDTO
@@ -146,6 +151,7 @@ public class CompetenceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of competences in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<List<CompetenceDTO>> getAllCompetences(CompetenceCriteria criteria) {
         LOG.debug("REST request to get Competences by criteria: {}", criteria);
 
@@ -160,6 +166,7 @@ public class CompetenceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/count")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Long> countCompetences(CompetenceCriteria criteria) {
         LOG.debug("REST request to count Competences by criteria: {}", criteria);
         return ResponseEntity.ok().body(competenceQueryService.countByCriteria(criteria));
@@ -172,6 +179,7 @@ public class CompetenceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the competenceDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CompetenceDTO> getCompetence(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Competence : {}", id);
         Optional<CompetenceDTO> competenceDTO = competenceService.findOne(id);
@@ -185,6 +193,7 @@ public class CompetenceResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Void> deleteCompetence(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Competence : {}", id);
         competenceService.delete(id);

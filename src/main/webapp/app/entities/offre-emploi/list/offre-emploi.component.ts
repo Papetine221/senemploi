@@ -17,6 +17,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { OffreEmploiDeleteDialogComponent } from '../delete/offre-emploi-delete-dialog.component';
 import { EntityArrayResponseType, OffreEmploiService } from '../service/offre-emploi.service';
 import { IOffreEmploi } from '../offre-emploi.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: 'jhi-offre-emploi',
@@ -43,6 +44,11 @@ export class OffreEmploiComponent implements OnInit {
   protected dataUtils = inject(DataUtils);
   protected modalService = inject(NgbModal);
   protected ngZone = inject(NgZone);
+  protected accountService = inject(AccountService);
+  
+  hasAnyAuthority(authorities: string | string[]): boolean {
+    return this.accountService.hasAnyAuthority(authorities);
+  }
 
   trackId = (item: IOffreEmploi): number => this.offreEmploiService.getOffreEmploiIdentifier(item);
 

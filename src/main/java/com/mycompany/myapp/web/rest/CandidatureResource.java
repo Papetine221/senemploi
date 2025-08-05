@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.CandidatureRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.CandidatureQueryService;
 import com.mycompany.myapp.service.CandidatureService;
 import com.mycompany.myapp.service.criteria.CandidatureCriteria;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -59,6 +61,7 @@ public class CandidatureResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CandidatureDTO> createCandidature(@Valid @RequestBody CandidatureDTO candidatureDTO) throws URISyntaxException {
         LOG.debug("REST request to save Candidature : {}", candidatureDTO);
         if (candidatureDTO.getId() != null) {
@@ -81,6 +84,7 @@ public class CandidatureResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CandidatureDTO> updateCandidature(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody CandidatureDTO candidatureDTO
@@ -115,6 +119,7 @@ public class CandidatureResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CandidatureDTO> partialUpdateCandidature(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CandidatureDTO candidatureDTO
@@ -146,6 +151,7 @@ public class CandidatureResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of candidatures in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<List<CandidatureDTO>> getAllCandidatures(CandidatureCriteria criteria) {
         LOG.debug("REST request to get Candidatures by criteria: {}", criteria);
 
@@ -160,6 +166,7 @@ public class CandidatureResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/count")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Long> countCandidatures(CandidatureCriteria criteria) {
         LOG.debug("REST request to count Candidatures by criteria: {}", criteria);
         return ResponseEntity.ok().body(candidatureQueryService.countByCriteria(criteria));
@@ -172,6 +179,7 @@ public class CandidatureResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the candidatureDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CandidatureDTO> getCandidature(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Candidature : {}", id);
         Optional<CandidatureDTO> candidatureDTO = candidatureService.findOne(id);
@@ -185,6 +193,7 @@ public class CandidatureResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Void> deleteCandidature(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Candidature : {}", id);
         candidatureService.delete(id);

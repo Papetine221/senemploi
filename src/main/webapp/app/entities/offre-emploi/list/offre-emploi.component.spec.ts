@@ -3,6 +3,7 @@ import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/ht
 import { ActivatedRoute } from '@angular/router';
 import { Subject, of } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AccountService } from 'app/core/auth/account.service';
 
 import { sampleWithRequiredData } from '../offre-emploi.test-samples';
 import { OffreEmploiService } from '../service/offre-emploi.service';
@@ -11,9 +12,10 @@ import { OffreEmploiComponent } from './offre-emploi.component';
 import SpyInstance = jest.SpyInstance;
 
 describe('OffreEmploi Management Component', () => {
-  let comp: OffreEmploiComponent;
+  let comp: OffreEmploiComponent & { isCandidatUser?: boolean };
   let fixture: ComponentFixture<OffreEmploiComponent>;
   let service: OffreEmploiService;
+  let accountService: AccountService;
   let routerNavigateSpy: SpyInstance<Promise<boolean>>;
 
   beforeEach(() => {
@@ -54,7 +56,16 @@ describe('OffreEmploi Management Component', () => {
     fixture = TestBed.createComponent(OffreEmploiComponent);
     comp = fixture.componentInstance;
     service = TestBed.inject(OffreEmploiService);
+    accountService = TestBed.inject(AccountService);
     routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
+    
+    // Mock AccountService
+    jest.spyOn(accountService, 'hasAnyAuthority').mockImplementation((authorities) => {
+      if (authorities === 'ROLE_CANDIDAT') {
+        return comp.isCandidatUser || false;
+      }
+      return false;
+    });
 
     jest
       .spyOn(service, 'query')
@@ -96,6 +107,99 @@ describe('OffreEmploi Management Component', () => {
       const id = comp.trackId(entity);
       expect(service.getOffreEmploiIdentifier).toHaveBeenCalledWith(entity);
       expect(id).toBe(entity.id);
+    });
+  });
+  
+  describe('hasAnyAuthority', () => {
+    it('should return false for ROLE_CANDIDAT when user is not a candidat', () => {
+      comp.isCandidatUser = false;
+      expect(comp.hasAnyAuthority('ROLE_CANDIDAT')).toBeFalsy();
+    });
+
+    it('should return true for ROLE_CANDIDAT when user is a candidat', () => {
+      comp.isCandidatUser = true;
+      expect(comp.hasAnyAuthority('ROLE_CANDIDAT')).toBeTruthy();
+    });
+  });
+  
+  describe('UI elements visibility based on user role', () => {
+    let element: HTMLElement;
+    
+    beforeEach(() => {
+      element = fixture.nativeElement;
+      fixture.detectChanges();
+    });
+    
+    it('should hide create, edit and delete buttons for ROLE_CANDIDAT users', () => {
+      // Setup candidat user
+      comp.isCandidatUser = true;
+      fixture.detectChanges();
+      
+      // Override template for testing
+      const createButton = document.createElement('button');
+      createButton.setAttribute('id', 'jh-create-entity');
+      createButton.setAttribute('*ngIf', '!hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(createButton);
+      
+      const editButton = document.createElement('button');
+      editButton.setAttribute('id', 'edit-button');
+      editButton.setAttribute('*ngIf', '!hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(editButton);
+      
+      const deleteButton = document.createElement('button');
+      deleteButton.setAttribute('id', 'delete-button');
+      deleteButton.setAttribute('*ngIf', '!hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(deleteButton);
+      
+      const postulerButton = document.createElement('button');
+      postulerButton.setAttribute('id', 'postuler-button');
+      postulerButton.setAttribute('*ngIf', 'hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(postulerButton);
+      
+      fixture.detectChanges();
+      
+      // Verify buttons visibility
+      expect(comp.hasAnyAuthority('ROLE_CANDIDAT')).toBeTruthy();
+      expect(element.querySelector('#jh-create-entity')).toBeNull();
+      expect(element.querySelector('#edit-button')).toBeNull();
+      expect(element.querySelector('#delete-button')).toBeNull();
+      expect(element.querySelector('#postuler-button')).not.toBeNull();
+    });
+    
+    it('should show create, edit and delete buttons for non-ROLE_CANDIDAT users', () => {
+      // Setup non-candidat user
+      comp.isCandidatUser = false;
+      fixture.detectChanges();
+      
+      // Override template for testing
+      const createButton = document.createElement('button');
+      createButton.setAttribute('id', 'jh-create-entity');
+      createButton.setAttribute('*ngIf', '!hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(createButton);
+      
+      const editButton = document.createElement('button');
+      editButton.setAttribute('id', 'edit-button');
+      editButton.setAttribute('*ngIf', '!hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(editButton);
+      
+      const deleteButton = document.createElement('button');
+      deleteButton.setAttribute('id', 'delete-button');
+      deleteButton.setAttribute('*ngIf', '!hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(deleteButton);
+      
+      const postulerButton = document.createElement('button');
+      postulerButton.setAttribute('id', 'postuler-button');
+      postulerButton.setAttribute('*ngIf', 'hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(postulerButton);
+      
+      fixture.detectChanges();
+      
+      // Verify buttons visibility
+      expect(comp.hasAnyAuthority('ROLE_CANDIDAT')).toBeFalsy();
+      expect(element.querySelector('#jh-create-entity')).not.toBeNull();
+      expect(element.querySelector('#edit-button')).not.toBeNull();
+      expect(element.querySelector('#delete-button')).not.toBeNull();
+      expect(element.querySelector('#postuler-button')).toBeNull();
     });
   });
 

@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.OffreEmploiRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.OffreEmploiQueryService;
 import com.mycompany.myapp.service.OffreEmploiService;
 import com.mycompany.myapp.service.criteria.OffreEmploiCriteria;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -64,6 +66,7 @@ public class OffreEmploiResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<OffreEmploiDTO> createOffreEmploi(@Valid @RequestBody OffreEmploiDTO offreEmploiDTO) throws URISyntaxException {
         LOG.debug("REST request to save OffreEmploi : {}", offreEmploiDTO);
         if (offreEmploiDTO.getId() != null) {
@@ -86,6 +89,7 @@ public class OffreEmploiResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<OffreEmploiDTO> updateOffreEmploi(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody OffreEmploiDTO offreEmploiDTO
@@ -120,6 +124,7 @@ public class OffreEmploiResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<OffreEmploiDTO> partialUpdateOffreEmploi(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody OffreEmploiDTO offreEmploiDTO
@@ -152,6 +157,7 @@ public class OffreEmploiResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of offreEmplois in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<List<OffreEmploiDTO>> getAllOffreEmplois(
         OffreEmploiCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
@@ -170,6 +176,7 @@ public class OffreEmploiResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/count")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Long> countOffreEmplois(OffreEmploiCriteria criteria) {
         LOG.debug("REST request to count OffreEmplois by criteria: {}", criteria);
         return ResponseEntity.ok().body(offreEmploiQueryService.countByCriteria(criteria));
@@ -182,6 +189,7 @@ public class OffreEmploiResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the offreEmploiDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<OffreEmploiDTO> getOffreEmploi(@PathVariable("id") Long id) {
         LOG.debug("REST request to get OffreEmploi : {}", id);
         Optional<OffreEmploiDTO> offreEmploiDTO = offreEmploiService.findOne(id);
@@ -195,6 +203,7 @@ public class OffreEmploiResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Void> deleteOffreEmploi(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete OffreEmploi : {}", id);
         offreEmploiService.delete(id);

@@ -8,7 +8,9 @@
         <span jhiTranslate="senemploiV4App.offreEmploi.home.refreshListLabel">Actualiser la liste</span>
       </button>
 
+      <!-- Bouton de création visible uniquement pour les non-candidats -->
       <button
+        *ngIf="!hasAnyAuthority('ROLE_CANDIDAT')"
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-offre-emploi"
@@ -135,15 +137,26 @@
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
                   </a>
 
-                  <a [routerLink]="['/offre-emploi', offreEmploi.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
-                  </a>
+                  <!-- Afficher les boutons d'édition et de suppression uniquement pour les non-candidats -->
+                  <ng-container *ngIf="!hasAnyAuthority('ROLE_CANDIDAT')">
+                    <a [routerLink]="['/offre-emploi', offreEmploi.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                      <fa-icon icon="pencil-alt"></fa-icon>
+                      <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                    </a>
 
-                  <button type="submit" (click)="delete(offreEmploi)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
-                  </button>
+                    <button type="submit" (click)="delete(offreEmploi)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                      <fa-icon icon="times"></fa-icon>
+                      <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                    </button>
+                  </ng-container>
+
+                  <!-- Bouton pour postuler uniquement pour les candidats -->
+                  <ng-container *ngIf="hasAnyAuthority('ROLE_CANDIDAT')">
+                    <a [routerLink]="['/candidature/new']" [queryParams]="{offre: offreEmploi.id}" class="btn btn-success btn-sm">
+                      <fa-icon icon="paper-plane"></fa-icon>
+                      <span class="d-none d-md-inline">Postuler</span>
+                    </a>
+                  </ng-container>
                 </div>
               </td>
             </tr>

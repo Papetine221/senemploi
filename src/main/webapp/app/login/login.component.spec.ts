@@ -70,17 +70,32 @@ describe('LoginComponent', () => {
       expect(mockAccountService.isAuthenticated).toHaveBeenCalled();
     });
 
-    it('should navigate to home page on Init if authenticated=true', () => {
+    it('should navigate to home page on Init if authenticated=true and not a candidat', () => {
       // GIVEN
       mockAccountService.identity = jest.fn(() => of(null));
       mockAccountService.getAuthenticationState = jest.fn(() => of(null));
       mockAccountService.isAuthenticated = () => true;
+      mockAccountService.hasAnyAuthority = jest.fn((authorities) => authorities !== 'ROLE_CANDIDAT');
 
       // WHEN
       comp.ngOnInit();
 
       // THEN
       expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
+    });
+
+    it('should navigate to offre-emploi page on Init if authenticated=true and is a candidat', () => {
+      // GIVEN
+      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.getAuthenticationState = jest.fn(() => of(null));
+      mockAccountService.isAuthenticated = () => true;
+      mockAccountService.hasAnyAuthority = jest.fn((authorities) => authorities === 'ROLE_CANDIDAT');
+
+      // WHEN
+      comp.ngOnInit();
+
+      // THEN
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/offre-emploi']);
     });
   });
 
@@ -101,7 +116,7 @@ describe('LoginComponent', () => {
   });
 
   describe('login', () => {
-    it('should authenticate the user and navigate to home page', () => {
+    it('should authenticate the user and navigate to home page if not a candidat', () => {
       // GIVEN
       const credentials = {
         username: 'admin',
@@ -115,6 +130,8 @@ describe('LoginComponent', () => {
         rememberMe: true,
       });
 
+      mockAccountService.hasAnyAuthority = jest.fn((authorities) => authorities !== 'ROLE_CANDIDAT');
+
       // WHEN
       comp.login();
 
@@ -122,6 +139,31 @@ describe('LoginComponent', () => {
       expect(comp.authenticationError()).toEqual(false);
       expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
+    });
+
+    it('should authenticate the user and navigate to offre-emploi page if is a candidat', () => {
+      // GIVEN
+      const credentials = {
+        username: 'candidat',
+        password: 'candidat',
+        rememberMe: true,
+      };
+
+      comp.loginForm.patchValue({
+        username: 'candidat',
+        password: 'candidat',
+        rememberMe: true,
+      });
+
+      mockAccountService.hasAnyAuthority = jest.fn((authorities) => authorities === 'ROLE_CANDIDAT');
+
+      // WHEN
+      comp.login();
+
+      // THEN
+      expect(comp.authenticationError()).toEqual(false);
+      expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/offre-emploi']);
     });
 
     it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {

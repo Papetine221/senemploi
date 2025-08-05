@@ -27,10 +27,16 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   private readonly router = inject(Router);
 
   ngOnInit(): void {
-    // if already authenticated then navigate to home page
+    // if already authenticated then navigate to appropriate page
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
-        this.router.navigate(['']);
+        // Si l'utilisateur est un candidat, rediriger vers la page des offres d'emploi
+        if (this.accountService.hasAnyAuthority('ROLE_CANDIDAT')) {
+          this.router.navigate(['/offre-emploi']);
+        } else {
+          // Sinon, rediriger vers la page d'accueil
+          this.router.navigate(['']);
+        }
       }
     });
   }
@@ -45,7 +51,13 @@ export default class LoginComponent implements OnInit, AfterViewInit {
         this.authenticationError.set(false);
         if (!this.router.getCurrentNavigation()) {
           // There were no routing during login (eg from navigationToStoredUrl)
-          this.router.navigate(['']);
+          // Si l'utilisateur est un candidat, rediriger vers la page des offres d'emploi
+          if (this.accountService.hasAnyAuthority('ROLE_CANDIDAT')) {
+            this.router.navigate(['/offre-emploi']);
+          } else {
+            // Sinon, rediriger vers la page d'accueil
+            this.router.navigate(['']);
+          }
         }
       },
       error: () => this.authenticationError.set(true),

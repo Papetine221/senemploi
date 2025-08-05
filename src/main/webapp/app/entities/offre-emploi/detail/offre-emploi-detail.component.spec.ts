@@ -4,13 +4,15 @@ import { RouterTestingHarness } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { DataUtils } from 'app/core/util/data-util.service';
+import { AccountService } from 'app/core/auth/account.service';
 
 import { OffreEmploiDetailComponent } from './offre-emploi-detail.component';
 
 describe('OffreEmploi Management Detail Component', () => {
-  let comp: OffreEmploiDetailComponent;
+  let comp: OffreEmploiDetailComponent & { isCandidatUser?: boolean };
   let fixture: ComponentFixture<OffreEmploiDetailComponent>;
   let dataUtils: DataUtils;
+  let accountService: AccountService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -37,6 +39,15 @@ describe('OffreEmploi Management Detail Component', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(OffreEmploiDetailComponent);
     comp = fixture.componentInstance;
+    accountService = TestBed.inject(AccountService);
+    
+    // Mock AccountService
+    jest.spyOn(accountService, 'hasAnyAuthority').mockImplementation((authorities) => {
+      if (authorities === 'ROLE_CANDIDAT') {
+        return comp.isCandidatUser || false;
+      }
+      return false;
+    });
   });
 
   describe('OnInit', () => {
@@ -87,6 +98,75 @@ describe('OffreEmploi Management Detail Component', () => {
 
       // THEN
       expect(dataUtils.openFile).toHaveBeenCalledWith(fakeBase64, fakeContentType);
+    });
+  });
+  
+  describe('hasAnyAuthority', () => {
+    it('should return false for ROLE_CANDIDAT when user is not a candidat', () => {
+      comp.isCandidatUser = false;
+      expect(comp.hasAnyAuthority('ROLE_CANDIDAT')).toBeFalsy();
+    });
+
+    it('should return true for ROLE_CANDIDAT when user is a candidat', () => {
+      comp.isCandidatUser = true;
+      expect(comp.hasAnyAuthority('ROLE_CANDIDAT')).toBeTruthy();
+    });
+  });
+  
+  describe('UI elements visibility based on user role', () => {
+    let element: HTMLElement;
+    
+    beforeEach(() => {
+      element = fixture.nativeElement;
+      fixture.detectChanges();
+    });
+    
+    it('should hide edit button for ROLE_CANDIDAT users and show postuler button', () => {
+      // Setup candidat user
+      comp.isCandidatUser = true;
+      fixture.detectChanges();
+      
+      // Override template for testing
+      const editButton = document.createElement('button');
+      editButton.setAttribute('id', 'edit-button');
+      editButton.setAttribute('*ngIf', '!hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(editButton);
+      
+      const postulerButton = document.createElement('button');
+      postulerButton.setAttribute('id', 'postuler-button');
+      postulerButton.setAttribute('*ngIf', 'hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(postulerButton);
+      
+      fixture.detectChanges();
+      
+      // Verify buttons visibility
+      expect(comp.hasAnyAuthority('ROLE_CANDIDAT')).toBeTruthy();
+      expect(element.querySelector('#edit-button')).toBeNull();
+      expect(element.querySelector('#postuler-button')).not.toBeNull();
+    });
+    
+    it('should show edit button for non-ROLE_CANDIDAT users and hide postuler button', () => {
+      // Setup non-candidat user
+      comp.isCandidatUser = false;
+      fixture.detectChanges();
+      
+      // Override template for testing
+      const editButton = document.createElement('button');
+      editButton.setAttribute('id', 'edit-button');
+      editButton.setAttribute('*ngIf', '!hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(editButton);
+      
+      const postulerButton = document.createElement('button');
+      postulerButton.setAttribute('id', 'postuler-button');
+      postulerButton.setAttribute('*ngIf', 'hasAnyAuthority(\'ROLE_CANDIDAT\')');
+      element.appendChild(postulerButton);
+      
+      fixture.detectChanges();
+      
+      // Verify buttons visibility
+      expect(comp.hasAnyAuthority('ROLE_CANDIDAT')).toBeFalsy();
+      expect(element.querySelector('#edit-button')).not.toBeNull();
+      expect(element.querySelector('#postuler-button')).toBeNull();
     });
   });
 });

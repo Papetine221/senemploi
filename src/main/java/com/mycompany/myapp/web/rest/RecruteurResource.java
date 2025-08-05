@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.RecruteurRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.RecruteurQueryService;
 import com.mycompany.myapp.service.RecruteurService;
 import com.mycompany.myapp.service.criteria.RecruteurCriteria;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -64,6 +66,7 @@ public class RecruteurResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<RecruteurDTO> createRecruteur(@Valid @RequestBody RecruteurDTO recruteurDTO) throws URISyntaxException {
         LOG.debug("REST request to save Recruteur : {}", recruteurDTO);
         if (recruteurDTO.getId() != null) {
@@ -86,6 +89,7 @@ public class RecruteurResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<RecruteurDTO> updateRecruteur(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody RecruteurDTO recruteurDTO
@@ -120,6 +124,7 @@ public class RecruteurResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<RecruteurDTO> partialUpdateRecruteur(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody RecruteurDTO recruteurDTO
@@ -152,6 +157,7 @@ public class RecruteurResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of recruteurs in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<List<RecruteurDTO>> getAllRecruteurs(
         RecruteurCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
@@ -170,6 +176,7 @@ public class RecruteurResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/count")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Long> countRecruteurs(RecruteurCriteria criteria) {
         LOG.debug("REST request to count Recruteurs by criteria: {}", criteria);
         return ResponseEntity.ok().body(recruteurQueryService.countByCriteria(criteria));
@@ -182,6 +189,7 @@ public class RecruteurResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the recruteurDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<RecruteurDTO> getRecruteur(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Recruteur : {}", id);
         Optional<RecruteurDTO> recruteurDTO = recruteurService.findOne(id);
@@ -195,6 +203,7 @@ public class RecruteurResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Void> deleteRecruteur(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Recruteur : {}", id);
         recruteurService.delete(id);

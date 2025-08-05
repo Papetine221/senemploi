@@ -5,6 +5,7 @@ import SharedModule from 'app/shared/shared.module';
 import { FormatMediumDatetimePipe } from 'app/shared/date';
 import { DataUtils } from 'app/core/util/data-util.service';
 import { IOffreEmploi } from '../offre-emploi.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: 'jhi-offre-emploi-detail',
@@ -15,6 +16,11 @@ export class OffreEmploiDetailComponent {
   offreEmploi = input<IOffreEmploi | null>(null);
 
   protected dataUtils = inject(DataUtils);
+  protected accountService = inject(AccountService);
+  
+  hasAnyAuthority(authorities: string | string[]): boolean {
+    return this.accountService.hasAnyAuthority(authorities);
+  }
 
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);

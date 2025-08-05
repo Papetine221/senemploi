@@ -74,9 +74,19 @@
           <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
         </button>
 
-        <button type="button" [routerLink]="['/offre-emploi', offreEmploiRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
-        </button>
+        <!-- Bouton d'édition visible uniquement pour les non-candidats -->
+        <ng-container *ngIf="!hasAnyAuthority('ROLE_CANDIDAT')">
+          <button type="button" [routerLink]="['/offre-emploi', offreEmploiRef.id, 'edit']" class="btn btn-primary">
+            <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+          </button>
+        </ng-container>
+        
+        <!-- Bouton pour postuler uniquement pour les candidats -->
+        <ng-container *ngIf="hasAnyAuthority('ROLE_CANDIDAT')">
+          <button type="button" [routerLink]="['/candidature/new']" [queryParams]="{offre: offreEmploiRef.id}" class="btn btn-success">
+            <fa-icon icon="paper-plane"></fa-icon>&nbsp;<span>Postuler</span>
+          </button>
+        </ng-container>
       </div>
     }
   </div>

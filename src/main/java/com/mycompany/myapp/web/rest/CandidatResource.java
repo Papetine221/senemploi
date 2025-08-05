@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.CandidatRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.CandidatQueryService;
 import com.mycompany.myapp.service.CandidatService;
 import com.mycompany.myapp.service.criteria.CandidatCriteria;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -64,6 +66,7 @@ public class CandidatResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CandidatDTO> createCandidat(@Valid @RequestBody CandidatDTO candidatDTO) throws URISyntaxException {
         LOG.debug("REST request to save Candidat : {}", candidatDTO);
         if (candidatDTO.getId() != null) {
@@ -86,6 +89,7 @@ public class CandidatResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CandidatDTO> updateCandidat(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody CandidatDTO candidatDTO
@@ -120,6 +124,7 @@ public class CandidatResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CandidatDTO> partialUpdateCandidat(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CandidatDTO candidatDTO
@@ -152,6 +157,7 @@ public class CandidatResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of candidats in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<List<CandidatDTO>> getAllCandidats(
         CandidatCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
@@ -170,6 +176,7 @@ public class CandidatResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/count")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Long> countCandidats(CandidatCriteria criteria) {
         LOG.debug("REST request to count Candidats by criteria: {}", criteria);
         return ResponseEntity.ok().body(candidatQueryService.countByCriteria(criteria));
@@ -182,6 +189,7 @@ public class CandidatResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the candidatDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CandidatDTO> getCandidat(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Candidat : {}", id);
         Optional<CandidatDTO> candidatDTO = candidatService.findOne(id);
@@ -195,6 +203,7 @@ public class CandidatResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Void> deleteCandidat(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Candidat : {}", id);
         candidatService.delete(id);

@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.LocalisationRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.LocalisationQueryService;
 import com.mycompany.myapp.service.LocalisationService;
 import com.mycompany.myapp.service.criteria.LocalisationCriteria;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -59,6 +61,7 @@ public class LocalisationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<LocalisationDTO> createLocalisation(@Valid @RequestBody LocalisationDTO localisationDTO)
         throws URISyntaxException {
         LOG.debug("REST request to save Localisation : {}", localisationDTO);
@@ -82,6 +85,7 @@ public class LocalisationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<LocalisationDTO> updateLocalisation(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody LocalisationDTO localisationDTO
@@ -116,6 +120,7 @@ public class LocalisationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<LocalisationDTO> partialUpdateLocalisation(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody LocalisationDTO localisationDTO
@@ -147,6 +152,7 @@ public class LocalisationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of localisations in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<List<LocalisationDTO>> getAllLocalisations(LocalisationCriteria criteria) {
         LOG.debug("REST request to get Localisations by criteria: {}", criteria);
 
@@ -161,6 +167,7 @@ public class LocalisationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/count")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Long> countLocalisations(LocalisationCriteria criteria) {
         LOG.debug("REST request to count Localisations by criteria: {}", criteria);
         return ResponseEntity.ok().body(localisationQueryService.countByCriteria(criteria));
@@ -173,6 +180,7 @@ public class LocalisationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the localisationDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<LocalisationDTO> getLocalisation(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Localisation : {}", id);
         Optional<LocalisationDTO> localisationDTO = localisationService.findOne(id);
@@ -186,6 +194,7 @@ public class LocalisationResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Void> deleteLocalisation(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Localisation : {}", id);
         localisationService.delete(id);

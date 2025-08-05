@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.TypeContratRepository;
+import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.TypeContratQueryService;
 import com.mycompany.myapp.service.TypeContratService;
 import com.mycompany.myapp.service.criteria.TypeContratCriteria;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -59,6 +61,7 @@ public class TypeContratResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<TypeContratDTO> createTypeContrat(@Valid @RequestBody TypeContratDTO typeContratDTO) throws URISyntaxException {
         LOG.debug("REST request to save TypeContrat : {}", typeContratDTO);
         if (typeContratDTO.getId() != null) {
@@ -81,6 +84,7 @@ public class TypeContratResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<TypeContratDTO> updateTypeContrat(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody TypeContratDTO typeContratDTO
@@ -115,6 +119,7 @@ public class TypeContratResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<TypeContratDTO> partialUpdateTypeContrat(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody TypeContratDTO typeContratDTO
@@ -146,6 +151,7 @@ public class TypeContratResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of typeContrats in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<List<TypeContratDTO>> getAllTypeContrats(TypeContratCriteria criteria) {
         LOG.debug("REST request to get TypeContrats by criteria: {}", criteria);
 
@@ -160,6 +166,7 @@ public class TypeContratResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/count")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Long> countTypeContrats(TypeContratCriteria criteria) {
         LOG.debug("REST request to count TypeContrats by criteria: {}", criteria);
         return ResponseEntity.ok().body(typeContratQueryService.countByCriteria(criteria));
@@ -172,6 +179,7 @@ public class TypeContratResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the typeContratDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<TypeContratDTO> getTypeContrat(@PathVariable("id") Long id) {
         LOG.debug("REST request to get TypeContrat : {}", id);
         Optional<TypeContratDTO> typeContratDTO = typeContratService.findOne(id);
@@ -185,6 +193,7 @@ public class TypeContratResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<Void> deleteTypeContrat(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete TypeContrat : {}", id);
         typeContratService.delete(id);
