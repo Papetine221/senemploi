@@ -1,0 +1,171 @@
+<div class="candidat-dashboard-container">
+  <!-- En-tête du dashboard -->
+  <div class="dashboard-header mb-4">
+    <div class="container-fluid">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h1 class="display-5 fw-bold text-primary mb-2">
+            <fa-icon icon="tachometer-alt" class="me-2"></fa-icon>
+            Tableau de bord candidat
+          </h1>
+          <p class="lead text-muted mb-0">
+            Bienvenue {{ account()?.firstName || 'Candidat' }}, découvrez les opportunités qui vous correspondent
+          </p>
+        </div>
+        <div class="col-md-4 text-end">
+          <button class="btn btn-outline-primary" (click)="refreshData()" [disabled]="isLoading()">
+            <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined"></fa-icon>
+            <span class="ms-1">Actualiser</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <!-- Actions principales -->
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-header bg-light border-0 py-3">
+            <h5 class="card-title mb-0">
+              <fa-icon icon="search" class="text-primary me-2"></fa-icon>
+              Rechercher
+            </h5>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Trouvez les offres d'emploi qui correspondent à votre profil</p>
+            <a [routerLink]="['/offre-emploi']" class="btn btn-primary w-100 action-btn">
+              <fa-icon icon="search" class="me-2"></fa-icon>
+              Rechercher des offres
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-header bg-light border-0 py-3">
+            <h5 class="card-title mb-0">
+              <fa-icon icon="file-alt" class="text-info me-2"></fa-icon>
+              Mes Candidatures
+            </h5>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Suivez l'état de vos candidatures envoyées</p>
+            <button class="btn btn-info w-100 action-btn" disabled>
+              <fa-icon icon="file-alt" class="me-2"></fa-icon>
+              Voir mes candidatures
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Offres récentes -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-light border-0 py-3 d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              <fa-icon icon="clock" class="text-primary me-2"></fa-icon>
+              Offres récentes
+            </h5>
+            <a [routerLink]="['/offre-emploi']" class="btn btn-sm btn-outline-primary">
+              Voir toutes les offres
+              <fa-icon icon="arrow-right" class="ms-1"></fa-icon>
+            </a>
+          </div>
+          <div class="card-body">
+            @if (isLoading()) {
+              <div class="text-center py-4">
+                <fa-icon icon="spinner" animation="spin" size="2x" class="text-primary"></fa-icon>
+                <p class="mt-2 text-muted">Chargement des offres...</p>
+              </div>
+            } @else if (recentOffers().length === 0) {
+              <div class="text-center py-4">
+                <fa-icon icon="info-circle" size="2x" class="text-muted mb-3"></fa-icon>
+                <p class="text-muted">Aucune offre d'emploi disponible pour le moment.</p>
+              </div>
+            } @else {
+              <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                @for (offre of recentOffers(); track trackById($index, offre)) {
+                  <div class="col">
+                    <div class="modern-job-card">
+                      <!-- En-tête de la carte avec gradient -->
+                      <div class="job-card-header">
+                        <div class="job-card-badge">
+                          <span class="badge-contract">{{ offre.typeContrat?.nom || 'CDI' }}</span>
+                          @if (offre.salaire) {
+                            <span class="badge-salary">
+                              <fa-icon icon="euro-sign" class="me-1"></fa-icon>
+                              {{ offre.salaire | number:'1.0-0' }}
+                            </span>
+                          }
+                        </div>
+                      </div>
+
+                      <!-- Contenu principal -->
+                      <div class="job-card-body">
+                        <h5 class="job-title">
+                          <a [routerLink]="['/offre-emploi', offre.id, 'view']" class="job-title-link">
+                            {{ offre.titre }}
+                          </a>
+                        </h5>
+                        
+                        <div class="job-company mb-3">
+                          <div class="company-info">
+                            <fa-icon icon="building" class="company-icon"></fa-icon>
+                            <span class="company-name">{{ offre.recruteur?.nomEntreprise || 'Entreprise' }}</span>
+                          </div>
+                          <div class="location-info">
+                            <fa-icon icon="map-marker-alt" class="location-icon"></fa-icon>
+                            <span class="location-name">{{ offre.localisation?.ville || 'Ville' }}</span>
+                          </div>
+                        </div>
+
+                        <!-- Description courte -->
+                        @if (offre.description) {
+                          <p class="job-description">
+                            {{ offre.description.length > 100 ? (offre.description | slice:0:100) + '...' : offre.description }}
+                          </p>
+                        }
+
+                        <!-- Date de publication -->
+                        @if (offre.datePublication) {
+                          <div class="job-date">
+                            <fa-icon icon="clock" class="date-icon"></fa-icon>
+                            <span>Publié le {{ offre.datePublication.format('DD/MM/YYYY') }}</span>
+                          </div>
+                        }
+                      </div>
+
+                      <!-- Actions -->
+                      <div class="job-card-actions">
+                        <a [routerLink]="['/offre-emploi', offre.id, 'view']" class="btn-view-details">
+                          <fa-icon icon="eye" class="me-2"></fa-icon>
+                          Voir détails
+                        </a>
+                        <button class="btn-apply" disabled>
+                          <fa-icon icon="paper-plane" class="me-2"></fa-icon>
+                          Postuler
+                        </button>
+                      </div>
+
+                      <!-- Indicateur de nouveauté -->
+                      @if (offre.datePublication && offre.datePublication.isAfter(offre.datePublication.subtract(7, 'day'))) {
+                        <div class="new-badge">
+                          <span>Nouveau</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

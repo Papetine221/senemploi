@@ -1,0 +1,189 @@
+<div class="mes-candidatures-container">
+  <div class="container py-4">
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="display-6 fw-bold text-primary mb-2">
+          <fa-icon icon="briefcase" class="me-3"></fa-icon>
+          Mes candidatures
+        </h1>
+        <p class="text-muted mb-0">Suivez l'état de vos candidatures</p>
+      </div>
+      <a [routerLink]="['/offre-emploi']" class="btn btn-outline-primary">
+        <fa-icon icon="search" class="me-2"></fa-icon>
+        Voir les offres
+      </a>
+    </div>
+
+    <!-- Loader -->
+    @if (isLoading) {
+      <div class="d-flex justify-content-center align-items-center" style="min-height: 300px;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+    }
+
+    <!-- Contenu principal -->
+    @if (!isLoading) {
+      <!-- Aucune candidature -->
+      @if (candidatures.length === 0) {
+        <div class="text-center py-5">
+          <div class="mb-4">
+            <fa-icon icon="inbox" size="4x" class="text-muted"></fa-icon>
+          </div>
+          <h3 class="text-muted mb-3">Aucune candidature trouvée</h3>
+          <p class="text-muted mb-4">Vous n'avez pas encore postulé à des offres d'emploi.</p>
+          <a [routerLink]="['/offre-emploi']" class="btn btn-primary btn-lg">
+            <fa-icon icon="search" class="me-2"></fa-icon>
+            Découvrir les offres
+          </a>
+        </div>
+      }
+
+      <!-- Liste des candidatures -->
+      @if (candidatures.length > 0) {
+        <div class="row">
+          @for (candidature of candidatures; track candidature.id) {
+            <div class="col-lg-6 col-xl-4 mb-4">
+              <div class="card candidature-card h-100 shadow-sm border-0">
+                <!-- En-tête de la carte -->
+                <div class="card-header bg-light border-0 d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                    <fa-icon icon="calendar-alt" class="text-primary me-2"></fa-icon>
+                    <small class="text-muted">
+                      {{ candidature.datePostulation | formatMediumDatetime }}
+                    </small>
+                  </div>
+                  <span class="badge rounded-pill" [class]="getStatutBadgeClass(candidature.statut)">
+                    {{ getStatutText(candidature.statut) }}
+                  </span>
+                </div>
+
+                <!-- Corps de la carte -->
+                <div class="card-body">
+                  <!-- Titre de l'offre -->
+                  <h5 class="card-title text-primary mb-3">
+                    {{ candidature.offre?.titre || 'Offre sans titre' }}
+                  </h5>
+
+                  <!-- Informations de l'offre -->
+                  <div class="mb-3">
+                    @if (candidature.offre?.recruteur) {
+                      <div class="d-flex align-items-center mb-2">
+                        <fa-icon icon="building" class="text-muted me-2"></fa-icon>
+                        <small class="text-muted">
+                          {{ candidature.offre?.recruteur?.nomEntreprise || 'Entreprise #' + candidature.offre?.recruteur?.id }}
+                        </small>
+                      </div>
+                    }
+                    @if (candidature.offre?.typeContrat) {
+                      <div class="d-flex align-items-center mb-2">
+                        <fa-icon icon="file-contract" class="text-muted me-2"></fa-icon>
+                        <small class="text-muted">
+                          {{ candidature.offre?.typeContrat?.nom || 'Contrat #' + candidature.offre?.typeContrat?.id }}
+                        </small>
+                      </div>
+                    }
+                    @if (candidature.offre?.localisation) {
+                      <div class="d-flex align-items-center mb-2">
+                        <fa-icon icon="map-marker-alt" class="text-muted me-2"></fa-icon>
+                        <small class="text-muted">
+                          {{ candidature.offre?.localisation?.ville || 'Ville #' + candidature.offre?.localisation?.id }}
+                          @if (candidature.offre?.localisation?.region) {
+                            - {{ candidature.offre?.localisation?.region }}
+                          }
+                        </small>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Extrait de la lettre de motivation -->
+                  @if (candidature.lettreMotivation) {
+                    <div class="mb-3">
+                      <h6 class="text-muted mb-2">
+                        <fa-icon icon="edit" class="me-1"></fa-icon>
+                        Lettre de motivation
+                      </h6>
+                      <p class="card-text text-muted small">
+                        {{ candidature.lettreMotivation.length > 100 ? 
+                           (candidature.lettreMotivation | slice:0:100) + '...' : 
+                           candidature.lettreMotivation }}
+                      </p>
+                    </div>
+                  }
+                </div>
+
+                <!-- Pied de la carte -->
+                <div class="card-footer bg-transparent border-0 pt-0">
+                  <div class="d-flex gap-2">
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-primary btn-sm flex-fill"
+                      (click)="voirOffre(candidature)">
+                      <fa-icon icon="eye" class="me-1"></fa-icon>
+                      Voir l'offre
+                    </button>
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-secondary btn-sm flex-fill"
+                      (click)="voirCandidature(candidature)">
+                      <fa-icon icon="file-alt" class="me-1"></fa-icon>
+                      Détails
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Statistiques -->
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="card bg-light border-0">
+              <div class="card-body">
+                <h6 class="card-title mb-3">
+                  <fa-icon icon="chart-bar" class="me-2 text-primary"></fa-icon>
+                  Résumé de vos candidatures
+                </h6>
+                <div class="row text-center">
+                  <div class="col-md-3">
+                    <div class="stat-item">
+                      <h4 class="text-primary mb-1">{{ candidatures.length }}</h4>
+                      <small class="text-muted">Total</small>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="stat-item">
+                      <h4 class="text-warning mb-1">
+                        {{ getCandidaturesEnAttente() }}
+                      </h4>
+                      <small class="text-muted">En attente</small>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="stat-item">
+                      <h4 class="text-success mb-1">
+                        {{ getCandidaturesAcceptees() }}
+                      </h4>
+                      <small class="text-muted">Acceptées</small>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="stat-item">
+                      <h4 class="text-danger mb-1">
+                        {{ getCandidaturesRefusees() }}
+                      </h4>
+                      <small class="text-muted">Refusées</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

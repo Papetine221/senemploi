@@ -4,6 +4,8 @@
     "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
     "menu": {
       "home": "Accueil",
+      "candidatDashboard": "Tableau de bord",
+      "mesCandidatures": "Mes candidatures",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entités",
@@ -148,7 +150,21 @@
     "file": {
       "could.not.extract": "Impossible d'extraire le fichier",
       "not.image": "Le fichier doit être une image et non du type \"{{ fileType }}\""
+    },
+    "candidat": {
+      "notFound": "Profil candidat non trouvé. Veuillez créer votre profil candidat."
+    },
+    "candidature": {
+      "creation": "Erreur lors de l'envoi de votre candidature. Veuillez réessayer."
     }
+  },
+  "success": {
+    "candidature": {
+      "created": "Votre candidature a été envoyée avec succès !"
+    }
+  },
+  "candidatDashboard": {
+    "title": "Tableau de bord candidat"
   },
   "footer": "Ceci est votre pied de page"
 }

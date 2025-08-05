@@ -44,6 +44,10 @@ export class CandidatService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findByUserLogin(userLogin: string): Observable<EntityResponseType> {
+    return this.http.get<ICandidat>(`${this.resourceUrl}/by-user-login/${userLogin}`, { observe: 'response' });
+  }
+
   getCandidatIdentifier(candidat: Pick<ICandidat, 'id'>): number {
     return candidat.id;
   }

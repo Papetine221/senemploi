@@ -17,6 +17,20 @@
       "detail": {
         "title": "Candidature"
       },
+      "postuler": {
+        "title": "Postuler à cette offre",
+        "lettreMotivationLabel": "Lettre de motivation",
+        "lettreMotivationPlaceholder": "Expliquez pourquoi vous êtes le candidat idéal pour ce poste. Parlez de votre expérience, vos compétences et votre motivation...",
+        "profilCandidat": "Votre profil candidat",
+        "voirOffreComplete": "Voir l'offre complète",
+        "envoyerCandidature": "Envoyer ma candidature",
+        "envoiEnCours": "Envoi en cours...",
+        "retour": "Retour",
+        "minimumCaracteres": "Minimum 50 caractères requis",
+        "caracteres": "caractères",
+        "modifierProfil": "Modifier votre profil",
+        "informationsTransmises": "Ces informations seront transmises avec votre candidature."
+      },
       "id": "ID",
       "lettreMotivation": "Lettre Motivation",
       "datePostulation": "Date Postulation",

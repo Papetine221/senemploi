@@ -34,6 +34,15 @@ const routes: Routes = [
     title: 'login.title',
   },
   {
+    path: 'candidat-dashboard',
+    data: {
+      authorities: ['ROLE_CANDIDAT'],
+    },
+    canActivate: [UserRouteAccessService],
+    loadChildren: () => import('./candidat-dashboard/candidat-dashboard.routes'),
+    title: 'candidatDashboard.title',
+  },
+  {
     path: '',
     loadChildren: () => import(`./entities/entity.routes`),
   },

@@ -30,6 +30,16 @@ const candidatureRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
+    path: 'postuler',
+    loadComponent: () => import('./postuler/candidature-postuler.component').then(m => m.CandidaturePostulerComponent),
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'mes-candidatures',
+    loadComponent: () => import('./mes-candidatures/mes-candidatures.component').then(m => m.MesCandidaturesComponent),
+    canActivate: [UserRouteAccessService],
+  },
+  {
     path: ':id/edit',
     loadComponent: () => import('./update/candidature-update.component').then(m => m.CandidatureUpdateComponent),
     resolve: {

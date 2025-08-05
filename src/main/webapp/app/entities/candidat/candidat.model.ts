@@ -6,7 +6,7 @@ export interface ICandidat {
   adresse?: string | null;
   cv?: string | null;
   cvContentType?: string | null;
-  user?: Pick<IUser, 'id'> | null;
+  user?: Pick<IUser, 'id' | 'login'> | null;
 }
 
 export type NewCandidat = Omit<ICandidat, 'id'> & { id: null };

@@ -27,6 +27,26 @@
             </span>
           </a>
         </li>
+        <!-- Tableau de bord candidat -->
+        @if (account() !== null) {
+          <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *jhiHasAnyAuthority="'ROLE_CANDIDAT'">
+            <a class="nav-link" routerLink="/candidat-dashboard" (click)="collapseNavbar()">
+              <span>
+                <fa-icon icon="tachometer-alt"></fa-icon>
+                <span jhiTranslate="global.menu.candidatDashboard">Tableau de bord</span>
+              </span>
+            </a>
+          </li>
+          <!-- Mes candidatures -->
+          <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *jhiHasAnyAuthority="'ROLE_CANDIDAT'">
+            <a class="nav-link" routerLink="/candidature/mes-candidatures" (click)="collapseNavbar()">
+              <span>
+                <fa-icon icon="briefcase"></fa-icon>
+                <span jhiTranslate="global.menu.mesCandidatures">Mes candidatures</span>
+              </span>
+            </a>
+          </li>
+        }
         <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
         @if (account() !== null) {
           <li

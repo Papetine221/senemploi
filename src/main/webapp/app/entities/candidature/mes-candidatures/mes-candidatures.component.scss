@@ -1,0 +1,151 @@
+.mes-candidatures-container {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+
+  .candidature-card {
+    transition: all 0.3s ease;
+    border-radius: 0.75rem;
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .card-header {
+      border-radius: 0.75rem 0.75rem 0 0 !important;
+      padding: 1rem 1.25rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .card-text {
+      line-height: 1.5;
+    }
+
+    .btn {
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+
+    &.bg-warning {
+      background: linear-gradient(135deg, #ffc107, #ffb300) !important;
+    }
+
+    &.bg-success {
+      background: linear-gradient(135deg, #28a745, #20c997) !important;
+    }
+
+    &.bg-danger {
+      background: linear-gradient(135deg, #dc3545, #c82333) !important;
+    }
+  }
+
+  .stat-item {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    h4 {
+      font-weight: 700;
+      font-size: 2rem;
+    }
+
+    small {
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .display-6 {
+    font-weight: 700;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  // Animation pour les cartes
+  .candidature-card {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // Responsive design
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .display-6 {
+      font-size: 2rem;
+    }
+
+    .candidature-card {
+      margin-bottom: 1.5rem;
+    }
+
+    .d-flex.gap-2 {
+      flex-direction: column;
+      gap: 0.5rem !important;
+
+      .btn {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    .row.text-center .col-md-3 {
+      margin-bottom: 1rem;
+    }
+  }
+
+  // États des candidatures avec couleurs distinctes
+  .statut-en-attente {
+    border-left: 4px solid #ffc107;
+  }
+
+  .statut-acceptee {
+    border-left: 4px solid #28a745;
+  }
+
+  .statut-refusee {
+    border-left: 4px solid #dc3545;
+  }
+}

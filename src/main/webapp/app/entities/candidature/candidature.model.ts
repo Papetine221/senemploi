@@ -9,7 +9,7 @@ export interface ICandidature {
   datePostulation?: dayjs.Dayjs | null;
   statut?: keyof typeof StatutCandidature | null;
   candidat?: Pick<ICandidat, 'id'> | null;
-  offre?: Pick<IOffreEmploi, 'id'> | null;
+  offre?: Pick<IOffreEmploi, 'id' | 'titre' | 'description' | 'salaire' | 'datePublication' | 'dateExpiration' | 'recruteur' | 'typeContrat' | 'localisation' | 'competences'> | null;
 }
 
 export type NewCandidature = Omit<ICandidature, 'id'> & { id: null };

@@ -1,0 +1,28 @@
+{
+  "candidatDashboard": {
+    "title": "Tableau de bord candidat",
+    "welcome": "Bienvenue",
+    "actions": {
+      "search": {
+        "title": "Rechercher",
+        "description": "Trouvez les offres d'emploi qui correspondent à votre profil",
+        "button": "Rechercher des offres"
+      },
+      "candidatures": {
+        "title": "Mes Candidatures",
+        "description": "Suivez l'état de vos candidatures envoyées",
+        "button": "Voir mes candidatures"
+      }
+    },
+    "recentOffers": {
+      "title": "Offres récentes",
+      "viewAll": "Voir toutes les offres",
+      "loading": "Chargement des offres...",
+      "noOffers": "Aucune offre d'emploi disponible pour le moment.",
+      "viewDetails": "Voir détails",
+      "apply": "Postuler",
+      "publishedOn": "Publié le"
+    },
+    "refresh": "Actualiser"
+  }
+}

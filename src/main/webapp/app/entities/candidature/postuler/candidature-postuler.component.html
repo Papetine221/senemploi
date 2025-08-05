@@ -1,0 +1,206 @@
+<div class="candidature-postuler-container">
+  <div class="container py-4">
+    <!-- Loader -->
+    @if (isLoading) {
+      <div class="d-flex justify-content-center align-items-center" style="min-height: 300px;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+    }
+
+    <!-- Contenu principal -->
+    @if (!isLoading && offreEmploi && candidat) {
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <!-- En-tête avec informations de l'offre -->
+          <div class="card shadow-lg border-0 rounded-lg mb-4">
+            <div class="card-header bg-primary text-white py-3">
+              <h2 class="mb-0">
+                <fa-icon icon="paper-plane" class="me-2"></fa-icon>
+                Postuler à cette offre
+              </h2>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-8">
+                  <h4 class="text-primary mb-2">{{ offreEmploi.titre }}</h4>
+                  <div class="d-flex flex-wrap gap-2 mb-3">
+                    @if (offreEmploi.recruteur) {
+                      <span class="badge bg-light text-dark">
+                        <fa-icon icon="building" class="me-1"></fa-icon>
+                        {{ offreEmploi.recruteur?.nomEntreprise || 'Entreprise #' + offreEmploi.recruteur?.id }}
+                      </span>
+                    }
+                    @if (offreEmploi.typeContrat) {
+                      <span class="badge bg-light text-dark">
+                        <fa-icon icon="file-contract" class="me-1"></fa-icon>
+                        {{ offreEmploi.typeContrat?.nom || 'Contrat #' + offreEmploi.typeContrat?.id }}
+                      </span>
+                    }
+                    @if (offreEmploi.localisation) {
+                      <span class="badge bg-light text-dark">
+                        <fa-icon icon="map-marker-alt" class="me-1"></fa-icon>
+                        {{ offreEmploi.localisation?.ville || 'Localisation #' + offreEmploi.localisation?.id }}
+                      </span>
+                    }
+                  </div>
+                </div>
+                <div class="col-md-4 text-end">
+                  <a 
+                    class="btn btn-outline-primary btn-sm"
+                    [routerLink]="['/offre-emploi', offreEmploi.id, 'view']">
+                    <fa-icon icon="eye" class="me-1"></fa-icon>
+                    Voir l'offre complète
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulaire de candidature -->
+          <div class="card shadow-lg border-0 rounded-lg">
+            <div class="card-header bg-light">
+              <h3 class="mb-0">
+                <fa-icon icon="edit" class="me-2 text-primary"></fa-icon>
+                Votre lettre de motivation
+              </h3>
+            </div>
+            <div class="card-body">
+              <form name="editForm" (ngSubmit)="save()" [formGroup]="editForm" novalidate>
+                <div class="mb-4">
+                  <label class="form-label" for="field_lettreMotivation">
+                    <strong>Lettre de motivation *</strong>
+                  </label>
+                  <textarea
+                    class="form-control"
+                    name="lettreMotivation"
+                    id="field_lettreMotivation"
+                    formControlName="lettreMotivation"
+                    rows="12"
+                    placeholder="Expliquez pourquoi vous êtes le candidat idéal pour ce poste. Parlez de votre expérience, vos compétences et votre motivation..."
+                    [class.is-invalid]="lettreMotivation?.invalid && (lettreMotivation?.dirty || lettreMotivation?.touched)">
+                  </textarea>
+                  
+                  <!-- Compteur de caractères -->
+                  <div class="form-text d-flex justify-content-between">
+                    <span>Minimum 50 caractères requis</span>
+                    <span class="text-muted">
+                      {{ lettreMotivation?.value?.length || 0 }} / 2000 caractères
+                    </span>
+                  </div>
+
+                  <!-- Messages d'erreur -->
+                  @if (lettreMotivation?.invalid && (lettreMotivation?.dirty || lettreMotivation?.touched)) {
+                    <div class="invalid-feedback d-block">
+                      @if (lettreMotivation?.errors?.['required']) {
+                        <div>La lettre de motivation est obligatoire.</div>
+                      }
+                      @if (lettreMotivation?.errors?.['minlength']) {
+                        <div>La lettre de motivation doit contenir au moins 50 caractères.</div>
+                      }
+                      @if (lettreMotivation?.errors?.['maxlength']) {
+                        <div>La lettre de motivation ne peut pas dépasser 2000 caractères.</div>
+                      }
+                    </div>
+                  }
+                </div>
+
+                <!-- Informations de contact -->
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <label class="form-label" for="field_telephone">
+                      <strong>Téléphone *</strong>
+                    </label>
+                    <input
+                      type="tel"
+                      class="form-control"
+                      name="telephone"
+                      id="field_telephone"
+                      formControlName="telephone"
+                      placeholder="Ex: +33 1 23 45 67 89"
+                      [class.is-invalid]="telephone?.invalid && (telephone?.dirty || telephone?.touched)">
+                    
+                    @if (telephone?.invalid && (telephone?.dirty || telephone?.touched)) {
+                      <div class="invalid-feedback d-block">
+                        @if (telephone?.errors?.['required']) {
+                          <div>Le numéro de téléphone est obligatoire.</div>
+                        }
+                        @if (telephone?.errors?.['pattern']) {
+                          <div>Veuillez saisir un numéro de téléphone valide.</div>
+                        }
+                      </div>
+                    }
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label class="form-label" for="field_adresse">
+                      <strong>Adresse *</strong>
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="adresse"
+                      id="field_adresse"
+                      formControlName="adresse"
+                      placeholder="Ex: 123 Rue de la Paix, 75001 Paris"
+                      [class.is-invalid]="adresse?.invalid && (adresse?.dirty || adresse?.touched)">
+                    
+                    @if (adresse?.invalid && (adresse?.dirty || adresse?.touched)) {
+                      <div class="invalid-feedback d-block">
+                        @if (adresse?.errors?.['required']) {
+                          <div>L'adresse est obligatoire.</div>
+                        }
+                        @if (adresse?.errors?.['minlength']) {
+                          <div>L'adresse doit contenir au moins 10 caractères.</div>
+                        }
+                        @if (adresse?.errors?.['maxlength']) {
+                          <div>L'adresse ne peut pas dépasser 200 caractères.</div>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <!-- Information sur la transmission des données -->
+                <div class="alert alert-info">
+                  <h6><fa-icon icon="info-circle" class="me-2"></fa-icon>Informations transmises</h6>
+                  <p class="mb-0">
+                    <small class="text-muted">
+                      Votre lettre de motivation, numéro de téléphone et adresse seront transmis avec votre candidature.
+                      Assurez-vous que ces informations sont correctes.
+                    </small>
+                  </p>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="d-flex justify-content-between align-items-center">
+                  <button 
+                    type="button" 
+                    class="btn btn-outline-secondary"
+                    (click)="previousState()">
+                    <fa-icon icon="arrow-left" class="me-2"></fa-icon>
+                    Retour
+                  </button>
+                  
+                  <button
+                    type="submit"
+                    [disabled]="editForm.invalid || isSaving"
+                    class="btn btn-success btn-lg">
+                    @if (isSaving) {
+                      <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                      Envoi en cours...
+                    } @else {
+                      <fa-icon icon="paper-plane" class="me-2"></fa-icon>
+                      Envoyer ma candidature
+                    }
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
