@@ -11,10 +11,10 @@ export interface IOffreEmploi {
   salaire?: number | null;
   datePublication?: dayjs.Dayjs | null;
   dateExpiration?: dayjs.Dayjs | null;
-  recruteur?: Pick<IRecruteur, 'id'> | null;
-  typeContrat?: Pick<ITypeContrat, 'id'> | null;
-  localisation?: Pick<ILocalisation, 'id'> | null;
-  competences?: Pick<ICompetence, 'id'>[] | null;
+  recruteur?: Pick<IRecruteur, 'id' | 'nomEntreprise'> | null;
+  typeContrat?: Pick<ITypeContrat, 'id' | 'nom'> | null;
+  localisation?: Pick<ILocalisation, 'id' | 'ville' | 'region'> | null;
+  competences?: Pick<ICompetence, 'id' | 'nom'>[] | null;
 }
 
 export type NewOffreEmploi = Omit<IOffreEmploi, 'id'> & { id: null };

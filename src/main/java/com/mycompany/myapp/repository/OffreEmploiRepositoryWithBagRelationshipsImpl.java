@@ -24,7 +24,7 @@ public class OffreEmploiRepositoryWithBagRelationshipsImpl implements OffreEmplo
 
     @Override
     public Optional<OffreEmploi> fetchBagRelationships(Optional<OffreEmploi> offreEmploi) {
-        return offreEmploi.map(this::fetchCompetences);
+        return offreEmploi.map(this::fetchAllRelationships);
     }
 
     @Override
@@ -38,25 +38,35 @@ public class OffreEmploiRepositoryWithBagRelationshipsImpl implements OffreEmplo
 
     @Override
     public List<OffreEmploi> fetchBagRelationships(List<OffreEmploi> offreEmplois) {
-        return Optional.of(offreEmplois).map(this::fetchCompetences).orElse(Collections.emptyList());
+        return Optional.of(offreEmplois).map(this::fetchAllRelationships).orElse(Collections.emptyList());
     }
 
-    OffreEmploi fetchCompetences(OffreEmploi result) {
+    OffreEmploi fetchAllRelationships(OffreEmploi result) {
         return entityManager
             .createQuery(
-                "select offreEmploi from OffreEmploi offreEmploi left join fetch offreEmploi.competences where offreEmploi.id = :id",
+                "select offreEmploi from OffreEmploi offreEmploi " +
+                "left join fetch offreEmploi.recruteur " +
+                "left join fetch offreEmploi.typeContrat " +
+                "left join fetch offreEmploi.localisation " +
+                "left join fetch offreEmploi.competences " +
+                "where offreEmploi.id = :id",
                 OffreEmploi.class
             )
             .setParameter(ID_PARAMETER, result.getId())
             .getSingleResult();
     }
 
-    List<OffreEmploi> fetchCompetences(List<OffreEmploi> offreEmplois) {
+    List<OffreEmploi> fetchAllRelationships(List<OffreEmploi> offreEmplois) {
         HashMap<Object, Integer> order = new HashMap<>();
         IntStream.range(0, offreEmplois.size()).forEach(index -> order.put(offreEmplois.get(index).getId(), index));
         List<OffreEmploi> result = entityManager
             .createQuery(
-                "select offreEmploi from OffreEmploi offreEmploi left join fetch offreEmploi.competences where offreEmploi in :offreEmplois",
+                "select distinct offreEmploi from OffreEmploi offreEmploi " +
+                "left join fetch offreEmploi.recruteur " +
+                "left join fetch offreEmploi.typeContrat " +
+                "left join fetch offreEmploi.localisation " +
+                "left join fetch offreEmploi.competences " +
+                "where offreEmploi in :offreEmplois",
                 OffreEmploi.class
             )
             .setParameter(OFFREEMPLOIS_PARAMETER, offreEmplois)

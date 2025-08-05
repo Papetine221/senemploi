@@ -1,168 +1,163 @@
-<div>
-  <h2 id="page-heading" data-cy="OffreEmploiHeading">
-    <span jhiTranslate="senemploiV4App.offreEmploi.home.title">OffreEmplois</span>
+<div class="offres-emploi-container py-4">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <h1 class="display-5 fw-bold text-primary" id="page-heading" data-cy="OffreEmploiHeading">
+          <fa-icon icon="briefcase" class="me-2"></fa-icon>
+          <span jhiTranslate="senemploiV4App.offreEmploi.home.title">Offres d'emploi</span>
+        </h1>
+        <p class="lead text-muted">Découvrez les opportunités professionnelles disponibles</p>
+      </div>
+      <div class="col-md-4 d-flex align-items-center justify-content-end">
+        <button class="btn btn-outline-primary me-2" (click)="load()" [disabled]="isLoading">
+          <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+          <span class="ms-1 d-none d-md-inline" jhiTranslate="senemploiV4App.offreEmploi.home.refreshListLabel">Actualiser</span>
+        </button>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
-        <span jhiTranslate="senemploiV4App.offreEmploi.home.refreshListLabel">Actualiser la liste</span>
-      </button>
-
-      <!-- Bouton de création visible uniquement pour les non-candidats -->
-      <button
-        *ngIf="!hasAnyAuthority('ROLE_CANDIDAT')"
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-offre-emploi"
-        [routerLink]="['/offre-emploi/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="senemploiV4App.offreEmploi.home.createLabel">Créer un nouveau Offre Emploi</span>
-      </button>
+        <!-- Bouton de création visible uniquement pour les non-candidats -->
+        <button
+          *ngIf="!hasAnyAuthority('ROLE_CANDIDAT')"
+          id="jh-create-entity"
+          data-cy="entityCreateButton"
+          class="btn btn-primary"
+          [routerLink]="['/offre-emploi/new']"
+        >
+          <fa-icon icon="plus"></fa-icon>
+          <span class="ms-1 d-none d-md-inline" jhiTranslate="senemploiV4App.offreEmploi.home.createLabel">Créer</span>
+        </button>
+      </div>
     </div>
-  </h2>
 
-  <jhi-alert-error />
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
 
-  <jhi-alert />
-
-  @if (offreEmplois().length === 0) {
-    <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="senemploiV4App.offreEmploi.home.notFound">Aucun Offre Emploi trouvé</span>
-    </div>
-  } @else {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="global.field.id">ID</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
+    @if (offreEmplois().length === 0) {
+      <div class="alert alert-warning shadow-sm rounded" id="no-result">
+        <fa-icon icon="info-circle" class="me-2"></fa-icon>
+        <span jhiTranslate="senemploiV4App.offreEmploi.home.notFound">Aucune offre d'emploi trouvée</span>
+      </div>
+    } @else {
+      <!-- Vue en cartes pour les offres d'emploi -->
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @for (offreEmploi of offreEmplois(); track trackId(offreEmploi)) {
+          <div class="col" data-cy="entityTable">
+            <div class="card h-100 shadow-sm border-0 offre-card">
+              <div class="card-header bg-light border-0 py-3">
+                <h5 class="card-title mb-0 text-truncate">
+                  <a [routerLink]="['/offre-emploi', offreEmploi.id, 'view']" class="stretched-link text-decoration-none">
+                    {{ offreEmploi.titre }}
+                  </a>
+                </h5>
               </div>
-            </th>
-            <th scope="col" jhiSortBy="titre">
-              <div class="d-flex">
-                <span jhiTranslate="senemploiV4App.offreEmploi.titre">Titre</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="description">
-              <div class="d-flex">
-                <span jhiTranslate="senemploiV4App.offreEmploi.description">Description</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="salaire">
-              <div class="d-flex">
-                <span jhiTranslate="senemploiV4App.offreEmploi.salaire">Salaire</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="datePublication">
-              <div class="d-flex">
-                <span jhiTranslate="senemploiV4App.offreEmploi.datePublication">Date Publication</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="dateExpiration">
-              <div class="d-flex">
-                <span jhiTranslate="senemploiV4App.offreEmploi.dateExpiration">Date Expiration</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="recruteur.id">
-              <div class="d-flex">
-                <span jhiTranslate="senemploiV4App.offreEmploi.recruteur">Recruteur</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="typeContrat.id">
-              <div class="d-flex">
-                <span jhiTranslate="senemploiV4App.offreEmploi.typeContrat">Type Contrat</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="localisation.id">
-              <div class="d-flex">
-                <span jhiTranslate="senemploiV4App.offreEmploi.localisation">Localisation</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0">
-          @for (offreEmploi of offreEmplois(); track trackId(offreEmploi)) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/offre-emploi', offreEmploi.id, 'view']">{{ offreEmploi.id }}</a>
-              </td>
-              <td>{{ offreEmploi.titre }}</td>
-              <td>{{ offreEmploi.description }}</td>
-              <td>{{ offreEmploi.salaire }}</td>
-              <td>{{ offreEmploi.datePublication | formatMediumDatetime }}</td>
-              <td>{{ offreEmploi.dateExpiration | formatMediumDatetime }}</td>
-              <td>
-                @if (offreEmploi.recruteur) {
-                  <div>
-                    <a [routerLink]="['/recruteur', offreEmploi.recruteur.id, 'view']">{{ offreEmploi.recruteur.id }}</a>
+              <div class="card-body">
+                <div class="mb-3 d-flex align-items-center">
+                  @if (offreEmploi.recruteur) {
+                    <span class="badge bg-primary me-2">
+                      <fa-icon icon="building" class="me-1"></fa-icon>
+                      {{ offreEmploi.recruteur.nomEntreprise || 'Entreprise #' + offreEmploi.recruteur.id }}
+                    </span>
+                  }
+                  @if (offreEmploi.typeContrat) {
+                    <span class="badge bg-secondary me-2">
+                      <fa-icon icon="file-contract" class="me-1"></fa-icon>
+                      {{ offreEmploi.typeContrat.nom || 'Contrat #' + offreEmploi.typeContrat.id }}
+                    </span>
+                  }
+                  @if (offreEmploi.localisation) {
+                    <span class="badge bg-info text-dark">
+                      <fa-icon icon="map-marker-alt" class="me-1"></fa-icon>
+                      {{ offreEmploi.localisation.ville || 'Localisation #' + offreEmploi.localisation.id }}
+                    </span>
+                  }
+                </div>
+                
+                <p class="card-text description-truncate">{{ offreEmploi.description }}</p>
+                
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <div class="text-success fw-bold">
+                    <fa-icon icon="money-bill-wave" class="me-1"></fa-icon>
+                    {{ offreEmploi.salaire }} €
                   </div>
-                }
-              </td>
-              <td>
-                @if (offreEmploi.typeContrat) {
-                  <div>
-                    <a [routerLink]="['/type-contrat', offreEmploi.typeContrat.id, 'view']">{{ offreEmploi.typeContrat.id }}</a>
+                  <div class="text-muted small">
+                    <fa-icon icon="calendar-alt" class="me-1"></fa-icon>
+                    {{ offreEmploi.datePublication | formatMediumDatetime }}
                   </div>
-                }
-              </td>
-              <td>
-                @if (offreEmploi.localisation) {
-                  <div>
-                    <a [routerLink]="['/localisation', offreEmploi.localisation.id, 'view']">{{ offreEmploi.localisation.id }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/offre-emploi', offreEmploi.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                </div>
+              </div>
+              <div class="card-footer bg-white border-0 py-3">
+                <div class="d-flex justify-content-between">
+                  <a [routerLink]="['/offre-emploi', offreEmploi.id, 'view']" class="btn btn-sm btn-outline-primary" data-cy="entityDetailsButton">
                     <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                    <span class="ms-1" jhiTranslate="entity.action.view">Voir</span>
                   </a>
 
-                  <!-- Afficher les boutons d'édition et de suppression uniquement pour les non-candidats -->
-                  <ng-container *ngIf="!hasAnyAuthority('ROLE_CANDIDAT')">
-                    <a [routerLink]="['/offre-emploi', offreEmploi.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                      <fa-icon icon="pencil-alt"></fa-icon>
-                      <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
-                    </a>
+                  <div class="btn-group">
+                    <!-- Afficher les boutons d'édition et de suppression uniquement pour les non-candidats -->
+                    <ng-container *ngIf="!hasAnyAuthority('ROLE_CANDIDAT')">
+                      <a [routerLink]="['/offre-emploi', offreEmploi.id, 'edit']" class="btn btn-sm btn-outline-secondary" data-cy="entityEditButton">
+                        <fa-icon icon="pencil-alt"></fa-icon>
+                        <span class="ms-1 d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                      </a>
 
-                    <button type="submit" (click)="delete(offreEmploi)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                      <fa-icon icon="times"></fa-icon>
-                      <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
-                    </button>
-                  </ng-container>
+                      <button type="submit" (click)="delete(offreEmploi)" class="btn btn-sm btn-outline-danger" data-cy="entityDeleteButton">
+                        <fa-icon icon="times"></fa-icon>
+                        <span class="ms-1 d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                      </button>
+                    </ng-container>
 
-                  <!-- Bouton pour postuler uniquement pour les candidats -->
-                  <ng-container *ngIf="hasAnyAuthority('ROLE_CANDIDAT')">
-                    <a [routerLink]="['/candidature/new']" [queryParams]="{offre: offreEmploi.id}" class="btn btn-success btn-sm">
-                      <fa-icon icon="paper-plane"></fa-icon>
-                      <span class="d-none d-md-inline">Postuler</span>
-                    </a>
-                  </ng-container>
+                    <!-- Bouton pour postuler uniquement pour les candidats -->
+                    <ng-container *ngIf="hasAnyAuthority('ROLE_CANDIDAT')">
+                      <a [routerLink]="['/candidature/new']" [queryParams]="{offre: offreEmploi.id}" class="btn btn-sm btn-success">
+                        <fa-icon icon="paper-plane"></fa-icon>
+                        <span class="ms-1 d-none d-md-inline">Postuler</span>
+                      </a>
+                    </ng-container>
+                  </div>
                 </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+    }
+  </div>
 </div>
+
+<style>
+  .offres-emploi-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+  }
+  
+  .offre-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  .offre-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .description-truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 4.5rem;
+  }
+  
+  .card-title {
+    font-weight: 600;
+    color: #343a40;
+  }
+  
+  .badge {
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-radius: 50rem;
+  }
+</style>

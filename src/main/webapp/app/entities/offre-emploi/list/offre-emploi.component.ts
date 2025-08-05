@@ -5,7 +5,7 @@ import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
-import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
+import { SortService, type SortState, sortStateSignal } from 'app/shared/sort';
 import { FormatMediumDatetimePipe } from 'app/shared/date';
 import { FormsModule } from '@angular/forms';
 
@@ -13,7 +13,7 @@ import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
 import { DataUtils } from 'app/core/util/data-util.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
-import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+
 import { OffreEmploiDeleteDialogComponent } from '../delete/offre-emploi-delete-dialog.component';
 import { EntityArrayResponseType, OffreEmploiService } from '../service/offre-emploi.service';
 import { IOffreEmploi } from '../offre-emploi.model';
@@ -22,7 +22,7 @@ import { AccountService } from 'app/core/auth/account.service';
 @Component({
   selector: 'jhi-offre-emploi',
   templateUrl: './offre-emploi.component.html',
-  imports: [RouterModule, FormsModule, SharedModule, SortDirective, SortByDirective, FormatMediumDatetimePipe, InfiniteScrollDirective],
+  imports: [RouterModule, FormsModule, SharedModule, FormatMediumDatetimePipe],
 })
 export class OffreEmploiComponent implements OnInit {
   subscription: Subscription | null = null;
@@ -32,9 +32,6 @@ export class OffreEmploiComponent implements OnInit {
   sortState = sortStateSignal({});
 
   itemsPerPage = ITEMS_PER_PAGE;
-  links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({});
-  hasMorePage = computed(() => !!this.links().next);
-  isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
 
   public readonly router = inject(Router);
   protected readonly offreEmploiService = inject(OffreEmploiService);
@@ -64,11 +61,10 @@ export class OffreEmploiComponent implements OnInit {
 
   reset(): void {
     this.offreEmplois.set([]);
+    this.isLoading = false;
   }
 
-  loadNextPage(): void {
-    this.load();
-  }
+
 
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
@@ -91,10 +87,16 @@ export class OffreEmploiComponent implements OnInit {
   }
 
   load(): void {
+    this.isLoading = true;
     this.queryBackend().subscribe({
       next: (res: EntityArrayResponseType) => {
         this.onResponseSuccess(res);
+        this.isLoading = false;
       },
+      error: (error) => {
+        console.error('Erreur lors du chargement des offres d\'emploi:', error);
+        this.isLoading = false;
+      }
     });
   }
 
@@ -113,48 +115,24 @@ export class OffreEmploiComponent implements OnInit {
   }
 
   protected fillComponentAttributesFromResponseBody(data: IOffreEmploi[] | null): IOffreEmploi[] {
-    // If there is previous link, data is a infinite scroll pagination content.
-    if (this.links().prev) {
-      const offreEmploisNew = this.offreEmplois();
-      if (data) {
-        for (const d of data) {
-          if (offreEmploisNew.some(op => op.id === d.id)) {
-            offreEmploisNew.push(d);
-          }
-        }
-      }
-      return offreEmploisNew;
-    }
     return data ?? [];
   }
 
   protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
-    const linkHeader = headers.get('link');
-    if (linkHeader) {
-      this.links.set(this.parseLinks.parseAll(linkHeader));
-    } else {
-      this.links.set({});
-    }
+    // Méthode simplifiée sans pagination infinie
   }
 
   protected queryBackend(): Observable<EntityArrayResponseType> {
-    this.isLoading = true;
     const queryObject: any = {
       size: this.itemsPerPage,
       eagerload: true,
+      sort: this.sortService.buildSortParam(this.sortState())
     };
-    if (this.hasMorePage()) {
-      Object.assign(queryObject, this.links().next);
-    } else if (this.isFirstFetch()) {
-      Object.assign(queryObject, { sort: this.sortService.buildSortParam(this.sortState()) });
-    }
 
-    return this.offreEmploiService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+    return this.offreEmploiService.query(queryObject);
   }
 
   protected handleNavigation(sortState: SortState): void {
-    this.links.set({});
-
     const queryParamsObj = {
       sort: this.sortService.buildSortParam(sortState),
     };
