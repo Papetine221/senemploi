@@ -494,7 +494,15 @@
                 (click)="modifierOffre(offre)"
               >
                 ✏️ Modifier cette offre
-              </button>
+              </button> 
+
+              <button
+  class="btn btn-outline-danger w-100"
+  (click)="supprimerOffre(offre.id)"
+>
+  🗑️ Supprimer cette offre
+</button>
+
       
               <!-- 🔍 Voir plus -->
               <button class="btn btn-voir-plus w-100 mt-auto">

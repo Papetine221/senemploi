@@ -84,6 +84,16 @@ export class RecruteurDashboardComponent implements OnInit {
     this.showForm = !this.showForm;
   }
 
+  supprimerOffre(id: number): void {
+    if (confirm("Voulez-vous vraiment supprimer cette offre ?")) {
+      this.offreService.delete(id).subscribe(() => {
+        this.offresPubliees = this.offresPubliees.filter(offre => offre.id !== id);
+      });
+    }
+  }
+  
+  
+
   onSubmit(): void {
     if (this.offreForm.valid) {
       const formValues = this.offreForm.value;
