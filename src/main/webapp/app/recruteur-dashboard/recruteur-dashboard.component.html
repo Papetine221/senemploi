@@ -353,64 +353,76 @@
             </div>
         </section>
     </body>
-      <!-- Formulaire de création d’offre -->
-      <div *ngIf="showForm" class="container my-5">
-        <div class="card p-4 shadow-sm">
-          <h4 class="mb-4">Nouvelle offre d'emploi</h4>
-          <form [formGroup]="offreForm" (ngSubmit)="onSubmit()">
-
-            <div class="mb-3">
-              <label for="titre" class="form-label">Titre de l'offre</label>
-              <input id="titre" type="text" class="form-control" formControlName="titre" />
-            </div>
-      
-            <div class="mb-3">
-              <label for="description" class="form-label">Description</label>
-              <textarea id="description" rows="4" class="form-control" formControlName="description"></textarea>
-            </div>
-      
-            <div class="mb-3">
-              <label for="salaire" class="form-label">Salaire</label>
-              <input id="salaire" type="number" class="form-control" formControlName="salaire" />
-            </div>
-      
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="datePublication" class="form-label">Date de publication</label>
-                <input id="datePublication" type="date" class="form-control" formControlName="datePublication" />
-              </div>
-      
-              <div class="col-md-6 mb-3">
-                <label for="dateExpiration" class="form-label">Date d’expiration</label>
-                <input id="dateExpiration" type="date" class="form-control" formControlName="dateExpiration" />
-              </div>
-            </div>
-      
-            <div class="mb-3">
-              <label for="typeContrat" class="form-label">Type de contrat</label>
-              <select id="typeContrat" class="form-select" formControlName="typeContratId">
-                <option value="">-- Sélectionner --</option>
-                <option *ngFor="let t of typeContrats" [value]="t.id">{{ t.nom }}</option>
-              </select>
-            </div>
-      
-            <div class="mb-3">
-              <label for="localisation" class="form-label">Localisation</label>
-              <select id="localisation" class="form-select" formControlName="localisationId">
-                <option value="">-- Sélectionner --</option>
-                <option *ngFor="let loc of localisations" [value]="loc.id">{{ loc.region }} - {{ loc.ville }}</option>
-              </select>
-            </div>
-      
-            <div class="text-end">
-                <button type="submit" class="btn btn-primary" style="background-color: rgb(13, 255, 0); z-index: 9999; position: relative; display: block;">
-                  Enregistrer
-                </button>
-              </div>
-              
-          </form>
-        </div>
+     <!-- Formulaire de création d’offre -->
+<div *ngIf="showForm" class="container my-5">
+    <div class="card p-4 shadow-lg border-0 bg-light position-relative">
+      <div class="ribbon bg-success text-white px-3 py-1 position-absolute top-0 end-0 rounded-bottom-start">
+        <i class="fas fa-plus-circle me-2"></i>Nouvelle offre
       </div>
+  
+      <h4 class="mb-4 text-primary fw-bold">
+        <i class="fas fa-briefcase me-2"></i>Publier une nouvelle offre d'emploi
+      </h4>
+  
+      <form [formGroup]="offreForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3">
+          <!-- Titre -->
+          <div class="col-md-6">
+            <label for="titre" class="form-label fw-semibold"><i class="fas fa-heading me-1"></i>Titre de l'offre</label>
+            <input id="titre" type="text" class="form-control border-primary" formControlName="titre" placeholder="Ex: Développeur Full Stack" />
+          </div>
+  
+          <!-- Salaire -->
+          <div class="col-md-6">
+            <label for="salaire" class="form-label fw-semibold"><i class="fas fa-money-bill-wave me-1"></i>Salaire</label>
+            <input id="salaire" type="number" class="form-control border-primary" formControlName="salaire" placeholder="Ex: 350000" />
+          </div>
+  
+          <!-- Description -->
+          <div class="col-12">
+            <label for="description" class="form-label fw-semibold"><i class="fas fa-align-left me-1"></i>Description</label>
+            <textarea id="description" rows="4" class="form-control border-primary" formControlName="description" placeholder="Décrivez brièvement le poste..."></textarea>
+          </div>
+  
+          <!-- Dates -->
+          <div class="col-md-6">
+            <label for="datePublication" class="form-label fw-semibold"><i class="fas fa-calendar-plus me-1"></i>Date de publication</label>
+            <input id="datePublication" type="date" class="form-control border-primary" formControlName="datePublication" />
+          </div>
+          <div class="col-md-6">
+            <label for="dateExpiration" class="form-label fw-semibold"><i class="fas fa-calendar-times me-1"></i>Date d’expiration</label>
+            <input id="dateExpiration" type="date" class="form-control border-primary" formControlName="dateExpiration" />
+          </div>
+  
+          <!-- Contrat -->
+          <div class="col-md-6">
+            <label for="typeContrat" class="form-label fw-semibold"><i class="fas fa-file-contract me-1"></i>Type de contrat</label>
+            <select id="typeContrat" class="form-select border-primary" formControlName="typeContratId">
+              <option value="">-- Sélectionner --</option>
+              <option *ngFor="let t of typeContrats" [value]="t.id">{{ t.nom }}</option>
+            </select>
+          </div>
+  
+          <!-- Localisation -->
+          <div class="col-md-6">
+            <label for="localisation" class="form-label fw-semibold"><i class="fas fa-map-marker-alt me-1"></i>Localisation</label>
+            <select id="localisation" class="form-select border-primary" formControlName="localisationId">
+              <option value="">-- Sélectionner --</option>
+              <option *ngFor="let loc of localisations" [value]="loc.id">{{ loc.region }} - {{ loc.ville }}</option>
+            </select>
+          </div>
+        </div>
+  
+        <!-- Bouton d'enregistrement -->
+        <div class="text-end mt-4">
+          <button type="submit" class="btn btn-success px-4 py-2">
+            <i class="fas fa-save me-2"></i>Enregistrer l’offre
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
     
 
 
