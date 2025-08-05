@@ -6,14 +6,13 @@ import { TypeContratService } from 'app/entities/type-contrat/service/type-contr
 import { LocalisationService } from 'app/entities/localisation/service/localisation.service';
 import { ITypeContrat } from 'app/entities/type-contrat/type-contrat.model';
 import { ILocalisation } from 'app/entities/localisation/localisation.model';
+import { IOffreEmploi } from 'app/entities/offre-emploi/offre-emploi.model';
+import { NewOffreEmploi } from 'app/entities/offre-emploi/offre-emploi.model';
 
 @Component({
   selector: 'jhi-recruteur-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './recruteur-dashboard.component.html',
   styleUrl: './recruteur-dashboard.component.scss',
 })
@@ -23,6 +22,8 @@ export class RecruteurDashboardComponent implements OnInit {
 
   typeContrats: ITypeContrat[] = [];
   localisations: ILocalisation[] = [];
+
+  offresPubliees: IOffreEmploi[] = []; // <- clé corrigée ici
 
   private fb = inject(FormBuilder);
   private offreService = inject(OffreEmploiService);
@@ -43,11 +44,19 @@ export class RecruteurDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.typeContratService.query().subscribe({
-      next: res => this.typeContrats = res.body ?? [],
+      next: res => (this.typeContrats = res.body ?? []),
     });
 
     this.localisationService.query().subscribe({
-      next: res => this.localisations = res.body ?? [],
+      next: res => (this.localisations = res.body ?? []),
+    });
+
+    this.loadOffres();
+  }
+
+  loadOffres(): void {
+    this.offreService.query().subscribe({
+      next: res => (this.offresPubliees = res.body ?? []),
     });
   }
 
@@ -58,8 +67,7 @@ export class RecruteurDashboardComponent implements OnInit {
   onSubmit(): void {
     if (this.offreForm.valid) {
       const formValues = this.offreForm.value;
-
-      const offreData = {
+      const offreData: NewOffreEmploi = {
         id: null,
         titre: formValues.titre,
         description: formValues.description,
@@ -68,14 +76,17 @@ export class RecruteurDashboardComponent implements OnInit {
         dateExpiration: formValues.dateExpiration,
         typeContrat: { id: formValues.typeContratId },
         localisation: { id: formValues.localisationId },
-        recruteur: { id: 1 }, // plus tard : remplacer par le recruteur connecté
+        recruteur: { id: 1 },
       };
+      
+      
 
       this.offreService.create(offreData).subscribe({
         next: () => {
           alert('✅ Offre enregistrée avec succès.');
           this.offreForm.reset();
           this.showForm = false;
+          this.loadOffres();
         },
         error: () => {
           alert('❌ Erreur lors de la soumission.');

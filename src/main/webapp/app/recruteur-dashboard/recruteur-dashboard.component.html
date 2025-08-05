@@ -224,6 +224,9 @@
                 </div>
             </div>
             
+          
+              
+  
             <div class="row g-4">
                 <!-- Candidate Card 1 -->
                 <div class="col-md-6 col-lg-4">
@@ -318,6 +321,37 @@
             </div>
         </div>
     </section>
+
+    <div class="row mt-4" *ngIf="offresPubliees.length > 0">
+        <div class="col-md-6 col-lg-4 mb-4" *ngFor="let offre of offresPubliees">
+          <div class="card shadow-sm h-100">
+           
+      
+            <div class="card-body">
+              <h5 class="card-title"><strong>{{ offre.titre }}</strong></h5>
+              <p class="card-text text-muted">{{ offre.description }}</p>
+      
+              <ul class="list-unstyled mb-3">
+                <li><strong>Salaire :</strong> {{ offre.salaire }} F CFA</li>
+                <li><strong>Contrat :</strong> ID={{ offre.typeContrat?.id }}</li>
+                <li><strong>Localisation :</strong> ID={{ offre.localisation?.id }}</li>
+                <li>
+                  <strong>Publié le :</strong>
+                  {{ offre.datePublication?.toDate?.() | date: 'longDate' }}
+                </li>
+                <li>
+                  <strong>Expire le :</strong>
+                  {{ offre.dateExpiration?.toDate?.() | date: 'longDate' }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      
 
     <!-- Features Section -->
     <section class="py-5 bg-light">
@@ -427,6 +461,7 @@
         <div class="card p-4 shadow-sm">
           <h4 class="mb-4">Nouvelle offre d'emploi</h4>
           <form [formGroup]="offreForm" (ngSubmit)="onSubmit()">
+
             <div class="mb-3">
               <label for="titre" class="form-label">Titre de l'offre</label>
               <input id="titre" type="text" class="form-control" formControlName="titre" />
