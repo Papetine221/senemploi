@@ -18,6 +18,7 @@
     <h1 class="slogan">Votre partenaire emploi au quotidien</h1>
 
     
+<<<<<<< HEAD
     <div class="d-flex justify-content-center">
       <button class="btn btn-primary  btn-recruteur me-2" [routerLink]="['/account/register']" [queryParams]="{ type: 'candidat' }">Je cherche un job</button>
       <button class="btn btn-secondary btn-job-seeker" [routerLink]="['/account/register']" [queryParams]="{ type: 'recruteur' }">Je suis Recruteur</button>
@@ -83,6 +84,73 @@
       </div>
     </div>
 
+=======
+      <div class="d-flex justify-content-center">
+        <button class="btn btn-primary  btn-recruteur me-2" [routerLink]="['/account/register']" [queryParams]="{ type: 'candidat' }">Je cherche un job</button>
+        <button class="btn btn-secondary btn-job-seeker" [routerLink]="['/account/register']" [queryParams]="{ type: 'recruteur' }">Je suis Recruteur</button>
+      </div>
+
+
+    <p class="small-text">
+      Déjà inscrit ? 👉
+      <a routerLink="/login" class="link-create-account">Se connecter</a>
+    </p>
+
+    <div class="search-section">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <input type="text" class="form-control" placeholder="Rechercher un emploi..." />
+        </div>
+        <div class="col-md-3">
+          <select class="form-select">
+            <option selected>Par secteur</option>
+            <option>Informatique</option>
+            <option>Santé</option>
+            <option>Education</option>
+            <option>Commerce</option>
+            <option>Finance</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select">
+            <option selected>Par région</option>
+            <option>Dakar</option>
+            <option>Thiès</option>
+            <option>Saint-Louis</option>
+            <option>Kaolack</option>
+            <option>Ziguinchor</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-success w-100">Rechercher</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row offres">
+      <div class="col-md-6">
+        <h2>✅ Offres récentes</h2>
+        <ul>
+          <li>Analyste Junior</li>
+          <li>Assistant RH</li>
+          <li>Développeur Web</li>
+          <li>Chef de Projet Digital</li>
+          <li>Comptable Senior</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h2>⭐️ À la une</h2>
+        <ul>
+          <li>Responsable Terrain – Thiès</li>
+          <li>Digital Officer – Dakar</li>
+          <li>Chargé Marketing – Saint-Louis</li>
+          <li>Directeur Commercial – Kaolack</li>
+          <li>Ingénieur Système – Dakar</li>
+        </ul>
+      </div>
+    </div>
+
+>>>>>>> f05d900991ef76322668b5aa628a93b7261d32be
     <div class="footer">
       © 2025 Plateforme Emploi Sénégal. Construisons ensemble un avenir professionnel solide et accessible pour tous !
     </div>

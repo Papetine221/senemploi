@@ -27,6 +27,7 @@
             </span>
           </a>
         </li>
+<<<<<<< HEAD
         <!-- Tableau de bord candidat -->
         @if (account() !== null) {
           <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *jhiHasAnyAuthority="'ROLE_CANDIDAT'">
@@ -47,6 +48,13 @@
             </a>
           </li>
         }
+=======
+
+        <a routerLink="/recruteur-dashboard" class="nav-link">
+          <span>Tableau de bord recruteur</span>
+        </a>
+        
+>>>>>>> f05d900991ef76322668b5aa628a93b7261d32be
         <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
         @if (account() !== null) {
           <li

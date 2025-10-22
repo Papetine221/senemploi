@@ -17,9 +17,7 @@ type RestOf<T extends IOffreEmploi | NewOffreEmploi> = Omit<T, 'datePublication'
 };
 
 export type RestOffreEmploi = RestOf<IOffreEmploi>;
-
 export type NewRestOffreEmploi = RestOf<NewOffreEmploi>;
-
 export type PartialUpdateRestOffreEmploi = RestOf<PartialUpdateOffreEmploi>;
 
 export type EntityResponseType = HttpResponse<IOffreEmploi>;
@@ -98,13 +96,19 @@ export class OffreEmploiService {
     return offreEmploiCollection;
   }
 
+  /**
+   * ✅ CORRECTION : convertit les dates JS en chaîne ISO compatible avec le backend
+   */
   protected convertDateFromClient<T extends IOffreEmploi | NewOffreEmploi | PartialUpdateOffreEmploi>(offreEmploi: T): RestOf<T> {
     return {
       ...offreEmploi,
-      datePublication: offreEmploi.datePublication?.toJSON() ?? null,
-      dateExpiration: offreEmploi.dateExpiration?.toJSON() ?? null,
+      datePublication: offreEmploi.datePublication ? dayjs(offreEmploi.datePublication).toISOString() : null,
+      dateExpiration: offreEmploi.dateExpiration ? dayjs(offreEmploi.dateExpiration).toISOString() : null,
     };
   }
+  
+  
+  
 
   protected convertDateFromServer(restOffreEmploi: RestOffreEmploi): IOffreEmploi {
     return {

@@ -10,23 +10,23 @@ import com.mycompany.myapp.service.dto.LocalisationDTO;
 import com.mycompany.myapp.service.dto.OffreEmploiDTO;
 import com.mycompany.myapp.service.dto.RecruteurDTO;
 import com.mycompany.myapp.service.dto.TypeContratDTO;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link OffreEmploi} and its DTO {@link OffreEmploiDTO}.
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {TypeContratMapper.class, LocalisationMapper.class, RecruteurMapper.class, CompetenceMapper.class})
 public interface OffreEmploiMapper extends EntityMapper<OffreEmploiDTO, OffreEmploi> {
-    @Mapping(target = "recruteur", source = "recruteur", qualifiedByName = "recruteurId")
-    @Mapping(target = "typeContrat", source = "typeContrat", qualifiedByName = "typeContratId")
-    @Mapping(target = "localisation", source = "localisation", qualifiedByName = "localisationId")
-    @Mapping(target = "competences", source = "competences", qualifiedByName = "competenceIdSet")
-    OffreEmploiDTO toDto(OffreEmploi s);
+
+    @Mapping(target = "recruteur", source = "recruteur")
+    @Mapping(target = "typeContrat", source = "typeContrat")
+    @Mapping(target = "localisation", source = "localisation")
+    @Mapping(target = "competences", source = "competences")
+    OffreEmploiDTO toDto(OffreEmploi offreEmploi);
 
     @Mapping(target = "removeCompetences", ignore = true)
     OffreEmploi toEntity(OffreEmploiDTO offreEmploiDTO);
+<<<<<<< HEAD
 
     @Named("recruteurId")
     @BeanMapping(ignoreByDefault = true)
@@ -57,4 +57,6 @@ public interface OffreEmploiMapper extends EntityMapper<OffreEmploiDTO, OffreEmp
     default Set<CompetenceDTO> toDtoCompetenceIdSet(Set<Competence> competence) {
         return competence.stream().map(this::toDtoCompetenceId).collect(Collectors.toSet());
     }
+=======
+>>>>>>> f05d900991ef76322668b5aa628a93b7261d32be
 }
