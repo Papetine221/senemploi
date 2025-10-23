@@ -31,13 +31,7 @@ export default class LoginComponent implements OnInit, AfterViewInit {
     // if already authenticated then navigate to appropriate page
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
-        // Si l'utilisateur est un candidat, rediriger vers son tableau de bord
-        if (this.accountService.hasAnyAuthority('ROLE_CANDIDAT')) {
-          this.router.navigate(['/candidat-dashboard']);
-        } else {
-          // Sinon, rediriger vers la page d'accueil
-          this.router.navigate(['']);
-        }
+        this.redirectBasedOnRole();
       }
     });
   }
@@ -52,16 +46,29 @@ export default class LoginComponent implements OnInit, AfterViewInit {
         this.authenticationError.set(false);
         if (!this.router.getCurrentNavigation()) {
           // There were no routing during login (eg from navigationToStoredUrl)
-          // Si l'utilisateur est un candidat, rediriger vers son tableau de bord
-          if (this.accountService.hasAnyAuthority('ROLE_CANDIDAT')) {
-            this.router.navigate(['/candidat-dashboard']);
-          } else {
-            // Sinon, rediriger vers la page d'accueil
-            this.router.navigate(['']);
-          }
+          this.redirectBasedOnRole();
         }
       },
       error: () => this.authenticationError.set(true),
     });
+  }
+
+  /**
+   * Redirige l'utilisateur vers sa page spécifique selon son rôle
+   */
+  private redirectBasedOnRole(): void {
+    if (this.accountService.hasAnyAuthority('ROLE_ADMIN')) {
+      // Admin → Page d'administration
+      this.router.navigate(['/admin/user-management']);
+    } else if (this.accountService.hasAnyAuthority('ROLE_RECRUTEUR')) {
+      // Recruteur → Tableau de bord recruteur
+      this.router.navigate(['/recruteur-dashboard']);
+    } else if (this.accountService.hasAnyAuthority('ROLE_CANDIDAT')) {
+      // Candidat → Tableau de bord candidat
+      this.router.navigate(['/candidat-dashboard']);
+    } else {
+      // Utilisateur standard → Page d'accueil
+      this.router.navigate(['']);
+    }
   }
 }
