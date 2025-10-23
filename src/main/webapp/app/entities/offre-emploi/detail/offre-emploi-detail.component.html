@@ -53,7 +53,7 @@
                       @for (competence of offreEmploiRef.competences; track $index) {
                         <span class="badge bg-primary p-2">
                           <fa-icon icon="check-circle" class="me-1"></fa-icon>
-                          {{ competence?.nom || 'Compétence #' + competence?.id }}
+                          {{ competence.nom || 'Compétence #' + competence.id }}
                         </span>
                       }
                     </div>

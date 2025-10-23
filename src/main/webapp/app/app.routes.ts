@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { errorRoute } from './layouts/error/error.route';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
 const routes: Routes = [
   {
@@ -31,11 +32,12 @@ const routes: Routes = [
   },
   {
     path: 'candidat-dashboard',
+    loadComponent: () =>
+      import('./candidat-dashboard/candidat-dashboard.component').then(m => m.CandidatDashboardComponent),
+    canActivate: [UserRouteAccessService],
     data: {
       authorities: ['ROLE_CANDIDAT'],
     },
-    canActivate: [UserRouteAccessService],
-    loadChildren: () => import('./candidat-dashboard/candidat-dashboard.routes'),
     title: 'candidatDashboard.title',
   },
   {
@@ -43,11 +45,14 @@ const routes: Routes = [
     loadChildren: () => import('./entities/entity.routes'),
   },
 
-  // ✅ Route libre d'accès (sans authentification)
   {
     path: 'recruteur-dashboard',
     loadComponent: () =>
       import('./recruteur-dashboard/recruteur-dashboard.component').then(m => m.RecruteurDashboardComponent),
+    canActivate: [UserRouteAccessService],
+    data: {
+      authorities: ['ROLE_RECRUTEUR'],
+    },
     title: 'Tableau de bord recruteur',
   },
 

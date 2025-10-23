@@ -29,19 +29,19 @@
                     @if (offreEmploi.recruteur) {
                       <span class="badge bg-light text-dark">
                         <fa-icon icon="building" class="me-1"></fa-icon>
-                        {{ offreEmploi.recruteur?.nomEntreprise || 'Entreprise #' + offreEmploi.recruteur?.id }}
+                        {{ offreEmploi.recruteur.nomEntreprise || 'Entreprise #' + offreEmploi.recruteur.id }}
                       </span>
                     }
                     @if (offreEmploi.typeContrat) {
                       <span class="badge bg-light text-dark">
                         <fa-icon icon="file-contract" class="me-1"></fa-icon>
-                        {{ offreEmploi.typeContrat?.nom || 'Contrat #' + offreEmploi.typeContrat?.id }}
+                        {{ offreEmploi.typeContrat.nom || 'Contrat #' + offreEmploi.typeContrat.id }}
                       </span>
                     }
                     @if (offreEmploi.localisation) {
                       <span class="badge bg-light text-dark">
                         <fa-icon icon="map-marker-alt" class="me-1"></fa-icon>
-                        {{ offreEmploi.localisation?.ville || 'Localisation #' + offreEmploi.localisation?.id }}
+                        {{ offreEmploi.localisation.ville || 'Localisation #' + offreEmploi.localisation.id }}
                       </span>
                     }
                   </div>

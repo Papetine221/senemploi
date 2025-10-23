@@ -27,7 +27,6 @@
             </span>
           </a>
         </li>
-<<<<<<< HEAD
         <!-- Tableau de bord candidat -->
         @if (account() !== null) {
           <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *jhiHasAnyAuthority="'ROLE_CANDIDAT'">
@@ -48,28 +47,43 @@
             </a>
           </li>
         }
-=======
-
-        <a routerLink="/recruteur-dashboard" class="nav-link">
-          <span>Tableau de bord recruteur</span>
-        </a>
-        
->>>>>>> f05d900991ef76322668b5aa628a93b7261d32be
-        <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+        <!-- Tableau de bord recruteur -->
         @if (account() !== null) {
-          <li
-            ngbDropdown
-            class="nav-item dropdown pointer"
-            display="dynamic"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+          <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *jhiHasAnyAuthority="'ROLE_RECRUTEUR'">
+            <a class="nav-link" routerLink="/recruteur-dashboard" (click)="collapseNavbar()">
               <span>
-                <fa-icon icon="th-list"></fa-icon>
-                <span jhiTranslate="global.menu.entities.main">Entités</span>
+                <fa-icon icon="briefcase"></fa-icon>
+                <span jhiTranslate="global.menu.recruteurDashboard">Tableau de bord recruteur</span>
               </span>
             </a>
+          </li>
+        }
+        <!-- Offres d'emploi (accessible à tous les utilisateurs connectés) -->
+        @if (account() !== null) {
+          <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a class="nav-link" routerLink="/offre-emploi" (click)="collapseNavbar()">
+              <span>
+                <fa-icon icon="search"></fa-icon>
+                <span jhiTranslate="global.menu.offreEmploi">Offres d'emploi</span>
+              </span>
+            </a>
+          </li>
+        }
+        <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+        <li
+          *jhiHasAnyAuthority="'ROLE_ADMIN'"
+          ngbDropdown
+          class="nav-item dropdown pointer"
+          display="dynamic"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+            <span>
+              <fa-icon icon="th-list"></fa-icon>
+              <span jhiTranslate="global.menu.entities.main">Entités</span>
+            </span>
+          </a>
             <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
               <li>
                 <a
@@ -157,8 +171,7 @@
               </li>
               <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
             </ul>
-          </li>
-        }
+        </li>
         <li
           *jhiHasAnyAuthority="'ROLE_ADMIN'"
           ngbDropdown
