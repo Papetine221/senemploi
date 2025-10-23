@@ -7,6 +7,9 @@ const routes: Routes = [
     path: '',
     loadComponent: () => import('./home/home.component'),
     title: 'home.title',
+    data: {
+      pageRibbon: false, // Pas de navbar sur la page d'accueil
+    },
   },
   {
     path: '',
@@ -17,11 +20,17 @@ const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./login/login.component'),
     title: 'login.title',
+    data: {
+      pageRibbon: false, // Pas de navbar sur la page de connexion
+    },
   },
   
   {
     path: 'account',
     loadChildren: () => import('./account/account.route'),
+    data: {
+      pageRibbon: false, // Pas de navbar sur les pages account
+    },
   },
   {
     path: 'admin',
@@ -37,12 +46,16 @@ const routes: Routes = [
     canActivate: [UserRouteAccessService],
     data: {
       authorities: ['ROLE_CANDIDAT'],
+      pageRibbon: false, // Désactive la navbar JHipster
     },
     title: 'candidatDashboard.title',
   },
   {
     path: '',
     loadChildren: () => import('./entities/entity.routes'),
+    data: {
+      pageRibbon: false, // Pas de navbar sur les pages entities
+    },
   },
 
   {
@@ -52,6 +65,7 @@ const routes: Routes = [
     canActivate: [UserRouteAccessService],
     data: {
       authorities: ['ROLE_RECRUTEUR'],
+      pageRibbon: false, // Désactive la navbar JHipster
     },
     title: 'Tableau de bord recruteur',
   },
