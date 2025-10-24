@@ -29,7 +29,9 @@ public interface RecruteurService {
      * @param recruteurDTO the entity to update partially.
      * @return the persisted entity.
      */
+    Optional<RecruteurDTO> findByUserLogin(String login);
     Optional<RecruteurDTO> partialUpdate(RecruteurDTO recruteurDTO);
+
 
     /**
      * Get the "id" recruteur.

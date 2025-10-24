@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.OffreEmploiDTO;
+import java.util.List;                     // 🔹 À ne pas oublier
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,12 @@ import org.springframework.data.domain.Pageable;
  */
 public interface OffreEmploiService {
     /**
-     * Save a offreEmploi.
+     * Get all offers by a specific recruiter ID.
+     */
+    List<OffreEmploiDTO> findByRecruteurLogin(String login);
+
+    /**
+     * Save an offreEmploi.
      *
      * @param offreEmploiDTO the entity to save.
      * @return the persisted entity.
@@ -18,7 +24,7 @@ public interface OffreEmploiService {
     OffreEmploiDTO save(OffreEmploiDTO offreEmploiDTO);
 
     /**
-     * Updates a offreEmploi.
+     * Updates an offreEmploi.
      *
      * @param offreEmploiDTO the entity to update.
      * @return the persisted entity.
@@ -26,7 +32,7 @@ public interface OffreEmploiService {
     OffreEmploiDTO update(OffreEmploiDTO offreEmploiDTO);
 
     /**
-     * Partially updates a offreEmploi.
+     * Partially updates an offreEmploi.
      *
      * @param offreEmploiDTO the entity to update partially.
      * @return the persisted entity.

@@ -44,6 +44,14 @@ export class OffreEmploiService {
       .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
+  getByRecruteurConnecte(): Observable<IOffreEmploi[]> {
+    return this.http.get<IOffreEmploi[]>(`${this.resourceUrl}/recruteur/mes-offres`);
+  }
+  
+  getCurrentRecruteur(): Observable<any> {
+    return this.http.get<any>(`${this.resourceUrl.replace('offre-emplois', 'recruteurs/current')}`);
+  }
+  
   partialUpdate(offreEmploi: PartialUpdateOffreEmploi): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(offreEmploi);
     return this.http

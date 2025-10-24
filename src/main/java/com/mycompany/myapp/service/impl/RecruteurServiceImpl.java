@@ -21,7 +21,6 @@ public class RecruteurServiceImpl implements RecruteurService {
     private static final Logger LOG = LoggerFactory.getLogger(RecruteurServiceImpl.class);
 
     private final RecruteurRepository recruteurRepository;
-
     private final RecruteurMapper recruteurMapper;
 
     public RecruteurServiceImpl(RecruteurRepository recruteurRepository, RecruteurMapper recruteurMapper) {
@@ -53,7 +52,6 @@ public class RecruteurServiceImpl implements RecruteurService {
             .findById(recruteurDTO.getId())
             .map(existingRecruteur -> {
                 recruteurMapper.partialUpdate(existingRecruteur, recruteurDTO);
-
                 return existingRecruteur;
             })
             .map(recruteurRepository::save)
@@ -71,5 +69,16 @@ public class RecruteurServiceImpl implements RecruteurService {
     public void delete(Long id) {
         LOG.debug("Request to delete Recruteur : {}", id);
         recruteurRepository.deleteById(id);
+    }
+
+    /**
+     * ✅ Méthode unique et correcte pour retrouver un recruteur par le login de l'utilisateur connecté.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<RecruteurDTO> findByUserLogin(String login) {
+        LOG.debug("Request to get Recruteur by user login : {}", login);
+        return recruteurRepository.findByUser_Login(login)
+            .map(recruteurMapper::toDto);
     }
 }

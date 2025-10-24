@@ -1,6 +1,7 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Recruteur;
+import java.util.Optional; // ✅ important !
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,8 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface RecruteurRepository extends JpaRepository<Recruteur, Long>, JpaSpecificationExecutor<Recruteur> {}
+public interface RecruteurRepository extends JpaRepository<Recruteur, Long>, JpaSpecificationExecutor<Recruteur> {
+    Optional<Recruteur> findByUser_Login(String login);
+}
+
+

@@ -17,6 +17,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OffreEmploiRepository
     extends OffreEmploiRepositoryWithBagRelationships, JpaRepository<OffreEmploi, Long>, JpaSpecificationExecutor<OffreEmploi> {
+
+    // 🔹 Méthode personnalisée pour récupérer les offres d’un recruteur donné
+    List<OffreEmploi> findByRecruteurId(Long recruteurId);
+
+    // 🔹 Méthodes par défaut générées par JHipster (à garder)
     default Optional<OffreEmploi> findOneWithEagerRelationships(Long id) {
         return this.fetchBagRelationships(this.findById(id));
     }

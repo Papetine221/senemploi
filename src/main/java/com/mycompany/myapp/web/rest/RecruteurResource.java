@@ -1,7 +1,9 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.Recruteur;
 import com.mycompany.myapp.repository.RecruteurRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
+import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.RecruteurQueryService;
 import com.mycompany.myapp.service.RecruteurService;
 import com.mycompany.myapp.service.criteria.RecruteurCriteria;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +41,7 @@ public class RecruteurResource {
     private static final Logger LOG = LoggerFactory.getLogger(RecruteurResource.class);
 
     private static final String ENTITY_NAME = "recruteur";
+    
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -188,13 +192,24 @@ public class RecruteurResource {
      * @param id the id of the recruteurDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the recruteurDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
-    public ResponseEntity<RecruteurDTO> getRecruteur(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get Recruteur : {}", id);
-        Optional<RecruteurDTO> recruteurDTO = recruteurService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(recruteurDTO);
+    @GetMapping("/current")
+    public ResponseEntity<RecruteurDTO> getCurrentRecruteur() {
+        String login = SecurityUtils.getCurrentUserLogin().orElse(null);
+        LOG.info("🔍 Utilisateur connecté : {}", login);
+    
+        if (login == null) {
+            return ResponseEntity.badRequest().build();
+        }
+    
+        Optional<RecruteurDTO> recruteur = recruteurService.findByUserLogin(login);
+        return recruteur.map(ResponseEntity::ok).orElseGet(() -> {
+            LOG.warn("⚠️ Aucun recruteur trouvé pour le login {}", login);
+            return ResponseEntity.notFound().build();
+        });
     }
+    
+    
+    
 
     /**
      * {@code DELETE  /recruteurs/:id} : delete the "id" recruteur.

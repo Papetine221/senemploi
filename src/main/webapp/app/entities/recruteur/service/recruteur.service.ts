@@ -43,7 +43,10 @@ export class RecruteurService {
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
-
+  findCurrent() {
+    return this.http.get<IRecruteur>(`${this.resourceUrl}/current`, { observe: 'response' });
+  }
+  
   getRecruteurIdentifier(recruteur: Pick<IRecruteur, 'id'>): number {
     return recruteur.id;
   }

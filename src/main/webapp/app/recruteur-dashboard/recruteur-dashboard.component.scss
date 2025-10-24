@@ -437,6 +437,15 @@
 .footer-section ul li a:hover::before {
     width: 6px;
 }
+.alert-primary {
+    background: linear-gradient(90deg, #b9d0e9 0%, #6610f2 100%);
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
 
 .newsletter-section {
     background: rgba(255, 255, 255, 0.05);
@@ -455,7 +464,42 @@
     color: #bdc3c7;
     margin-bottom: 1.5rem;
 }
-
+.category-badge {
+    transition: all 0.3s ease-in-out;
+  }
+  .category-badge:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+  }
+  
+  .job-card {
+    transition: all 0.3s ease;
+  }
+  .hover-rise:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* Boutons SenEmploi style */
+  .btn-success {
+    background: linear-gradient(90deg, #009739, #fdd835);
+    color: #fff;
+    border: none;
+    font-weight: 500;
+  }
+  .btn-success:hover {
+    background: linear-gradient(90deg, #007a2f, #e0c200);
+    color: #fff;
+  }
+  .btn-outline-success {
+    border-color: #009739;
+    color: #009739;
+  }
+  .btn-outline-success:hover {
+    background: #9c03e8;
+    color: #fff;
+  }
+  
 .newsletter-form .form-control {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);

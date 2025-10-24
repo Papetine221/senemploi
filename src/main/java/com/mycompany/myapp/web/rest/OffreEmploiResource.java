@@ -2,6 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.OffreEmploiRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
+import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.OffreEmploiQueryService;
 import com.mycompany.myapp.service.OffreEmploiService;
 import com.mycompany.myapp.service.criteria.OffreEmploiCriteria;
@@ -57,6 +58,8 @@ public class OffreEmploiResource {
         this.offreEmploiRepository = offreEmploiRepository;
         this.offreEmploiQueryService = offreEmploiQueryService;
     }
+
+    
 
     /**
      * {@code POST  /offre-emplois} : Create a new offreEmploi.
@@ -188,13 +191,17 @@ public class OffreEmploiResource {
      * @param id the id of the offreEmploiDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the offreEmploiDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
-    public ResponseEntity<OffreEmploiDTO> getOffreEmploi(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get OffreEmploi : {}", id);
-        Optional<OffreEmploiDTO> offreEmploiDTO = offreEmploiService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(offreEmploiDTO);
+    @GetMapping("/recruteur/current")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
+    public ResponseEntity<List<OffreEmploiDTO>> getOffresByCurrentRecruteur() {
+        String login = SecurityUtils.getCurrentUserLogin().orElse(null);
+        if (login == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<OffreEmploiDTO> offres = offreEmploiService.findByRecruteurLogin(login);
+        return ResponseEntity.ok().body(offres);
     }
+    
 
     /**
      * {@code DELETE  /offre-emplois/:id} : delete the "id" offreEmploi.
@@ -211,4 +218,21 @@ public class OffreEmploiResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+        /**
+     * {@code GET  /offre-emplois/recruteur/:id} : get all offres by recruteur ID.
+     *
+     * @param id the id of the recruteur whose offers to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of offers in body.
+     */
+   @GetMapping("/recruteur/mes-offres")
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.RECRUTEUR + "\")")
+public ResponseEntity<List<OffreEmploiDTO>> getOffresByRecruteurConnecte() {
+    String login = SecurityUtils.getCurrentUserLogin().orElseThrow();
+    LOG.debug("REST request to get offres for connected recruteur : {}", login);
+    List<OffreEmploiDTO> offres = offreEmploiService.findByRecruteurLogin(login);
+    return ResponseEntity.ok(offres);
+}
+
+
 }
