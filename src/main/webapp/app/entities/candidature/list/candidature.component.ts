@@ -16,6 +16,7 @@ import { CandidatureDeleteDialogComponent } from '../delete/candidature-delete-d
 @Component({
   selector: 'jhi-candidature',
   templateUrl: './candidature.component.html',
+  styleUrls: ['./candidature.component.scss'],
   imports: [RouterModule, FormsModule, SharedModule, SortDirective, SortByDirective, FormatMediumDatetimePipe],
 })
 export class CandidatureComponent implements OnInit {
@@ -113,5 +114,9 @@ export class CandidatureComponent implements OnInit {
         queryParams: queryParamsObj,
       });
     });
+  }
+
+  getCountByStatus(status: string): number {
+    return this.candidatures().filter(candidature => candidature.statut === status).length;
   }
 }
