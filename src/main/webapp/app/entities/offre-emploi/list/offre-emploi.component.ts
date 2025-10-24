@@ -18,6 +18,8 @@ import { OffreEmploiDeleteDialogComponent } from '../delete/offre-emploi-delete-
 import { EntityArrayResponseType, OffreEmploiService } from '../service/offre-emploi.service';
 import { IOffreEmploi } from '../offre-emploi.model';
 import { AccountService } from 'app/core/auth/account.service';
+import { CandidatureService } from 'app/entities/candidature/service/candidature.service';
+import { ICandidature } from 'app/entities/candidature/candidature.model';
 
 @Component({
   selector: 'jhi-offre-emploi',
@@ -42,19 +44,43 @@ export class OffreEmploiComponent implements OnInit {
   protected modalService = inject(NgbModal);
   protected ngZone = inject(NgZone);
   protected accountService = inject(AccountService);
+  protected candidatureService = inject(CandidatureService);
+  
+  candidatures = signal<ICandidature[]>([]);
   
   hasAnyAuthority(authorities: string | string[]): boolean {
     return this.accountService.hasAnyAuthority(authorities);
   }
 
+  hasAlreadyApplied(offreEmploi: IOffreEmploi): boolean {
+    return this.candidatures().some(candidature => candidature.offre?.id === offreEmploi.id);
+  }
+
   trackId = (item: IOffreEmploi): number => this.offreEmploiService.getOffreEmploiIdentifier(item);
 
   ngOnInit(): void {
+    // Charger les candidatures du candidat si c'est un candidat
+    if (this.hasAnyAuthority('ROLE_CANDIDAT')) {
+      this.candidatureService.query().subscribe({
+        next: (response) => {
+          if (response.body) {
+            this.candidatures.set(response.body);
+          }
+        },
+        error: () => {
+          console.error('Erreur lors du chargement des candidatures');
+        }
+      });
+    }
+    
     this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
       .pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-        tap(() => this.reset()),
-        tap(() => this.load()),
+        tap(() => {
+          if (this.offreEmplois().length === 0) {
+            this.load();
+          }
+        }),
       )
       .subscribe();
   }

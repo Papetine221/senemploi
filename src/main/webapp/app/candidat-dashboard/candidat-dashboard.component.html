@@ -146,10 +146,17 @@
                           <fa-icon icon="eye" class="me-2"></fa-icon>
                           Voir détails
                         </a>
-                        <a [routerLink]="['/candidature/postuler']" [queryParams]="{ offre: offre.id }" class="btn-apply">
-                          <fa-icon icon="paper-plane" class="me-2"></fa-icon>
-                          Postuler
-                        </a>
+                        @if (hasAlreadyApplied(offre.id)) {
+                          <button class="btn-apply btn-applied" disabled>
+                            <fa-icon icon="check-circle" class="me-2"></fa-icon>
+                            Déjà postulé
+                          </button>
+                        } @else {
+                          <a [routerLink]="['/candidature/postuler']" [queryParams]="{ offre: offre.id }" class="btn-apply">
+                            <fa-icon icon="paper-plane" class="me-2"></fa-icon>
+                            Postuler
+                          </a>
+                        }
                       </div>
 
                       <!-- Indicateur de nouveauté -->

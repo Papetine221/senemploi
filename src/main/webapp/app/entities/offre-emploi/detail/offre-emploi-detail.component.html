@@ -132,14 +132,24 @@
               <div class="action-buttons">
                 <!-- Bouton pour postuler uniquement pour les candidats -->
                 <ng-container *ngIf="hasAnyAuthority('ROLE_CANDIDAT')">
-                  <button 
-                    type="button" 
-                    [routerLink]="['/candidature/postuler']" 
-                    [queryParams]="{offre: offreEmploiRef.id}" 
-                    class="btn btn-success btn-lg w-100 mb-3 d-flex align-items-center justify-content-center">
-                    <fa-icon icon="paper-plane" class="me-2"></fa-icon>
-                    <span>Postuler maintenant</span>
-                  </button>
+                  @if (hasAlreadyApplied()) {
+                    <button 
+                      type="button" 
+                      class="btn btn-secondary btn-lg w-100 mb-3 d-flex align-items-center justify-content-center"
+                      disabled>
+                      <fa-icon icon="check-circle" class="me-2"></fa-icon>
+                      <span>Déjà postulé</span>
+                    </button>
+                  } @else {
+                    <button 
+                      type="button" 
+                      [routerLink]="['/candidature/postuler']" 
+                      [queryParams]="{offre: offreEmploiRef.id}" 
+                      class="btn btn-success btn-lg w-100 mb-3 d-flex align-items-center justify-content-center">
+                      <fa-icon icon="paper-plane" class="me-2"></fa-icon>
+                      <span>Postuler maintenant</span>
+                    </button>
+                  }
                 </ng-container>
 
                 <!-- Bouton d'édition visible uniquement pour les non-candidats -->
