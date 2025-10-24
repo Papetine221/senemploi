@@ -53,10 +53,10 @@
           </div>
           <div class="card-body">
             <p class="text-muted mb-3">Suivez l'état de vos candidatures envoyées</p>
-            <button class="btn btn-info w-100 action-btn" disabled>
+            <a [routerLink]="['/candidature/mes-candidatures']" class="btn btn-info w-100 action-btn">
               <fa-icon icon="file-alt" class="me-2"></fa-icon>
               Voir mes candidatures
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -146,10 +146,10 @@
                           <fa-icon icon="eye" class="me-2"></fa-icon>
                           Voir détails
                         </a>
-                        <button class="btn-apply" disabled>
+                        <a [routerLink]="['/candidature/postuler']" [queryParams]="{ offre: offre.id }" class="btn-apply">
                           <fa-icon icon="paper-plane" class="me-2"></fa-icon>
                           Postuler
-                        </button>
+                        </a>
                       </div>
 
                       <!-- Indicateur de nouveauté -->

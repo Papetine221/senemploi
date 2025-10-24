@@ -40,6 +40,14 @@ public interface CandidatService {
     Optional<CandidatDTO> findOne(Long id);
 
     /**
+     * Get the candidat by user login.
+     *
+     * @param userLogin the login of the user.
+     * @return the entity.
+     */
+    Optional<CandidatDTO> findByUserLogin(String userLogin);
+
+    /**
      * Delete the "id" candidat.
      *
      * @param id the id of the entity.

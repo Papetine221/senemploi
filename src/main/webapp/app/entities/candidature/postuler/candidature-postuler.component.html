@@ -162,12 +162,189 @@
                   </div>
                 </div>
 
+                <!-- Section CV -->
+                <div class="mb-4">
+                  <label class="form-label">
+                    <strong>Curriculum Vitae (CV) *</strong>
+                  </label>
+                  
+                  <!-- CV existant -->
+                  @if (candidat.cv && !newCvFile) {
+                    <div class="alert alert-success d-flex align-items-center justify-content-between mb-3">
+                      <div>
+                        <fa-icon icon="file-pdf" class="me-2 text-danger"></fa-icon>
+                        <strong>CV actuel :</strong> 
+                        <span class="ms-2">{{ candidat.cvContentType || 'Document' }}</span>
+                        <small class="text-muted ms-2">({{ getCvSize() }})</small>
+                      </div>
+                      <div>
+                        <button 
+                          type="button" 
+                          class="btn btn-sm btn-outline-info me-2"
+                          (click)="previewCv()">
+                          <fa-icon icon="eye" class="me-1"></fa-icon>
+                          Aperçu
+                        </button>
+                        <button 
+                          type="button" 
+                          class="btn btn-sm btn-outline-primary me-2"
+                          (click)="downloadCv()">
+                          <fa-icon icon="download" class="me-1"></fa-icon>
+                          Télécharger
+                        </button>
+                        <button 
+                          type="button" 
+                          class="btn btn-sm btn-outline-secondary"
+                          (click)="fileInput.click()">
+                          <fa-icon icon="upload" class="me-1"></fa-icon>
+                          Remplacer
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Miniature du CV existant -->
+                    @if (showCvPreview) {
+                      <div class="cv-preview-container mb-3">
+                        <div class="cv-preview-header d-flex justify-content-between align-items-center mb-2">
+                          <h6 class="mb-0">
+                            <fa-icon icon="search" class="me-2"></fa-icon>
+                            Aperçu du CV
+                          </h6>
+                          <button 
+                            type="button" 
+                            class="btn btn-sm btn-outline-secondary"
+                            (click)="showCvPreview = false">
+                            <fa-icon icon="times"></fa-icon>
+                          </button>
+                        </div>
+                        <div class="cv-thumbnail">
+                          @if (isPdfCv(candidat.cvContentType)) {
+                            <iframe 
+                              [src]="getCvPreviewUrl()" 
+                              class="cv-iframe"
+                              frameborder="0">
+                            </iframe>
+                          } @else {
+                            <div class="cv-doc-preview text-center p-5">
+                              <fa-icon icon="file-word" size="5x" class="text-primary mb-3"></fa-icon>
+                              <h5>{{ getFileName() }}</h5>
+                              <p class="text-muted">
+                                Cliquez sur "Télécharger" pour voir le contenu complet
+                              </p>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  }
+
+                  <!-- Nouveau CV sélectionné -->
+                  @if (newCvFile) {
+                    <div class="alert alert-info d-flex align-items-center justify-content-between mb-3">
+                      <div>
+                        <fa-icon icon="file" class="me-2"></fa-icon>
+                        <strong>Nouveau CV :</strong> 
+                        <span class="ms-2">{{ newCvFile.name }}</span>
+                        <small class="text-muted ms-2">({{ formatFileSize(newCvFile.size) }})</small>
+                      </div>
+                      <div>
+                        <button 
+                          type="button" 
+                          class="btn btn-sm btn-outline-info me-2"
+                          (click)="previewNewCv()">
+                          <fa-icon icon="eye" class="me-1"></fa-icon>
+                          Aperçu
+                        </button>
+                        <button 
+                          type="button" 
+                          class="btn btn-sm btn-outline-danger"
+                          (click)="removeCv()">
+                          <fa-icon icon="times" class="me-1"></fa-icon>
+                          Annuler
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Miniature du nouveau CV -->
+                    @if (showNewCvPreview) {
+                      <div class="cv-preview-container mb-3">
+                        <div class="cv-preview-header d-flex justify-content-between align-items-center mb-2">
+                          <h6 class="mb-0">
+                            <fa-icon icon="search" class="me-2"></fa-icon>
+                            Aperçu du nouveau CV
+                          </h6>
+                          <button 
+                            type="button" 
+                            class="btn btn-sm btn-outline-secondary"
+                            (click)="showNewCvPreview = false">
+                            <fa-icon icon="times"></fa-icon>
+                          </button>
+                        </div>
+                        <div class="cv-thumbnail">
+                          @if (isPdfCv(newCvFile.type)) {
+                            <iframe 
+                              [src]="newCvPreviewUrl" 
+                              class="cv-iframe"
+                              frameborder="0">
+                            </iframe>
+                          } @else {
+                            <div class="cv-doc-preview text-center p-5">
+                              <fa-icon icon="file-word" size="5x" class="text-primary mb-3"></fa-icon>
+                              <h5>{{ newCvFile.name }}</h5>
+                              <p class="text-muted">
+                                Document Word - L'aperçu sera disponible après l'envoi
+                              </p>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  }
+
+                  <!-- Upload CV -->
+                  <div class="cv-upload-zone" [class.has-error]="!candidat.cv && !newCvFile && formSubmitted">
+                    <input
+                      #fileInput
+                      type="file"
+                      id="file_cv"
+                      accept=".pdf,.doc,.docx"
+                      (change)="onFileSelected($event)"
+                      class="d-none">
+                    
+                    <div 
+                      class="upload-area text-center p-4 border border-2 border-dashed rounded"
+                      [class.border-primary]="!candidat.cv && !newCvFile"
+                      [class.border-danger]="!candidat.cv && !newCvFile && formSubmitted"
+                      (click)="fileInput.click()"
+                      style="cursor: pointer;">
+                      <fa-icon icon="cloud-upload-alt" size="3x" class="text-primary mb-3"></fa-icon>
+                      <h5>Cliquez pour {{ candidat.cv || newCvFile ? 'remplacer' : 'télécharger' }} votre CV</h5>
+                      <p class="text-muted mb-0">
+                        Formats acceptés : PDF, DOC, DOCX (max 5 Mo)
+                      </p>
+                    </div>
+                  </div>
+
+                  @if (!candidat.cv && !newCvFile && formSubmitted) {
+                    <div class="text-danger mt-2">
+                      <small>Le CV est obligatoire pour postuler.</small>
+                    </div>
+                  }
+
+                  @if (cvUploadError) {
+                    <div class="alert alert-danger mt-3">
+                      <fa-icon icon="exclamation-triangle" class="me-2"></fa-icon>
+                      {{ cvUploadError }}
+                    </div>
+                  }
+                </div>
+
                 <!-- Information sur la transmission des données -->
                 <div class="alert alert-info">
                   <h6><fa-icon icon="info-circle" class="me-2"></fa-icon>Informations transmises</h6>
                   <p class="mb-0">
                     <small class="text-muted">
-                      Votre lettre de motivation, numéro de téléphone et adresse seront transmis avec votre candidature.
+                      Votre CV, lettre de motivation, numéro de téléphone et adresse seront transmis avec votre candidature.
                       Assurez-vous que ces informations sont correctes.
                     </small>
                   </p>

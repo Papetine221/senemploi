@@ -68,6 +68,13 @@ public class CandidatServiceImpl implements CandidatService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Optional<CandidatDTO> findByUserLogin(String userLogin) {
+        LOG.debug("Request to get Candidat by user login : {}", userLogin);
+        return candidatRepository.findByUserLogin(userLogin).map(candidatMapper::toDto);
+    }
+
+    @Override
     public void delete(Long id) {
         LOG.debug("Request to delete Candidat : {}", id);
         candidatRepository.deleteById(id);

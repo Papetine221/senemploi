@@ -148,6 +148,159 @@
     height: 1rem;
   }
 
+  // CV Upload Zone
+  .cv-upload-zone {
+    margin-top: 1rem;
+
+    .upload-area {
+      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+        border-color: #007bff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.1);
+      }
+
+      fa-icon {
+        transition: transform 0.3s ease;
+      }
+
+      &:hover fa-icon {
+        transform: scale(1.1);
+      }
+
+      h5 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+    }
+
+    &.has-error .upload-area {
+      border-color: #dc3545 !important;
+      background: linear-gradient(135deg, #f8d7da, #ffffff);
+    }
+  }
+
+  .alert-success, .alert-info, .alert-danger {
+    display: flex;
+    align-items: center;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    fa-icon {
+      font-size: 1.5rem;
+    }
+
+    .btn-sm {
+      padding: 0.25rem 0.75rem;
+      font-size: 0.875rem;
+      border-radius: 0.375rem;
+    }
+  }
+
+  .alert-success {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+    border-left: 4px solid #28a745;
+  }
+
+  .alert-danger {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+  }
+
+  // CV Preview Container
+  .cv-preview-container {
+    border: 2px solid #e9ecef;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .cv-preview-header {
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #dee2e6;
+      margin-bottom: 1rem;
+
+      h6 {
+        font-weight: 600;
+        color: #495057;
+        margin: 0;
+      }
+
+      .btn-sm {
+        padding: 0.25rem 0.5rem;
+      }
+    }
+
+    .cv-thumbnail {
+      width: 100%;
+      min-height: 400px;
+      background: #f8f9fa;
+      border-radius: 0.375rem;
+      overflow: hidden;
+      position: relative;
+
+      .cv-iframe {
+        width: 100%;
+        height: 600px;
+        border: none;
+        border-radius: 0.375rem;
+        background: white;
+      }
+
+      .cv-doc-preview {
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        border: 2px dashed #dee2e6;
+        border-radius: 0.375rem;
+
+        fa-icon {
+          opacity: 0.7;
+          transition: all 0.3s ease;
+        }
+
+        &:hover fa-icon {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+
+        h5 {
+          font-weight: 600;
+          color: #495057;
+          margin-top: 1rem;
+        }
+
+        p {
+          font-size: 0.9rem;
+          color: #6c757d;
+        }
+      }
+    }
+  }
+
+  .btn-outline-info {
+    border: 2px solid #17a2b8;
+    color: #17a2b8;
+
+    &:hover {
+      background: #17a2b8;
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+    }
+  }
+
   // Responsive design
   @media (max-width: 768px) {
     padding-top: 1rem;

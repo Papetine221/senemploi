@@ -197,6 +197,20 @@ public class CandidatResource {
     }
 
     /**
+     * {@code GET  /candidats/by-user-login/:userLogin} : get the candidat by user login.
+     *
+     * @param userLogin the login of the user.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the candidatDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/by-user-login/{userLogin}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.ADMIN + "')")
+    public ResponseEntity<CandidatDTO> getCandidatByUserLogin(@PathVariable("userLogin") String userLogin) {
+        LOG.debug("REST request to get Candidat by user login : {}", userLogin);
+        Optional<CandidatDTO> candidatDTO = candidatService.findByUserLogin(userLogin);
+        return ResponseUtil.wrapOrNotFound(candidatDTO);
+    }
+
+    /**
      * {@code DELETE  /candidats/:id} : delete the "id" candidat.
      *
      * @param id the id of the candidatDTO to delete.
