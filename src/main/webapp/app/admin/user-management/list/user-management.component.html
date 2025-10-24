@@ -1,132 +1,247 @@
-<div>
-  <h2>
-    <span id="user-management-page-heading" data-cy="userManagementPageHeading" jhiTranslate="userManagement.home.title">Utilisateurs</span>
+<style>
+  /* 🎨 STYLE GLOBAL ADMIN (élégant et moderne) */
+  .admin-wrapper {
+    padding: 2rem 1.5rem;
+    background: #f5f7fb;
+    min-height: 100vh;
+  }
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    color: white;
+    padding: 1.2rem 1.8rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+
+  .admin-header h2 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .admin-header h2 fa-icon {
+    margin-right: 10px;
+    font-size: 1.3rem;
+  }
+
+  .admin-header .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 0.6rem 1.1rem;
+    box-shadow: 0 2px 6px rgba(255, 255, 255, 0.3);
+    transition: all 0.2s;
+  }
+
+  .admin-header .btn:hover {
+    transform: scale(1.05);
+  }
+
+  .admin-card {
+    background: #ffffff;
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+
+  .admin-table thead {
+    background: #0d6efd;
+    color: white;
+  }
+
+  .admin-table thead th {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 0.9rem;
+  }
+
+  .admin-table tbody tr {
+    transition: background 0.25s, transform 0.2s;
+  }
+
+  .admin-table tbody tr:hover {
+    background-color: #f0f8ff;
+    transform: scale(1.005);
+  }
+
+  .admin-table td {
+    padding: 0.9rem 0.75rem;
+    vertical-align: middle;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+  }
+
+  .table-actions button {
+    border-radius: 8px;
+    transition: 0.2s;
+  }
+
+  .table-actions button:hover {
+    transform: scale(1.12);
+  }
+
+  .pagination-container {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pagination-container jhi-item-count {
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #444;
+  }
+
+  /* Animation subtile au survol */
+  .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: #fff;
+  }
+
+  .btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #000;
+  }
+
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .admin-header {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+  }
+</style>
+
+<div class="admin-wrapper">
+  <!-- HEADER -->
+  <div class="admin-header">
+    <h2><fa-icon icon="users"></fa-icon> Gestion des utilisateurs</h2>
+    <div>
+      <button class="btn btn-light text-primary me-2" (click)="loadAll()" [disabled]="isLoading()">
         <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined"></fa-icon>
-        <span jhiTranslate="userManagement.home.refreshListLabel">Actualiser la liste</span>
+        Actualiser
       </button>
-      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
-        <fa-icon icon="plus"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Créer un nouvel utilisateur</span>
+      <button class="btn btn-success jh-create-entity" [routerLink]="['./new']">
+        <fa-icon icon="plus"></fa-icon> Nouvel utilisateur
       </button>
     </div>
-  </h2>
+  </div>
 
   <jhi-alert-error />
-
   <jhi-alert />
 
+  <!-- TABLE UTILISATEURS -->
   @if (users()) {
-    <div class="table-responsive">
-      <table class="table table-striped" aria-describedby="user-management-page-heading">
-        <thead>
-          <tr jhiSort [(sortState)]="sortState" (sortChange)="transition($event)">
-            <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col" jhiSortBy="login"><span jhiTranslate="userManagement.login">Login</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col" jhiSortBy="email"><span jhiTranslate="userManagement.email">Email</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col"></th>
-            <th scope="col" jhiSortBy="langKey">
-              <span jhiTranslate="userManagement.langKey">Langue</span> <fa-icon icon="sort"></fa-icon>
-            </th>
-            <th scope="col"><span jhiTranslate="userManagement.profiles">Droits</span></th>
-            <th scope="col" jhiSortBy="createdDate">
-              <span jhiTranslate="userManagement.createdDate">Créé le</span> <fa-icon icon="sort"></fa-icon>
-            </th>
-            <th scope="col" jhiSortBy="lastModifiedBy">
-              <span jhiTranslate="userManagement.lastModifiedBy">Modifié par</span> <fa-icon icon="sort"></fa-icon>
-            </th>
-            <th scope="col" jhiSortBy="lastModifiedDate">
-              <span jhiTranslate="userManagement.lastModifiedDate">Modifié le</span> <fa-icon icon="sort"></fa-icon>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (user of users(); track trackIdentity(user)) {
-            <tr>
-              <td>
-                <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
-              </td>
-              <td>{{ user.login }}</td>
-              <td>{{ user.email }}</td>
-              <td>
-                @if (!user.activated) {
-                  <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" jhiTranslate="userManagement.deactivated">
-                    Désactivé
-                  </button>
-                } @else {
+    <div class="card admin-card">
+      <div class="table-responsive">
+        <table class="table table-hover admin-table align-middle mb-0">
+          <thead>
+            <tr jhiSort [(sortState)]="sortState" (sortChange)="transition($event)">
+              <th jhiSortBy="id">#</th>
+              <th jhiSortBy="login">Login</th>
+              <th jhiSortBy="email">Email</th>
+              <th>Statut</th>
+              <th jhiSortBy="langKey">Langue</th>
+              <th>Rôles</th>
+              <th jhiSortBy="createdDate">Créé le</th>
+              <th jhiSortBy="lastModifiedBy">Modifié par</th>
+              <th jhiSortBy="lastModifiedDate">Modifié le</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (user of users(); track trackIdentity(user)) {
+              <tr>
+                <td class="fw-semibold text-muted">{{ user.id }}</td>
+                <td class="fw-semibold">{{ user.login }}</td>
+                <td>{{ user.email }}</td>
+
+                <td>
+                  @if (!user.activated) {
+                    <span class="badge bg-danger">Désactivé</span>
+                  } @else {
+                    <span class="badge bg-success">Actif</span>
+                  }
+                </td>
+
+                <td>{{ user.langKey }}</td>
+
+                <td>
+                  @for (authority of user.authorities; track $index) {
+                    <span class="badge bg-info text-dark me-1">{{ authority }}</span>
+                  }
+                </td>
+
+                <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
+                <td>{{ user.lastModifiedBy }}</td>
+                <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
+
+                <td class="text-end table-actions">
                   <button
-                    class="btn btn-success btn-sm"
-                    (click)="setActive(user, false)"
-                    [disabled]="!currentAccount() || currentAccount()?.login === user.login"
-                    jhiTranslate="userManagement.activated"
+                    class="btn btn-outline-primary btn-sm me-1"
+                    [routerLink]="['./', user.login, 'view']"
+                    title="Voir le profil"
                   >
-                    Activé
-                  </button>
-                }
-              </td>
-              <td>{{ user.langKey }}</td>
-              <td>
-                @for (authority of user.authorities; track $index) {
-                  <div>
-                    <span class="badge bg-info">{{ authority }}</span>
-                  </div>
-                }
-              </td>
-              <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
-              <td>{{ user.lastModifiedBy }}</td>
-              <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
                     <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
                   </button>
 
                   <button
-                    type="submit"
+                    class="btn btn-outline-warning btn-sm me-1"
                     [routerLink]="['./', user.login, 'edit']"
-                    queryParamsHandling="merge"
-                    class="btn btn-primary btn-sm"
+                    title="Modifier l'utilisateur"
                   >
                     <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
                   </button>
 
                   <button
-                    type="button"
+                    class="btn btn-outline-danger btn-sm"
                     (click)="deleteUser(user)"
-                    class="btn btn-danger btn-sm"
                     [disabled]="!currentAccount() || currentAccount()?.login === user.login"
+                    title="Supprimer"
                   >
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                    <fa-icon icon="trash-alt"></fa-icon>
                   </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div>
-      <div class="d-flex justify-content-center">
-        <jhi-item-count [params]="{ page, totalItems: totalItems(), itemsPerPage }" />
-      </div>
-
-      <div class="d-flex justify-content-center">
-        <ngb-pagination
-          [collectionSize]="totalItems()"
-          [(page)]="page"
-          [pageSize]="itemsPerPage"
-          [maxSize]="5"
-          [rotate]="true"
-          [boundaryLinks]="true"
-          (pageChange)="transition()"
-        ></ngb-pagination>
-      </div>
+    <!-- PAGINATION -->
+    <div class="pagination-container">
+      <jhi-item-count [params]="{ page, totalItems: totalItems(), itemsPerPage }"></jhi-item-count>
+      <ngb-pagination
+        [collectionSize]="totalItems()"
+        [(page)]="page"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="transition()"
+      ></ngb-pagination>
     </div>
   }
 </div>
