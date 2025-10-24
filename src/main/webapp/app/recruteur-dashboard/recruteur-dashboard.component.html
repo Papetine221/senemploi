@@ -566,17 +566,42 @@
                         <i class="fas fa-calendar me-2"></i>
                         <strong>Postulé le :</strong> {{ candidature.datePostulation?.toDate?.() | date: 'dd/MM/yyyy' }}
                       </p>
-                      <p class="mb-2">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <strong>Statut :</strong> 
-                        <span class="badge" [ngClass]="{
-                          'bg-warning': candidature.statut === 'EN_ATTENTE',
-                          'bg-success': candidature.statut === 'ACCEPTEE',
-                          'bg-danger': candidature.statut === 'REFUSEE'
-                        }">
-                          {{ candidature.statut || 'EN_ATTENTE' }}
-                        </span>
-                      </p>
+                      <div class="mb-3">
+                        <p class="mb-2">
+                          <i class="fas fa-info-circle me-2"></i>
+                          <strong>Statut actuel :</strong> 
+                          <span class="badge" [ngClass]="{
+                            'bg-warning text-dark': candidature.statut === 'EN_ATTENTE',
+                            'bg-success': candidature.statut === 'ACCEPTEE',
+                            'bg-danger': candidature.statut === 'REFUSEE'
+                          }">
+                            {{ candidature.statut || 'EN_ATTENTE' }}
+                          </span>
+                        </p>
+                        <div class="btn-group btn-group-sm mt-2" role="group">
+                          <button 
+                            class="btn btn-outline-warning"
+                            [class.active]="candidature.statut === StatutCandidature.EN_ATTENTE"
+                            (click)="changerStatut(candidature, StatutCandidature.EN_ATTENTE)"
+                            [disabled]="candidature.statut === StatutCandidature.EN_ATTENTE">
+                            <i class="fas fa-clock me-1"></i>En attente
+                          </button>
+                          <button 
+                            class="btn btn-outline-success"
+                            [class.active]="candidature.statut === StatutCandidature.ACCEPTEE"
+                            (click)="changerStatut(candidature, StatutCandidature.ACCEPTEE)"
+                            [disabled]="candidature.statut === StatutCandidature.ACCEPTEE">
+                            <i class="fas fa-check me-1"></i>Accepter
+                          </button>
+                          <button 
+                            class="btn btn-outline-danger"
+                            [class.active]="candidature.statut === StatutCandidature.REFUSEE"
+                            (click)="changerStatut(candidature, StatutCandidature.REFUSEE)"
+                            [disabled]="candidature.statut === StatutCandidature.REFUSEE">
+                            <i class="fas fa-times me-1"></i>Refuser
+                          </button>
+                        </div>
+                      </div>
                       <div *ngIf="candidature.lettreMotivation" class="mt-3">
                         <p class="mb-1"><strong><i class="fas fa-envelope me-2"></i>Lettre de motivation :</strong></p>
                         <p class="text-muted small border-start border-3 border-primary ps-3">

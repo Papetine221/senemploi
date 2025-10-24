@@ -12,6 +12,7 @@ import { RecruteurService } from 'app/entities/recruteur/service/recruteur.servi
 import { IRecruteur } from 'app/entities/recruteur/recruteur.model'; // Interface représentant un recruteur
 import { CandidatureService } from 'app/entities/candidature/service/candidature.service'; // Service pour gérer les candidatures
 import { ICandidature } from 'app/entities/candidature/candidature.model'; // Interface représentant une candidature
+import { StatutCandidature } from 'app/entities/enumerations/statut-candidature.model'; // Énumération des statuts
 
 // DÉCORATEUR DU COMPOSANT 
 @Component({
@@ -39,6 +40,7 @@ export class RecruteurDashboardComponent implements OnInit {
   candidaturesParOffre: ICandidature[] = []; // Liste des candidatures pour l'offre sélectionnée
   offreSelectionnee: IOffreEmploi | null = null; // Offre dont on affiche les candidatures
   showCandidatures = false; // Afficher ou masquer la modal des candidatures
+  StatutCandidature = StatutCandidature; // Référence à l'énumération pour l'utiliser dans le template
 
   //  INJECTION DES SERVICES 
   private fb = inject(FormBuilder); // Permet de créer des formulaires dynamiques
@@ -131,6 +133,29 @@ export class RecruteurDashboardComponent implements OnInit {
     this.showCandidatures = false;
     this.offreSelectionnee = null;
     this.candidaturesParOffre = [];
+  }
+
+  // 🔄 CHANGER LE STATUT D'UNE CANDIDATURE
+  changerStatut(candidature: ICandidature, nouveauStatut: keyof typeof StatutCandidature): void {
+    const candidatureModifiee: ICandidature = {
+      ...candidature,
+      statut: nouveauStatut,
+    };
+
+    this.candidatureService.update(candidatureModifiee).subscribe({
+      next: (response) => {
+        // Mise à jour locale de la candidature
+        const index = this.candidaturesParOffre.findIndex(c => c.id === candidature.id);
+        if (index !== -1) {
+          this.candidaturesParOffre[index] = response.body!;
+        }
+        console.log('✅ Statut mis à jour avec succès');
+      },
+      error: (err) => {
+        console.error('❌ Erreur lors de la mise à jour du statut', err);
+        alert('Erreur lors de la mise à jour du statut');
+      },
+    });
   }
 
   supprimerOffre(id: number): void {

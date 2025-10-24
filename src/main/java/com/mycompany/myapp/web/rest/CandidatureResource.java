@@ -84,7 +84,7 @@ public class CandidatureResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.ADMIN + "')")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CandidatureDTO> updateCandidature(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody CandidatureDTO candidatureDTO
@@ -119,7 +119,7 @@ public class CandidatureResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.ADMIN + "')")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<CandidatureDTO> partialUpdateCandidature(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CandidatureDTO candidatureDTO

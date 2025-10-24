@@ -683,6 +683,47 @@
     font-size: 0.85rem;
     font-weight: 600;
   }
+
+  .btn-group {
+    .btn {
+      font-size: 0.85rem;
+      padding: 0.4rem 0.8rem;
+      transition: all 0.3s ease;
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      &.active {
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    .btn-outline-warning.active {
+      background-color: #ffc107;
+      border-color: #ffc107;
+      color: #000;
+    }
+
+    .btn-outline-success.active {
+      background-color: #28a745;
+      border-color: #28a745;
+      color: white;
+    }
+
+    .btn-outline-danger.active {
+      background-color: #dc3545;
+      border-color: #dc3545;
+      color: white;
+    }
+  }
 }
 
 .modal-footer-custom {
