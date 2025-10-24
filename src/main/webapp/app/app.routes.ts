@@ -41,14 +41,12 @@ const routes: Routes = [
   },
   {
     path: 'candidat-dashboard',
-    loadComponent: () =>
-      import('./candidat-dashboard/candidat-dashboard.component').then(m => m.CandidatDashboardComponent),
+    loadChildren: () => import('./candidat-dashboard/candidat-dashboard.routes'),
     canActivate: [UserRouteAccessService],
     data: {
       authorities: ['ROLE_CANDIDAT'],
       pageRibbon: false, // Désactive la navbar JHipster
     },
-    title: 'candidatDashboard.title',
   },
   {
     path: '',

@@ -13,6 +13,15 @@ const candidatDashboardRoute: Routes = [
       authorities: ['ROLE_CANDIDAT'],
       pageTitle: 'candidatDashboard.title'
     }
+  },
+  {
+    path: 'mes-candidatures',
+    loadComponent: () => import('../entities/candidature/mes-candidatures/mes-candidatures.component').then(m => m.MesCandidaturesComponent),
+    canActivate: [UserRouteAccessService],
+    data: {
+      authorities: ['ROLE_CANDIDAT'],
+      pageTitle: 'Mes Candidatures'
+    }
   }
 ];
 

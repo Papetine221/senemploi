@@ -39,7 +39,7 @@
           </li>
           <!-- Mes candidatures -->
           <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *jhiHasAnyAuthority="'ROLE_CANDIDAT'">
-            <a class="nav-link" routerLink="/candidature/mes-candidatures" (click)="collapseNavbar()">
+            <a class="nav-link" routerLink="/candidat-dashboard/mes-candidatures" (click)="collapseNavbar()">
               <span>
                 <fa-icon icon="briefcase"></fa-icon>
                 <span jhiTranslate="global.menu.mesCandidatures">Mes candidatures</span>

@@ -188,7 +188,7 @@ export class CandidaturePostulerComponent implements OnInit {
         message: 'Votre candidature a été envoyée avec succès !' 
       })
     );
-    this.router.navigate(['/candidature/mes-candidatures']);
+    this.router.navigate(['/candidat-dashboard/mes-candidatures']);
   }
 
   protected onSaveError(): void {
