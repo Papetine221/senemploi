@@ -33,11 +33,17 @@ const candidatureRoute: Routes = [
     path: 'postuler',
     loadComponent: () => import('./postuler/candidature-postuler.component').then(m => m.CandidaturePostulerComponent),
     canActivate: [UserRouteAccessService],
+    data: {
+      authorities: ['ROLE_CANDIDAT'],
+    },
   },
   {
     path: 'mes-candidatures',
     loadComponent: () => import('./mes-candidatures/mes-candidatures.component').then(m => m.MesCandidaturesComponent),
     canActivate: [UserRouteAccessService],
+    data: {
+      authorities: ['ROLE_CANDIDAT'],
+    },
   },
   {
     path: ':id/edit',

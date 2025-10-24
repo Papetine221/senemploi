@@ -8,7 +8,7 @@ export interface ICandidature {
   lettreMotivation?: string | null;
   datePostulation?: dayjs.Dayjs | null;
   statut?: keyof typeof StatutCandidature | null;
-  candidat?: Pick<ICandidat, 'id'> | null;
+  candidat?: Pick<ICandidat, 'id' | 'user' | 'telephone' | 'adresse' | 'cv' | 'cvContentType'> | null;
   offre?: Pick<IOffreEmploi, 'id' | 'titre' | 'description' | 'salaire' | 'datePublication' | 'dateExpiration' | 'recruteur' | 'typeContrat' | 'localisation' | 'competences'> | null;
 }
 

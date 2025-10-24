@@ -6,7 +6,7 @@
         <div class="col-md-8">
           <h1 class="display-5 fw-bold text-primary mb-2">
             <fa-icon icon="tachometer-alt" class="me-2"></fa-icon>
-            Tableau de bord candidat
+            Tableau de bord candidat 
           </h1>
           <p class="lead text-muted mb-0">
             Bienvenue {{ account()?.firstName || 'Candidat' }}, découvrez les opportunités qui vous correspondent
@@ -108,9 +108,13 @@
                       <!-- Contenu principal -->
                       <div class="job-card-body">
                         <h5 class="job-title">
-                          <a [routerLink]="['/offre-emploi', offre.id, 'view']" class="job-title-link">
-                            {{ offre.titre }}
-                          </a>
+                          @if (offre.id) {
+                            <a [routerLink]="['/offre-emploi', offre.id, 'view']" class="job-title-link">
+                              {{ offre.titre }}
+                            </a>
+                          } @else {
+                            <span class="job-title-link">{{ offre.titre }}</span>
+                          }
                         </h5>
                         
                         <div class="job-company mb-3">
@@ -142,20 +146,22 @@
 
                       <!-- Actions -->
                       <div class="job-card-actions">
-                        <a [routerLink]="['/offre-emploi', offre.id, 'view']" class="btn-view-details">
-                          <fa-icon icon="eye" class="me-2"></fa-icon>
-                          Voir détails
-                        </a>
-                        @if (hasAlreadyApplied(offre.id)) {
-                          <button class="btn-apply btn-applied" disabled>
-                            <fa-icon icon="check-circle" class="me-2"></fa-icon>
-                            Déjà postulé
-                          </button>
-                        } @else {
-                          <a [routerLink]="['/candidature/postuler']" [queryParams]="{ offre: offre.id }" class="btn-apply">
-                            <fa-icon icon="paper-plane" class="me-2"></fa-icon>
-                            Postuler
+                        @if (offre.id) {
+                          <a [routerLink]="['/offre-emploi', offre.id, 'view']" class="btn-view-details">
+                            <fa-icon icon="eye" class="me-2"></fa-icon>
+                            Voir détails
                           </a>
+                          @if (hasAlreadyApplied(offre.id)) {
+                            <button class="btn-apply btn-applied" disabled>
+                              <fa-icon icon="check-circle" class="me-2"></fa-icon>
+                              Déjà postulé
+                            </button>
+                          } @else {
+                            <a [routerLink]="['/candidature/postuler']" [queryParams]="{ offre: offre.id }" class="btn-apply">
+                              <fa-icon icon="paper-plane" class="me-2"></fa-icon>
+                              Postuler
+                            </a>
+                          }
                         }
                       </div>
 

@@ -90,12 +90,13 @@ export class CandidatDashboardComponent implements OnInit {  // Classe principal
   // == MÉTHODE : OPTIMISATION DU *ngFor ==
   // Angular utilise cette fonction pour identifier chaque offre et éviter de recharger inutilement le DOM
   trackById(index: number, item: IOffreEmploi): number {
-    return item.id;
+    return item.id ?? index;
   }
 
   // == MÉTHODE : VÉRIFIER SI LE CANDIDAT A DÉJÀ POSTULÉ ==
-  hasAlreadyApplied(offreId: number): boolean {
+  hasAlreadyApplied(offreId: number | undefined): boolean {
     // Retourne "true" si le candidat a déjà une candidature liée à cette offre
+    if (!offreId) return false;
     return this.candidatures().some(candidature => candidature.offre?.id === offreId);
   }
 }

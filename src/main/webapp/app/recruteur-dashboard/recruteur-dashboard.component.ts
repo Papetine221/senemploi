@@ -10,6 +10,8 @@ import { ILocalisation } from 'app/entities/localisation/localisation.model'; //
 import { IOffreEmploi, NewOffreEmploi } from 'app/entities/offre-emploi/offre-emploi.model'; // Interface et modèle pour les offres d'emploi
 import { RecruteurService } from 'app/entities/recruteur/service/recruteur.service'; // Service pour récupérer le recruteur connecté
 import { IRecruteur } from 'app/entities/recruteur/recruteur.model'; // Interface représentant un recruteur
+import { CandidatureService } from 'app/entities/candidature/service/candidature.service'; // Service pour gérer les candidatures
+import { ICandidature } from 'app/entities/candidature/candidature.model'; // Interface représentant une candidature
 
 // DÉCORATEUR DU COMPOSANT 
 @Component({
@@ -33,12 +35,18 @@ export class RecruteurDashboardComponent implements OnInit {
   recruteur?: IRecruteur; // Informations du recruteur connecté
   loadingRecruteur = true; // Indique si la récupération du recruteur est en cours
 
+  // GESTION DES CANDIDATURES
+  candidaturesParOffre: ICandidature[] = []; // Liste des candidatures pour l'offre sélectionnée
+  offreSelectionnee: IOffreEmploi | null = null; // Offre dont on affiche les candidatures
+  showCandidatures = false; // Afficher ou masquer la modal des candidatures
+
   //  INJECTION DES SERVICES 
   private fb = inject(FormBuilder); // Permet de créer des formulaires dynamiques
   private offreService = inject(OffreEmploiService); // Service CRUD pour les offres d'emploi
   private typeContratService = inject(TypeContratService); // Service pour récupérer les types de contrat
   private localisationService = inject(LocalisationService); // Service pour récupérer les localisations
   private recruteurService = inject(RecruteurService); // Service pour obtenir le recruteur connecté
+  private candidatureService = inject(CandidatureService); // Service pour gérer les candidatures
 
   //  CONSTRUCTEUR 
   constructor() {
@@ -95,6 +103,34 @@ export class RecruteurDashboardComponent implements OnInit {
 
   toggleForm(): void {
     this.showForm = !this.showForm; // Bascule entre afficher et cacher le formulaire
+  }
+
+  // 📍 NAVIGATION VERS LA SECTION DES OFFRES
+  scrollToOffres(): void {
+    const element = document.getElementById('mes-offres');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // 👥 AFFICHER LES CANDIDATURES D'UNE OFFRE
+  voirCandidatures(offre: IOffreEmploi): void {
+    this.offreSelectionnee = offre;
+    this.showCandidatures = true;
+    this.candidatureService.getCandidaturesByOffre(offre.id).subscribe({
+      next: (candidatures) => {
+        this.candidaturesParOffre = candidatures;
+        console.log('📋 Candidatures pour l\'offre', offre.titre, ':', candidatures);
+      },
+      error: (err) => console.error('❌ Erreur chargement candidatures', err),
+    });
+  }
+
+  // ❌ FERMER LA MODAL DES CANDIDATURES
+  fermerCandidatures(): void {
+    this.showCandidatures = false;
+    this.offreSelectionnee = null;
+    this.candidaturesParOffre = [];
   }
 
   supprimerOffre(id: number): void {

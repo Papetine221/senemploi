@@ -69,6 +69,13 @@ export class CandidatureService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  // Récupérer les candidatures pour une offre spécifique
+  getCandidaturesByOffre(offreId: number): Observable<ICandidature[]> {
+    return this.http
+      .get<RestCandidature[]>(`${this.resourceUrl}?offreId.equals=${offreId}`)
+      .pipe(map(candidatures => candidatures.map(item => this.convertDateFromServer(item))));
+  }
+
   getCandidatureIdentifier(candidature: Pick<ICandidature, 'id'>): number {
     return candidature.id;
   }

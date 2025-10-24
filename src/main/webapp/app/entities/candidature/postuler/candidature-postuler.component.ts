@@ -22,6 +22,7 @@ import dayjs from 'dayjs/esm';
 
 @Component({
   selector: 'jhi-candidature-postuler',
+  standalone: true,
   templateUrl: './candidature-postuler.component.html',
   imports: [SharedModule, FormsModule, ReactiveFormsModule, RouterModule],
 })

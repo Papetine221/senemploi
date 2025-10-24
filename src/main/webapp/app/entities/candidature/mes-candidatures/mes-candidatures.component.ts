@@ -14,6 +14,7 @@ import { StatutCandidature } from 'app/entities/enumerations/statut-candidature.
 
 @Component({
   selector: 'jhi-mes-candidatures',
+  standalone: true,
   templateUrl: './mes-candidatures.component.html',
   imports: [SharedModule, RouterModule, FormatMediumDatetimePipe],
 })

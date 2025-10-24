@@ -10,6 +10,7 @@ const offreEmploiRoute: Routes = [
     loadComponent: () => import('./list/offre-emploi.component').then(m => m.OffreEmploiComponent),
     data: {
       defaultSort: `id,${ASC}`,
+      authorities: ['ROLE_CANDIDAT', 'ROLE_RECRUTEUR', 'ROLE_ADMIN'],
     },
     canActivate: [UserRouteAccessService],
   },
@@ -20,6 +21,9 @@ const offreEmploiRoute: Routes = [
       offreEmploi: OffreEmploiResolve,
     },
     canActivate: [UserRouteAccessService],
+    data: {
+      authorities: ['ROLE_CANDIDAT', 'ROLE_RECRUTEUR', 'ROLE_ADMIN'],
+    },
   },
   {
     path: 'new',

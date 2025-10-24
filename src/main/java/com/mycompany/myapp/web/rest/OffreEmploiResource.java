@@ -191,6 +191,14 @@ public class OffreEmploiResource {
      * @param id the id of the offreEmploiDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the offreEmploiDTO, or with status {@code 404 (Not Found)}.
      */
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.CANDIDAT + "', '" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
+    public ResponseEntity<OffreEmploiDTO> getOffreEmploi(@PathVariable("id") Long id) {
+        LOG.debug("REST request to get OffreEmploi : {}", id);
+        Optional<OffreEmploiDTO> offreEmploiDTO = offreEmploiService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(offreEmploiDTO);
+    }
+
     @GetMapping("/recruteur/current")
     @PreAuthorize("hasAnyAuthority('" + AuthoritiesConstants.RECRUTEUR + "', '" + AuthoritiesConstants.ADMIN + "')")
     public ResponseEntity<List<OffreEmploiDTO>> getOffresByCurrentRecruteur() {

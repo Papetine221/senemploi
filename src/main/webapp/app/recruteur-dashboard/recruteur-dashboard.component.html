@@ -101,7 +101,7 @@
                         <a class="nav-link active" href="#">Tableau de bord</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Offres d'emploi</a>
+                        <a class="nav-link" (click)="scrollToOffres()" style="cursor: pointer;">Offres d'emploi</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Candidats</a>
@@ -436,6 +436,12 @@
   
     
 
+    <!-- Section des offres publiées -->
+    <section id="mes-offres" class="py-5">
+      <div class="container">
+        <h2 class="fw-bold mb-4 text-center">
+          <i class="fas fa-briefcase me-2"></i>Mes offres d'emploi publiées
+        </h2>
     <div class="row mt-4" *ngIf="offresPubliees.length > 0">
         <div class="col-md-6 col-lg-4 mb-4" *ngFor="let offre of offresPubliees">
           <div class="card job-card h-100">
@@ -496,30 +502,116 @@
                 </div>
               </div>
       
+              <!--  Bouton Voir les candidatures -->
+              <button
+                class="btn btn-primary w-100 mb-2"
+                (click)="voirCandidatures(offre)"
+              >
+                <i class="fas fa-users me-2"></i>Voir les candidatures
+              </button>
+
               <!--  Bouton Modifier -->
               <button
                 class="btn btn-outline-warning w-100 mb-2"
                 (click)="modifierOffre(offre)"
               >
-                 Modifier cette offre
+                <i class="fas fa-edit me-2"></i>Modifier cette offre
               </button> 
 
               <button
-  class="btn btn-outline-danger w-100"
-  (click)="supprimerOffre(offre.id)"
->
-   Supprimer cette offre
-</button>
-
-      
-              <!--  Voir plus -->
-              <button class="btn btn-voir-plus w-100 mt-auto">
-                <i class="fas fa-arrow-right me-2"></i>Voir plus
+                class="btn btn-outline-danger w-100"
+                (click)="supprimerOffre(offre.id)"
+              >
+                <i class="fas fa-trash me-2"></i>Supprimer cette offre
               </button>
             </div>
           </div>
         </div>
       </div>
+      
+    <!-- Message si aucune offre -->
+      <div *ngIf="offresPubliees.length === 0" class="alert alert-info text-center">
+        <i class="fas fa-info-circle me-2"></i>
+        Vous n'avez pas encore publié d'offres d'emploi. Cliquez sur "Publier une offre" pour commencer.
+      </div>
+      </div>
+    </section>
+
+    <!-- Modal pour afficher les candidatures -->
+    <div *ngIf="showCandidatures" class="modal-overlay" (click)="fermerCandidatures()">
+      <div class="modal-content-custom" (click)="$event.stopPropagation()">
+        <div class="modal-header-custom">
+          <h3 class="mb-0">
+            <i class="fas fa-users me-2"></i>
+            Candidatures pour : {{ offreSelectionnee?.titre }}
+          </h3>
+          <button class="btn-close-custom" (click)="fermerCandidatures()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="modal-body-custom">
+          <!-- Liste des candidatures -->
+          <div *ngIf="candidaturesParOffre.length > 0" class="row g-3">
+            <div class="col-12" *ngFor="let candidature of candidaturesParOffre">
+              <div class="card candidature-card shadow-sm">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col-md-8">
+                      <h5 class="mb-2">
+                        <i class="fas fa-user-circle me-2 text-primary"></i>
+                        {{ candidature.candidat?.user?.login || 'Candidat' }}
+                      </h5>
+                      <p class="text-muted mb-2">
+                        <i class="fas fa-calendar me-2"></i>
+                        <strong>Postulé le :</strong> {{ candidature.datePostulation?.toDate?.() | date: 'dd/MM/yyyy' }}
+                      </p>
+                      <p class="mb-2">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Statut :</strong> 
+                        <span class="badge" [ngClass]="{
+                          'bg-warning': candidature.statut === 'EN_ATTENTE',
+                          'bg-success': candidature.statut === 'ACCEPTEE',
+                          'bg-danger': candidature.statut === 'REFUSEE'
+                        }">
+                          {{ candidature.statut || 'EN_ATTENTE' }}
+                        </span>
+                      </p>
+                      <div *ngIf="candidature.lettreMotivation" class="mt-3">
+                        <p class="mb-1"><strong><i class="fas fa-envelope me-2"></i>Lettre de motivation :</strong></p>
+                        <p class="text-muted small border-start border-3 border-primary ps-3">
+                          {{ candidature.lettreMotivation }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                      <button class="btn btn-outline-primary btn-sm mb-2 w-100">
+                        <i class="fas fa-file-pdf me-2"></i>Télécharger CV
+                      </button>
+                      <button class="btn btn-success btn-sm w-100">
+                        <i class="fas fa-envelope me-2"></i>Contacter
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message si aucune candidature -->
+          <div *ngIf="candidaturesParOffre.length === 0" class="alert alert-info text-center">
+            <i class="fas fa-info-circle me-2"></i>
+            Aucune candidature reçue pour cette offre pour le moment.
+          </div>
+        </div>
+
+        <div class="modal-footer-custom">
+          <button class="btn btn-secondary" (click)="fermerCandidatures()">
+            <i class="fas fa-times me-2"></i>Fermer
+          </button>
+        </div>
+      </div>
+    </div>
       
     <!-- Features Section -->
     <section class="py-5 bg-light">

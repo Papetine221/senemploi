@@ -11,6 +11,7 @@ import { ICandidature } from 'app/entities/candidature/candidature.model';
 
 @Component({
   selector: 'jhi-offre-emploi-detail',
+  standalone: true,
   templateUrl: './offre-emploi-detail.component.html',
   imports: [SharedModule, RouterModule, FormatMediumDatetimePipe],
 })
